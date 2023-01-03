@@ -3,6 +3,7 @@ package lc
 import (
 	"fmt"
 	"log"
+	"slices"
 	"testing"
 )
 
@@ -192,4 +193,30 @@ func Test133(t *testing.T) {
 	c := cloneGraph(g)
 	log.Print(g, g.Neighbors[0], g.Neighbors[1])
 	log.Print(c, c.Neighbors[0], c.Neighbors[1])
+}
+
+// 2300m Successful Pairs of Spells and Potions
+func Test2300(t *testing.T) {
+	successfulPairs := func(spells []int, potions []int, success int64) []int {
+		slices.Sort(potions)
+
+		pairs := make([]int, 0, len(spells))
+		for _, spell := range spells {
+			l, r := 0, len(potions)
+			for l < r {
+				m := l + (r-l)>>1
+				if int64(spell)*int64(potions[m]) >= success {
+					r = m
+				} else {
+					l = m + 1
+				}
+			}
+			pairs = append(pairs, len(potions)-l)
+		}
+
+		return pairs
+	}
+
+	log.Print("[4 0 3] ?= ", successfulPairs([]int{5, 1, 3}, []int{1, 2, 3, 4, 5}, 7))
+	log.Print("[2 0 2] ?= ", successfulPairs([]int{3, 1, 2}, []int{8, 5, 8}, 16))
 }
