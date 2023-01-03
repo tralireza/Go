@@ -219,4 +219,5 @@ func Test2300(t *testing.T) {
 
 	log.Print("[4 0 3] ?= ", successfulPairs([]int{5, 1, 3}, []int{1, 2, 3, 4, 5}, 7))
 	log.Print("[2 0 2] ?= ", successfulPairs([]int{3, 1, 2}, []int{8, 5, 8}, 16))
+	log.Print("[1 4 3] ?= ", successfulPairs([]int{1, 4, 2}, []int{2, 5, 1, 3}, 4))
 }
