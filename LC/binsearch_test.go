@@ -35,21 +35,25 @@ func TestBSSearch(t *testing.T) {
 				l = m + 1
 			}
 		}
-		return r
+		return l
 	}
 
-	log.Print("+ Rightmost Index")
-	log.Print("4 ?= ", bSearchRight([]int{1, 2, 3, 4}, 5))
-	log.Print("3 ?= ", bSearchRight([]int{1, 2, 3, 4, 5}, 3))
-	log.Print("2 ?= ", bSearchRight([]int{1, 1, 3}, 1))
-	log.Print("0 ?= ", bSearchRight([]int{1, 2, 3, 4}, 0))
-	log.Print("+ Leftmost Index")
-	log.Print("2 ?= ", bSearchLeft([]int{1, 2, 3, 4, 5}, 3))
-	log.Print("0 ?= ", bSearchLeft([]int{1, 1, 3}, 1))
-	log.Print("0 ?= ", bSearchLeft([]int{1, 2, 3, 4}, 0))
-	log.Print("3 ?= ", bSearchLeft([]int{1, 2, 2, 7}, 3))
-	log.Print("3 ?= ", bSearchLeft([]int{1, 2, 5, 7}, 7))
-	log.Print("4 ?= ", bSearchLeft([]int{1, 2, 3, 4}, 5))
+	// test cases:-
+	for _, tc := range [][][]int{
+		{{0, 1, 2, 3}, {9, 4, 4}},
+		{{1, 2, 2, 3, 4}, {2, 1, 3}},
+		{{2, 2, 2, 4}, {1, 0, 0}},
+		{{4, 4, 4}, {4, 0, 3}},
+	} {
+		nums, target, lowerBound, upperBound := tc[0], tc[1][0], tc[1][1], tc[1][2]
+		log.Printf("target: %d | %d:%d ?= %v", target, lowerBound, upperBound, nums)
+		if x := bSearchLeft(nums, target); x != lowerBound {
+			t.Fatalf("Wrong Lower Bound! %d != %d", x, lowerBound)
+		}
+		if x := bSearchRight(nums, target); x != upperBound {
+			t.Fatalf("Wrong Upper Bound! %d != %d", x, upperBound)
+		}
+	}
 }
 
 // 33m Search in Rotated Sorted Array
