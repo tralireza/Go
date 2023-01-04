@@ -40,12 +40,13 @@ func TestBSSearch(t *testing.T) {
 
 	// test cases:-
 	for _, tc := range [][][]int{
-		{{0, 1, 2, 3}, {9, 4, 4}},
-		{{1, 2, 2, 3, 4}, {2, 1, 3}},
-		{{2, 2, 2, 4}, {1, 0, 0}},
-		{{4, 4, 4}, {4, 0, 3}},
+		{{9, 4, 4}, {0, 1, 2, 3}},
+		{{2, 1, 4}, {1, 2, 2, 2, 3, 4}},
+		{{1, 0, 0}, {2, 2, 2, 4}},
+		{{4, 0, 3}, {4, 4, 4}},
+		{{6, 2, 2}, {1, 5, 7, 7}},
 	} {
-		nums, target, lowerBound, upperBound := tc[0], tc[1][0], tc[1][1], tc[1][2]
+		nums, target, lowerBound, upperBound := tc[1], tc[0][0], tc[0][1], tc[0][2]
 		log.Printf("target: %d | %d:%d ?= %v", target, lowerBound, upperBound, nums)
 		if x := bSearchLeft(nums, target); x != lowerBound {
 			t.Fatalf("Wrong Lower Bound! %d != %d", x, lowerBound)
