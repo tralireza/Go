@@ -89,3 +89,50 @@ func Test205(t *testing.T) {
 	log.Print("false ?= ", isIsomorphic("aba", "xxy"))
 	log.Print("true ?= ", isIsomorphic("abcdefghij", "0123456789"))
 }
+
+// 189m Rotate Array
+func Test189(t *testing.T) {
+	rotate := func(nums []int, k int) {
+		k = k % len(nums)
+		if k == 0 {
+			return
+		}
+
+		gcd := func(a, b int) int {
+			for b > 0 {
+				a, b = b, a%b
+			}
+			return a
+		}
+		log.Printf(".GCD(%d,%d) %d", len(nums), k, gcd(len(nums), k))
+
+		reverse := func(l, r int) {
+			for l < r {
+				nums[l], nums[r] = nums[r], nums[l]
+				l++
+				r--
+			}
+		}
+
+		log.Print(nums)
+
+		reverse(0, k-1)
+		log.Print(nums)
+		reverse(k, len(nums)-1)
+		log.Print(nums)
+		reverse(0, len(nums)-1)
+		log.Print(nums)
+	}
+
+	for _, ts := range [][][]int{
+		{{1, 2, 3, 4, 5, 6}, {4}},
+		{{1, 2, 3, 4, 5, 6}, {5}},
+		{{1, 2, 3, 4, 5, 6}, {1}},
+		{{1, 2, 3, 4, 5, 6, 7}, {3}},
+	} {
+		nums, k := ts[0], ts[1][0]
+		rotate(nums, k)
+		log.Printf("+ k: %d -> %v", k, nums)
+	}
+
+}
