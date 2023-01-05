@@ -114,14 +114,9 @@ func Test189(t *testing.T) {
 			}
 		}
 
-		log.Print(nums)
-
-		reverse(0, k-1)
-		log.Print(nums)
-		reverse(k, len(nums)-1)
-		log.Print(nums)
 		reverse(0, len(nums)-1)
-		log.Print(nums)
+		reverse(0, k-1)
+		reverse(k, len(nums)-1)
 	}
 
 	for _, ts := range [][][]int{
