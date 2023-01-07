@@ -13,7 +13,6 @@ func init() {
 func Test1614(t *testing.T) {
 	maxDepth := func(s string) int {
 		S := []byte{}
-
 		x := 0
 		for i := 0; i < len(s); i++ {
 			switch s[i] {
