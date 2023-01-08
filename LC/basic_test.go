@@ -58,4 +58,5 @@ func Test1544(t *testing.T) {
 
 	log.Print(" ?= ", makeGood("abBACc"))
 	log.Print(" ?= ", makeGood("Pp"))
+	log.Print("a ?= ", makeGood("aPp"))
 }
