@@ -47,6 +47,14 @@ func Test1544(t *testing.T) {
 		return s
 	}
 
+	fmt.Print("byte 'Overflow' -> ")
+	b := byte(253)
+	for range 7 {
+		fmt.Printf("%d,", b)
+		b++
+	}
+	fmt.Print("\n")
+
 	log.Print(" ?= ", makeGood("abBACc"))
 	log.Print(" ?= ", makeGood("Pp"))
 }
