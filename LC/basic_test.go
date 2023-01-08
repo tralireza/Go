@@ -35,7 +35,7 @@ func Test1544(t *testing.T) {
 	makeGood := func(s string) string {
 		i := 0
 		for i < len(s)-1 {
-			log.Printf("%q %[1]d %q %[2]d | %d", s[i], s[i+1], s[i]-s[i+1])
+			log.Printf("%q %3[1]d %q %3[2]d | %3d", s[i], s[i+1], s[i]-s[i+1])
 
 			if s[i]-s[i+1] == 'a'-'A' || s[i]-s[i+1] == 256-('a'-'A') {
 				s = s[:i] + s[i+2:]
