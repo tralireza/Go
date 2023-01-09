@@ -60,3 +60,41 @@ func Test1544(t *testing.T) {
 	log.Print(" ?= ", makeGood("Pp"))
 	log.Print("a ?= ", makeGood("aPp"))
 }
+
+// 1249m Minimum Remove to Make Valid Parentheses
+func Test1249(t *testing.T) {
+	minRemoveToMakeValid := func(s string) string {
+		S := []int{}
+
+		for i := 0; i < len(s); i++ {
+			switch s[i] {
+			case '(':
+				S = append(S, i)
+			case ')':
+				if len(S) > 0 && s[S[len(S)-1]] == '(' {
+					S = S[:len(S)-1]
+				} else {
+					S = append(S, i)
+				}
+			}
+		}
+		log.Printf("%v", S)
+
+		bs := []byte{}
+		for i := 0; i < len(s); i++ {
+			if len(S) > 0 {
+				if i < S[0] {
+					bs = append(bs, s[i])
+				} else {
+					S = S[1:]
+				}
+			} else {
+				bs = append(bs, s[i])
+			}
+		}
+		return string(bs)
+	}
+
+	log.Print("lee(t(c)o)de ?= ", minRemoveToMakeValid("lee(t(c)o)de)"))
+	log.Print(" ?= ", minRemoveToMakeValid("))(("))
+}
