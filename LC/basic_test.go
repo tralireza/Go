@@ -65,7 +65,6 @@ func Test1544(t *testing.T) {
 func Test1249(t *testing.T) {
 	minRemoveToMakeValid := func(s string) string {
 		S := []int{}
-
 		for i := 0; i < len(s); i++ {
 			switch s[i] {
 			case '(':
