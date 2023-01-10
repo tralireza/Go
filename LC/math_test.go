@@ -129,5 +129,4 @@ func Test189(t *testing.T) {
 		rotate(nums, k)
 		log.Printf("+ k: %d -> %v", k, nums)
 	}
-
 }
