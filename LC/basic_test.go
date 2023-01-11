@@ -123,3 +123,32 @@ func Test1249(t *testing.T) {
 	log.Print("lee(t(c)o)de ?= ", minRemoveToMakeValid("lee(t(c)o)de)"))
 	log.Print(" ?= ", minRemoveToMakeValid("))(("))
 }
+
+// 678m Valid Parenthesis String
+func Test678(t *testing.T) {
+	checkValidString := func(s string) bool {
+		// dp: Number of matches by choosing * as: (, ) or empty
+		dp := make([][3]int, len(s)+1)
+		log.Print(dp)
+
+		for i := 0; i < len(s); i++ {
+			switch s[i] {
+			case '(':
+			case ')':
+			case '*':
+			}
+		}
+		log.Print(dp)
+
+		for _, m := range dp[len(s)-1] {
+			if m == 0 {
+				return true
+			}
+		}
+		return false
+	}
+
+	log.Print("ture ?= ", checkValidString("(*))"))
+	log.Print("ture ?= ", checkValidString("(*)"))
+	//log.Print("false ?= ", checkValidString("(((((*(()((((*((**(((()()*)()()()*((((**)())*)*)))))))(())(()))())((*()()(((()((()*(())*(()**)()(())"))
+}
