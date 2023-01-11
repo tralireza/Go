@@ -166,38 +166,39 @@ func Test678(t *testing.T) {
 	}
 
 	dynamic := func(s string) bool {
-		// [fromIndex][brackets] -> valid/notValid
+		// [endIndex][brackets] -> valid/notValid
 
 		dp := make([][]byte, len(s)+1)
 		for i := 0; i < len(dp); i++ {
 			dp[i] = make([]byte, len(s)+1)
 		}
-		dp[len(s)][0] = 1
+		dp[0][0] = 1
 
-		for i := len(s) - 1; i >= 0; i-- {
-			for j := 0; j <= len(s)-i; j++ {
-				switch s[i] {
+		// substring s[0:i] ie, last index: i-1 s[0...(i-1)]
+		for i := 1; i <= len(s); i++ {
+			for j := 0; j <= i; j++ {
+				switch s[i-1] {
 				case '*':
 					if j < len(s) {
-						dp[i][j] = max(dp[i+1][j], dp[i+1][j+1])
+						dp[i][j] = max(dp[i-1][j], dp[i-1][j+1])
 					}
 					if j > 0 {
-						dp[i][j] = max(dp[i][j], dp[i+1][j-1])
+						dp[i][j] = max(dp[i][j], dp[i-1][j-1])
 					}
-					dp[i][j] = max(dp[i][j], dp[i+1][j])
+					dp[i][j] = max(dp[i][j], dp[i-1][j])
 				case '(':
-					if j < len(s) {
-						dp[i][j] = dp[i+1][j+1]
+					if j > 0 {
+						dp[i][j] = dp[i-1][j-1]
 					}
 				case ')':
-					if j > 0 {
-						dp[i][j] = dp[i+1][j-1]
+					if j < len(s) {
+						dp[i][j] = dp[i-1][j+1]
 					}
 				}
 			}
 		}
 
-		return dp[0][0] == 1
+		return dp[len(s)][0] == 1
 	}
 
 	log.Print("ture ?= ", checkValidString("(*))"))
