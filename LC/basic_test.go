@@ -127,28 +127,48 @@ func Test1249(t *testing.T) {
 // 678m Valid Parenthesis String
 func Test678(t *testing.T) {
 	checkValidString := func(s string) bool {
-		// dp: Number of matches by choosing * as: (, ) or empty
-		dp := make([][3]int, len(s)+1)
-		log.Print(dp)
+		type Y = struct{}
+
+		m := map[int]Y{}
+		m[0] = Y{}
 
 		for i := 0; i < len(s); i++ {
+			mNew := map[int]Y{}
 			switch s[i] {
 			case '(':
+				for k := range m {
+					mNew[k+1] = Y{}
+				}
 			case ')':
+				for k := range m {
+					if k > 0 {
+						mNew[k-1] = Y{}
+					}
+				}
 			case '*':
+				for k := range m {
+					mNew[k] = Y{}
+					mNew[k+1] = Y{}
+					if k > 0 {
+						mNew[k-1] = Y{}
+					}
+				}
 			}
+			log.Printf("%q %v -> %v", s[i], m, mNew)
+			m = mNew
 		}
-		log.Print(dp)
+		log.Print(m)
 
-		for _, m := range dp[len(s)-1] {
-			if m == 0 {
-				return true
-			}
+		if _, ok := m[0]; ok {
+			return true
 		}
 		return false
 	}
 
 	log.Print("ture ?= ", checkValidString("(*))"))
+	log.Print("ture ?= ", checkValidString("(*()"))
 	log.Print("ture ?= ", checkValidString("(*)"))
-	//log.Print("false ?= ", checkValidString("(((((*(()((((*((**(((()()*)()()()*((((**)())*)*)))))))(())(()))())((*()()(((()((()*(())*(()**)()(())"))
+	log.Print("ture ?= ", checkValidString("((**(*)))"))
+	log.Print("ture ?= ", checkValidString("((**)"))
+	log.Print("true ?= ", checkValidString("((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()"))
 }
