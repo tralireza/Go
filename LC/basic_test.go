@@ -10,6 +10,32 @@ func init() {
 	log.Print("> Basic DS")
 }
 
+// 20 Valid Parentheses
+func Test20(t *testing.T) {
+	isValid := func(s string) bool {
+		S := []byte{}
+		pairs := map[byte]byte{'(': ')', '[': ']', '{': '}'}
+
+		for i := 0; i < len(s); i++ {
+			switch s[i] {
+			case ')', '}', ']':
+				if len(S) == 0 || pairs[S[len(S)-1]] != s[i] {
+					return false
+				}
+				S = S[:len(S)-1]
+			default:
+				S = append(S, s[i])
+			}
+		}
+
+		return len(S) == 0
+	}
+
+	log.Print("true ?= ", isValid("()[]{}"))
+	log.Print("true ?= ", isValid("({}[])"))
+	log.Print("false ?= ", isValid("(}"))
+}
+
 // 1614 Maximum Nesting Depth of Parentheses
 func Test1614(t *testing.T) {
 	maxDepth := func(s string) int {
