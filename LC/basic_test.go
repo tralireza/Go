@@ -165,10 +165,47 @@ func Test678(t *testing.T) {
 		return false
 	}
 
+	dynamic := func(s string) bool {
+		// [fromIndex][brackets] -> valid/notValid
+
+		dp := make([][]byte, len(s)+1)
+		for i := 0; i < len(dp); i++ {
+			dp[i] = make([]byte, len(s)+1)
+		}
+		dp[len(s)][0] = 1
+
+		for i := len(s) - 1; i >= 0; i-- {
+			for j := 0; j <= len(s)-i; j++ {
+				switch s[i] {
+				case '*':
+					if j < len(s) {
+						dp[i][j] = max(dp[i+1][j], dp[i+1][j+1])
+					}
+					if j > 0 {
+						dp[i][j] = max(dp[i][j], dp[i+1][j-1])
+					}
+					dp[i][j] = max(dp[i][j], dp[i+1][j])
+				case '(':
+					if j < len(s) {
+						dp[i][j] = dp[i+1][j+1]
+					}
+				case ')':
+					if j > 0 {
+						dp[i][j] = dp[i+1][j-1]
+					}
+				}
+			}
+		}
+
+		return dp[0][0] == 1
+	}
+
 	log.Print("ture ?= ", checkValidString("(*))"))
 	log.Print("ture ?= ", checkValidString("(*()"))
 	log.Print("ture ?= ", checkValidString("(*)"))
 	log.Print("ture ?= ", checkValidString("((**(*)))"))
 	log.Print("ture ?= ", checkValidString("((**)"))
 	log.Print("true ?= ", checkValidString("((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()"))
+	log.Print("ture ?= ", dynamic("((**(*)))"))
+	log.Print("true ?= ", dynamic("((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()"))
 }
