@@ -166,8 +166,7 @@ func Test678(t *testing.T) {
 	}
 
 	dynamic := func(s string) bool {
-		// [endIndex][brackets] -> valid/notValid
-
+		// dp[endIndex][brackets] -> valid/notValid
 		dp := make([][]byte, len(s)+1)
 		for i := 0; i < len(dp); i++ {
 			dp[i] = make([]byte, len(s)+1)
