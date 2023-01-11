@@ -200,12 +200,48 @@ func Test678(t *testing.T) {
 		return dp[len(s)][0] == 1
 	}
 
-	log.Print("ture ?= ", checkValidString("(*))"))
-	log.Print("ture ?= ", checkValidString("(*()"))
-	log.Print("ture ?= ", checkValidString("(*)"))
-	log.Print("ture ?= ", checkValidString("((**(*)))"))
-	log.Print("ture ?= ", checkValidString("((**)"))
-	log.Print("true ?= ", checkValidString("((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()"))
-	log.Print("ture ?= ", dynamic("((**(*)))"))
-	log.Print("true ?= ", dynamic("((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()"))
+	doubleStack := func(s string) bool {
+		S, W := []int{}, []int{}
+
+		for i := 0; i < len(s); i++ {
+			switch s[i] {
+			case '(':
+				S = append(S, i)
+			case ')':
+				if len(S) > 0 {
+					S = S[:len(S)-1]
+				} else if len(W) > 0 {
+					W = W[:len(W)-1]
+				} else {
+					return false
+				}
+			case '*':
+				W = append(W, i)
+			}
+		}
+		log.Print(S, W)
+
+		for len(S) > 0 {
+			if len(W) > 0 && S[len(S)-1] < W[len(W)-1] {
+				S, W = S[:len(S)-1], W[:len(W)-1]
+			} else {
+				return false
+			}
+		}
+		log.Print(S, W)
+		return len(S) == 0
+	}
+
+	for _, s := range []string{
+		"((((()(()()()*()(((((*)()*(**(())))))(())()())(((())())())))))))(((((())*)))()))(()((*()*(*)))(*)()",
+		"(*))",
+		"(*()",
+		"(*)",
+		"((**(*)))",
+		"(*)**)()",
+	} {
+		for _, f := range []func(string) bool{checkValidString, dynamic, doubleStack} {
+			log.Print("true ?= ", f(s))
+		}
+	}
 }
