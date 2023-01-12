@@ -71,7 +71,7 @@ func Test200(t *testing.T) {
 
 		var dfs func(i, j int)
 		dfs = func(i, j int) {
-			grid[i][j] = 'X'
+			grid[i][j] = '🏰'
 			for k := range dirs[:4] {
 				p, q := i+dirs[k], j+dirs[k+1]
 				if p >= 0 && m > p && q >= 0 && n > q && grid[p][q] == '🏠' {
@@ -92,7 +92,7 @@ func Test200(t *testing.T) {
 		return islands
 	}
 
-	grid := [][]rune{{'🏠', '🏠', '🏠', '🏠', '💧'}, {'🏠', '🏠', '💧', '🏠', '💧'}, {'🏠', '🏠', '💧', '💧', '💧'}, {'💧', '💧', '💧', '💧', '💧'}}
+	grid := [][]rune{{'🏠', '🏠', '🏠', '🏠', '🌊'}, {'🏠', '🏠', '🌊', '🏠', '🌊'}, {'🏠', '🏠', '🌊', '🌊', '🌊'}, {'🌊', '🌊', '🌊', '🌊', '🌊'}}
 	draw := func() {
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[i]); j++ {
@@ -103,6 +103,7 @@ func Test200(t *testing.T) {
 	}
 	draw()
 	log.Print("1 ?= ", numIslands(grid))
+	draw()
 }
 
 // 130m Surrounded Regions
