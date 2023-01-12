@@ -63,7 +63,7 @@ func Test1091(t *testing.T) {
 
 // 200m Number of Islands
 func Test200(t *testing.T) {
-	numIslands := func(grid [][]byte) int {
+	numIslands := func(grid [][]rune) int {
 		m, n := len(grid), len(grid[0])
 		islands := 0
 
@@ -74,7 +74,7 @@ func Test200(t *testing.T) {
 			grid[i][j] = 'X'
 			for k := range dirs[:4] {
 				p, q := i+dirs[k], j+dirs[k+1]
-				if p >= 0 && m > p && q >= 0 && n > q && grid[p][q] == '1' {
+				if p >= 0 && m > p && q >= 0 && n > q && grid[p][q] == '🏠' {
 					dfs(p, q)
 				}
 			}
@@ -82,7 +82,7 @@ func Test200(t *testing.T) {
 
 		for i := 0; i < m; i++ {
 			for j := 0; j < n; j++ {
-				if grid[i][j] == '1' {
+				if grid[i][j] == '🏠' {
 					islands++
 					dfs(i, j)
 				}
@@ -92,7 +92,7 @@ func Test200(t *testing.T) {
 		return islands
 	}
 
-	grid := [][]byte{{'1', '1', '1', '1', '0'}, {'1', '1', '0', '1', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '0', '0', '0'}}
+	grid := [][]rune{{'🏠', '🏠', '🏠', '🏠', '💧'}, {'🏠', '🏠', '💧', '🏠', '💧'}, {'🏠', '🏠', '💧', '💧', '💧'}, {'💧', '💧', '💧', '💧', '💧'}}
 	draw := func() {
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[i]); j++ {
