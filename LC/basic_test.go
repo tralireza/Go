@@ -245,3 +245,23 @@ func Test678(t *testing.T) {
 		}
 	}
 }
+
+// 2073 Time Needed to Buy Tickets
+func Test2073(t *testing.T) {
+	timeRequiredToBuy := func(tickets []int, k int) int {
+		t := 0
+		for i, n := range tickets {
+			if i <= k {
+				t += min(n, tickets[k])
+			} else {
+				t += min(n, tickets[k]-1)
+			}
+		}
+		return t
+	}
+
+	for _, f := range []func([]int, int) int{timeRequiredToBuy} {
+		log.Print("6 ?= ", f([]int{2, 3, 2}, 2))
+		log.Print("8 ?= ", f([]int{5, 1, 1, 1}, 0))
+	}
+}
