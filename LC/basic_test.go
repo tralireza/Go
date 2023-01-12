@@ -260,8 +260,26 @@ func Test2073(t *testing.T) {
 		return t
 	}
 
-	for _, f := range []func([]int, int) int{timeRequiredToBuy} {
+	onK := func(tickets []int, k int) int {
+		t := 0
+		for range tickets[k] {
+			for i := range tickets {
+				if tickets[k] == 0 {
+					return t
+				}
+				if tickets[i] == 0 {
+					continue
+				}
+				t++
+				tickets[i]--
+			}
+		}
+		return t
+	}
+
+	for _, f := range []func([]int, int) int{onK, timeRequiredToBuy} {
 		log.Print("6 ?= ", f([]int{2, 3, 2}, 2))
 		log.Print("8 ?= ", f([]int{5, 1, 1, 1}, 0))
+		log.Print(" ?= ", f([]int{5, 1, 2, 1}, 2))
 	}
 }
