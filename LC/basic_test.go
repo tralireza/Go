@@ -260,24 +260,28 @@ func Test2073(t *testing.T) {
 		return t
 	}
 
-	onK := func(tickets []int, k int) int {
+	simulateQueue := func(tickets []int, k int) int {
 		t := 0
-		for range tickets[k] {
-			for i := range tickets {
-				if tickets[k] == 0 {
-					return t
-				}
-				if tickets[i] == 0 {
-					continue
-				}
-				t++
-				tickets[i]--
-			}
+
+		Q := []int{}
+		for i := 0; i < len(tickets); i++ {
+			Q = append(Q, i)
 		}
+
+		var front int
+		for tickets[k] > 0 {
+			front, Q = Q[0], Q[1:]
+			if tickets[front] > 0 {
+				t++
+				tickets[front]--
+			}
+			Q = append(Q, front)
+		}
+
 		return t
 	}
 
-	for _, f := range []func([]int, int) int{onK, timeRequiredToBuy} {
+	for _, f := range []func([]int, int) int{simulateQueue, timeRequiredToBuy} {
 		log.Print("6 ?= ", f([]int{2, 3, 2}, 2))
 		log.Print("8 ?= ", f([]int{5, 1, 1, 1}, 0))
 		log.Print(" ?= ", f([]int{5, 1, 2, 1}, 2))
