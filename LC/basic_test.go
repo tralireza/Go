@@ -3,6 +3,7 @@ package lc
 import (
 	"fmt"
 	"log"
+	"slices"
 	"testing"
 )
 
@@ -286,4 +287,24 @@ func Test2073(t *testing.T) {
 		log.Print("8 ?= ", f([]int{5, 1, 1, 1}, 0))
 		log.Print(" ?= ", f([]int{5, 1, 2, 1}, 2))
 	}
+}
+
+// 950m Reveal Cards in Increasing Order
+func Test950(t *testing.T) {
+	deckRevealedIncreasing := func(deck []int) []int {
+		slices.Sort(deck)
+
+		Q := []int{deck[len(deck)-1]}
+
+		r := len(deck) - 1
+		for r > 0 {
+			back := Q[len(Q)-1]
+			r--
+			Q = append([]int{deck[r], back}, Q[:len(Q)-1]...)
+		}
+
+		return Q
+	}
+
+	log.Print("[2 13 3 11 5 17 7] ?= ", deckRevealedIncreasing([]int{17, 13, 11, 2, 3, 5, 7}))
 }
