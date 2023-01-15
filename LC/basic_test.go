@@ -308,3 +308,34 @@ func Test950(t *testing.T) {
 
 	log.Print("[2 13 3 11 5 17 7] ?= ", deckRevealedIncreasing([]int{17, 13, 11, 2, 3, 5, 7}))
 }
+
+// 402m Remove K Digits
+func Test402(t *testing.T) {
+	removeKdigits := func(num string, k int) string {
+		S := []byte{}
+		for i := 0; i < len(num); i++ {
+			for len(S) > 0 && k > 0 && S[len(S)-1] > num[i] {
+				S = S[:len(S)-1]
+				k--
+			}
+			S = append(S, num[i])
+		}
+		log.Printf("%c", S)
+
+		if k > 0 {
+			S = S[:len(S)-k]
+		}
+		log.Printf("%c", S)
+
+		v := string(bytes.TrimLeft(S, "0"))
+		if v == "" {
+			return "0"
+		}
+		return v
+	}
+
+	log.Print("1219 ?= ", removeKdigits("1432219", 3))
+	log.Print("200 ?= ", removeKdigits("10200", 1))
+	log.Print("0 ?= ", removeKdigits("10200", 2))
+	log.Print("122 ?= ", removeKdigits("12234", 2))
+}
