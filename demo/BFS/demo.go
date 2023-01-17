@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"time"
 )
 
 func init() {
 	log.SetFlags(0)
 }
 
-type Point struct{ row, col int }
+type Point struct{ r, c int } // r: row, c: column
 type Demo struct {
 	M, N int
 	Grid map[Point]rune
@@ -19,8 +20,13 @@ type Demo struct {
 }
 
 const (
-	SPC  = '🟰'
-	WALL = '🧱'
+	Space = '🟰'
+	Wall  = '🧱'
+
+	Start   = '👻' // White
+	Looking = '👀' // Gray
+	Done    = '🐾' // Black
+	Success = '👍' // Black
 )
 
 func NewDemo(m, n int) *Demo {
@@ -29,9 +35,9 @@ func NewDemo(m, n int) *Demo {
 	g := map[Point]rune{}
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
-			v := SPC
+			v := Space
 			if i == 0 || i == m-1 || j == 0 || j == n-1 {
-				v = WALL
+				v = Wall
 			}
 			g[Point{i, j}] = v
 		}
@@ -44,8 +50,8 @@ func NewDemo(m, n int) *Demo {
 func (o *Demo) AddBlock(k int) {
 	for k > 0 {
 		i, j := rand.Intn(o.M-1)+1, rand.Intn(o.N-1)+1
-		if o.Grid[Point{i, j}] == SPC {
-			o.Grid[Point{i, j}] = WALL
+		if o.Grid[Point{i, j}] == Space {
+			o.Grid[Point{i, j}] = Wall
 			k--
 		}
 	}
@@ -62,8 +68,8 @@ func (o *Demo) AddDoor(k int) {
 			i = rand.Intn(o.M-1) + 1
 			j = rand.Intn(2) * (o.N - 1)
 		}
-		if o.Grid[Point{i, j}] == WALL {
-			o.Grid[Point{i, j}] = SPC
+		if o.Grid[Point{i, j}] == Wall {
+			o.Grid[Point{i, j}] = Space
 			k--
 		}
 	}
@@ -78,6 +84,43 @@ func (o *Demo) Draw() {
 	}
 }
 
+func (o *Demo) adjacents(p Point) []Point {
+	ps := []Point{}
+	dirs := []int{0, 1, 0, -1, 0}
+	for i := range dirs[:4] {
+		q := Point{p.r + dirs[i], p.c + dirs[i+1]}
+		if q.r >= 0 && o.M > q.r && q.c >= 0 && o.N > q.c && o.Grid[q] != Wall {
+			ps = append(ps, q)
+		}
+	}
+	return ps
+}
+
 func (o *Demo) BFS(i, j int) {
-	//
+	s := Point{i, j}
+	o.Grid[s] = Start
+	o.D[s] = 0
+	o.Draw()
+
+	Q := []Point{s}
+
+	for len(Q) > 0 {
+		u := Q[0]
+		Q = Q[1:]
+		for _, v := range o.adjacents(u) {
+			if o.Grid[v] != Done && o.Grid[v] != Looking {
+				o.Grid[v] = Looking
+				o.D[v], o.P[v] = 1+o.D[u], u
+
+				Q = append(Q, v)
+			}
+		}
+
+		o.Draw()
+		time.Sleep(125 * time.Millisecond)
+
+		o.Grid[u] = Done
+	}
+
+	o.Draw()
 }
