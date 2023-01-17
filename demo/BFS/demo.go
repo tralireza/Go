@@ -96,6 +96,13 @@ func (o *Demo) adjacents(p Point) []Point {
 	return ps
 }
 
+func (o *Demo) success(p Point) bool {
+	if p.r == 0 || p.r == o.M-1 || p.c == 0 || p.c == o.N-1 {
+		return true
+	}
+	return false
+}
+
 func (o *Demo) BFS(i, j int) {
 	s := Point{i, j}
 	o.Grid[s] = Start
@@ -108,7 +115,7 @@ func (o *Demo) BFS(i, j int) {
 		u := Q[0]
 		Q = Q[1:]
 		for _, v := range o.adjacents(u) {
-			if o.Grid[v] != Done && o.Grid[v] != Looking {
+			if o.Grid[v] == Space {
 				o.Grid[v] = Looking
 				o.D[v], o.P[v] = 1+o.D[u], u
 
@@ -119,7 +126,11 @@ func (o *Demo) BFS(i, j int) {
 		o.Draw()
 		time.Sleep(125 * time.Millisecond)
 
-		o.Grid[u] = Done
+		if o.success(u) {
+			o.Grid[u] = Success
+		} else if o.Grid[u] != Start {
+			o.Grid[u] = Done
+		}
 	}
 
 	o.Draw()
