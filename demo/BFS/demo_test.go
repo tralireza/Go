@@ -10,13 +10,15 @@ func init() {
 }
 
 func TestDemo(t *testing.T) {
-	d := NewDemo(9, 56)
+	d := NewDemo(10, 56)
 	d.AddBlock(64)
 	d.AddDoor(8)
 	d.Draw()
 }
 
 func TestBFS(t *testing.T) {
-	d := NewDemo(9, 48)
-	d.BFS(3, 5)
+	d := NewDemo(10, 56)
+	d.AddBlock(64)
+	d.AddDoor(8)
+	d.BFS(5, 28)
 }
