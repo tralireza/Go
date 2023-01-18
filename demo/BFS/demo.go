@@ -11,12 +11,12 @@ func init() {
 	log.SetFlags(0)
 }
 
-type Point struct{ r, c int } // r: row, c: column
+type Point struct{ row, col int }
 type Demo struct {
 	M, N int
-	Grid map[Point]rune
-	P    map[Point]Point
-	D    map[Point]int
+	Grid map[Point]rune  // visual
+	P    map[Point]Point // parent/predecessor
+	D    map[Point]int   // distance to source/start
 }
 
 const (
@@ -90,30 +90,30 @@ func (o *Demo) Draw() {
 }
 
 func (o *Demo) adjacents(p Point) []Point {
-	ps := []Point{}
+	P := []Point{}
 	dirs := []int{0, 1, 0, -1, 0}
 	for i := range dirs[:4] {
-		q := Point{p.r + dirs[i], p.c + dirs[i+1]}
-		if q.r >= 0 && o.M > q.r && q.c >= 0 && o.N > q.c && o.Grid[q] != Wall {
-			ps = append(ps, q)
+		q := Point{p.row + dirs[i], p.col + dirs[i+1]}
+		if q.row >= 0 && o.M > q.row && q.col >= 0 && o.N > q.col && o.Grid[q] != Wall {
+			P = append(P, q)
 		}
 	}
-	return ps
+	return P
 }
 
 func (o *Demo) success(p Point) bool {
-	if p.r == 0 || p.r == o.M-1 || p.c == 0 || p.c == o.N-1 {
+	if p.row == 0 || p.row == o.M-1 || p.col == 0 || p.col == o.N-1 {
 		for o.Grid[p] != Start {
 			prv := o.P[p]
 			if o.Grid[p] != Success {
 				switch {
-				case prv.r < p.r:
+				case prv.row < p.row:
 					o.Grid[p] = Up
-				case prv.r > p.r:
+				case prv.row > p.row:
 					o.Grid[p] = Down
-				case prv.c < p.c:
+				case prv.col < p.col:
 					o.Grid[p] = Left
-				default:
+				case prv.col > p.col:
 					o.Grid[p] = Right
 				}
 			}
