@@ -18,7 +18,7 @@ func TestDemo(t *testing.T) {
 
 func TestBFS(t *testing.T) {
 	d := NewDemo(10, 56)
-	d.AddBlock(64)
-	d.AddDoor(8)
+	d.AddBlock(128)
+	d.AddDoor(16)
 	d.BFS(5, 28)
 }
