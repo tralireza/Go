@@ -105,15 +105,17 @@ func (o *Demo) success(p Point) bool {
 	if p.r == 0 || p.r == o.M-1 || p.c == 0 || p.c == o.N-1 {
 		for o.Grid[p] != Start {
 			prv := o.P[p]
-			switch {
-			case prv.r < p.r:
-				o.Grid[p] = Up
-			case prv.r > p.r:
-				o.Grid[p] = Down
-			case prv.c < p.c:
-				o.Grid[p] = Left
-			default:
-				o.Grid[p] = Right
+			if o.Grid[p] != Success {
+				switch {
+				case prv.r < p.r:
+					o.Grid[p] = Up
+				case prv.r > p.r:
+					o.Grid[p] = Down
+				case prv.c < p.c:
+					o.Grid[p] = Left
+				default:
+					o.Grid[p] = Right
+				}
 			}
 			p = prv
 		}
