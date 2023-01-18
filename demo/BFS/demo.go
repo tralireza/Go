@@ -27,6 +27,11 @@ const (
 	Looking = '👀' // Gray
 	Done    = '🐾' // Black
 	Success = '👍' // Black
+
+	Up    = '👆'
+	Down  = '👇'
+	Left  = '👈'
+	Right = '👉'
 )
 
 func NewDemo(m, n int) *Demo {
@@ -98,6 +103,20 @@ func (o *Demo) adjacents(p Point) []Point {
 
 func (o *Demo) success(p Point) bool {
 	if p.r == 0 || p.r == o.M-1 || p.c == 0 || p.c == o.N-1 {
+		for o.Grid[p] != Start {
+			prv := o.P[p]
+			switch {
+			case prv.r < p.r:
+				o.Grid[p] = Up
+			case prv.r > p.r:
+				o.Grid[p] = Down
+			case prv.c < p.c:
+				o.Grid[p] = Left
+			default:
+				o.Grid[p] = Right
+			}
+			p = prv
+		}
 		return true
 	}
 	return false
@@ -124,7 +143,7 @@ func (o *Demo) BFS(i, j int) {
 		}
 
 		o.Draw()
-		time.Sleep(125 * time.Millisecond)
+		time.Sleep(75 * time.Millisecond)
 
 		if o.success(u) {
 			o.Grid[u] = Success
