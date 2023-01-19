@@ -124,8 +124,23 @@ func (o *Demo) success(p Point) bool {
 	return false
 }
 
-func (o *Demo) BFS(i, j int) {
-	s := Point{i, j}
+func (o *Demo) DFS(s Point) {
+	o.Search(s, func(Q *[]Point) Point {
+		u := (*Q)[len(*Q)-1]
+		*Q = (*Q)[:len(*Q)-1]
+		return u
+	})
+}
+
+func (o *Demo) BFS(s Point) {
+	o.Search(s, func(Q *[]Point) Point {
+		u := (*Q)[0]
+		*Q = (*Q)[1:]
+		return u
+	})
+}
+
+func (o *Demo) Search(s Point, dQueue func(Q *[]Point) Point) {
 	o.Grid[s] = Start
 	o.D[s] = 0
 	o.Draw()
@@ -133,8 +148,8 @@ func (o *Demo) BFS(i, j int) {
 	Q := []Point{s}
 
 	for len(Q) > 0 {
-		u := Q[0]
-		Q = Q[1:]
+		u := dQueue(&Q)
+
 		for _, v := range o.adjacents(u) {
 			if o.Grid[v] == Space {
 				o.Grid[v] = Looking
