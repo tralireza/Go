@@ -20,7 +20,7 @@ type Demo struct {
 }
 
 const (
-	Space = '🟰'
+	Space = '🪡'
 	Wall  = '🧱'
 
 	Start   = '👻' // White
