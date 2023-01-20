@@ -82,10 +82,10 @@ func (o *Demo) AddDoor(k int) {
 
 func (o *Demo) Draw() {
 	for i := range o.M {
+		fmt.Printf("\033[%d;%dH", i+1, 1)
 		for j := range o.N {
 			fmt.Printf("%c", o.Grid[Point{i, j}])
 		}
-		fmt.Printf("\n")
 	}
 }
 
@@ -141,6 +141,9 @@ func (o *Demo) BFS(s Point) {
 }
 
 func (o *Demo) Search(s Point, dQueue func(Q *[]Point) Point) {
+	fmt.Print("\033[2J")   // clear screen
+	fmt.Print("\x1b[?25l") // low(hide) cursor
+
 	o.Grid[s] = Start
 	o.D[s] = 0
 	o.Draw()
@@ -170,4 +173,7 @@ func (o *Demo) Search(s Point, dQueue func(Q *[]Point) Point) {
 	}
 
 	o.Draw()
+
+	fmt.Print("\x1b[?25h") // high(show) cursor
+	fmt.Print("\n")
 }
