@@ -3,6 +3,7 @@ package dBFS
 import (
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"time"
 )
@@ -13,10 +14,14 @@ func init() {
 
 type Point struct{ row, col int }
 type Demo struct {
-	M, N int
-	Grid map[Point]rune  // visual
-	P    map[Point]Point // parent/predecessor
-	D    map[Point]int   // distance to source/start
+	M, N             int
+	Grid             map[Point]rune  // visual
+	P                map[Point]Point // parent/predecessor
+	D                map[Point]int   // distance to source/start
+	start            Point           // source/start
+	fdoors, shortest int             // doors found, shortest path
+	exit             Point           // shortest distance exit
+	steps            int             // steps
 }
 
 const (
@@ -27,6 +32,7 @@ const (
 	Looking = '👀' // Gray
 	Done    = '🐾' // Black
 	Success = '👍' // Black
+	Bee     = '🐝' // Black (shortest distance)
 
 	Up    = '👆'
 	Down  = '👇'
@@ -35,7 +41,7 @@ const (
 )
 
 func NewDemo(m, n int) *Demo {
-	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}}
+	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}, shortest: math.MaxInt}
 
 	g := map[Point]rune{}
 	for i := 0; i < m; i++ {
@@ -89,6 +95,27 @@ func (o *Demo) Draw() {
 	}
 }
 
+func (o *Demo) Stat(t int) {
+	if t == 0 { // DFS may override Beeline path -> (refresh at end)
+		o.breadcrumb(o.exit, true)
+	}
+
+	fmt.Printf("\033[%d;%dH", o.M+1, 1)
+	if t == 0 {
+		fmt.Printf("[ 💅 ]   ") 
+	} else {
+		fmt.Printf("[ %c ]   ", []rune{'💿', '📀'}[o.steps%2])
+		o.steps++
+	}
+
+	fmt.Printf("%c%3d     %c%3d     %c", Looking, t, Success, o.fdoors, Bee)
+	if o.shortest < math.MaxInt {
+		fmt.Printf("% 3d", o.shortest)
+	} else {
+		fmt.Print(" ∞")
+	}
+}
+
 func (o *Demo) adjacents(p Point) []Point {
 	P := []Point{}
 	dirs := []int{0, 1, 0, -1, 0}
@@ -101,11 +128,16 @@ func (o *Demo) adjacents(p Point) []Point {
 	return P
 }
 
-func (o *Demo) success(p Point) bool {
-	if p.row == 0 || p.row == o.M-1 || p.col == 0 || p.col == o.N-1 {
-		for o.Grid[p] != Start {
-			prv := o.P[p]
-			if o.Grid[p] != Success {
+func (o *Demo) breadcrumb(exit Point, bline bool) {
+	p := exit
+	for o.Grid[p] != Start {
+		prv := o.P[p]
+
+		if o.Grid[p] != Success {
+			switch bline {
+			case true:
+				o.Grid[p] = Bee
+			case false:
 				switch {
 				case prv.row < p.row:
 					o.Grid[p] = Up
@@ -117,15 +149,35 @@ func (o *Demo) success(p Point) bool {
 					o.Grid[p] = Right
 				}
 			}
-			p = prv
 		}
+
+		p = prv
+	}
+}
+
+func (o *Demo) success(p Point) bool {
+	if p.row == 0 || p.row == o.M-1 || p.col == 0 || p.col == o.N-1 {
+		o.fdoors++
+
+		if o.D[p] < o.shortest {
+			if o.shortest < math.MaxInt {
+				o.breadcrumb(o.exit, false)
+			}
+			o.shortest = o.D[p]
+			o.exit = p
+			o.breadcrumb(o.exit, true)
+		} else {
+			o.breadcrumb(p, false)
+		}
+		o.Grid[p] = Success
+
 		return true
 	}
 	return false
 }
 
 func (o *Demo) DFS(s Point) {
-	o.Search(s, func(Q *[]Point) Point {
+	o.search(s, func(Q *[]Point) Point {
 		u := (*Q)[len(*Q)-1]
 		*Q = (*Q)[:len(*Q)-1]
 		return u
@@ -133,23 +185,24 @@ func (o *Demo) DFS(s Point) {
 }
 
 func (o *Demo) BFS(s Point) {
-	o.Search(s, func(Q *[]Point) Point {
+	o.search(s, func(Q *[]Point) Point {
 		u := (*Q)[0]
 		*Q = (*Q)[1:]
 		return u
 	})
 }
 
-func (o *Demo) Search(s Point, dQueue func(Q *[]Point) Point) {
+func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	fmt.Print("\033[2J")   // clear screen
 	fmt.Print("\x1b[?25l") // low(hide) cursor
 
+	o.start = s
 	o.Grid[s] = Start
 	o.D[s] = 0
+
 	o.Draw()
 
 	Q := []Point{s}
-
 	for len(Q) > 0 {
 		u := dQueue(&Q)
 
@@ -163,17 +216,19 @@ func (o *Demo) Search(s Point, dQueue func(Q *[]Point) Point) {
 		}
 
 		o.Draw()
+		o.Stat(len(Q))
 		time.Sleep(75 * time.Millisecond)
 
-		if o.success(u) {
-			o.Grid[u] = Success
-		} else if o.Grid[u] != Start {
+		if !o.success(u) && o.Grid[u] != Start {
 			o.Grid[u] = Done
 		}
 	}
 
+	fmt.Print("\033[2J")
 	o.Draw()
 
 	fmt.Print("\x1b[?25h") // high(show) cursor
+	fmt.Print("\n 💅 Done!")
+	o.Stat(0)
 	fmt.Print("\n")
 }
