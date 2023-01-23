@@ -96,11 +96,7 @@ func (o *Demo) Draw() {
 }
 
 func (o *Demo) Stat(t int) {
-	if t == 0 { // DFS may override Beeline path -> (refresh at end)
-		o.breadcrumb(o.exit, true)
-	}
-
-	fmt.Printf("\033[%d;%dH", o.M+1, 1)
+	fmt.Printf("\033[%d;%dH", o.M+1, 1) // move cursor/position
 	if t == 0 {
 		fmt.Printf("[ 💅 ]   ") 
 	} else {
@@ -128,7 +124,7 @@ func (o *Demo) adjacents(p Point) []Point {
 	return P
 }
 
-func (o *Demo) breadcrumb(exit Point, bline bool) {
+func (o *Demo) Breadcrumb(exit Point, bline bool) {
 	p := exit
 	for o.Grid[p] != Start {
 		prv := o.P[p]
@@ -161,13 +157,13 @@ func (o *Demo) success(p Point) bool {
 
 		if o.D[p] < o.shortest {
 			if o.shortest < math.MaxInt {
-				o.breadcrumb(o.exit, false)
+				o.Breadcrumb(o.exit, false)
 			}
 			o.shortest = o.D[p]
 			o.exit = p
-			o.breadcrumb(o.exit, true)
+			o.Breadcrumb(o.exit, true)
 		} else {
-			o.breadcrumb(p, false)
+			o.Breadcrumb(p, false)
 		}
 		o.Grid[p] = Success
 
@@ -215,20 +211,19 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 			}
 		}
 
-		o.Draw()
-		o.Stat(len(Q))
-		time.Sleep(75 * time.Millisecond)
-
 		if !o.success(u) && o.Grid[u] != Start {
 			o.Grid[u] = Done
 		}
+
+		o.Draw()
+		o.Stat(len(Q))
+		time.Sleep(75 * time.Millisecond)
 	}
 
 	fmt.Print("\033[2J")
+	o.Breadcrumb(o.exit, true)
 	o.Draw()
-
-	fmt.Print("\x1b[?25h") // high(show) cursor
-	fmt.Print("\n 💅 Done!")
 	o.Stat(0)
+	fmt.Print("\x1b[?25h") // high(show) cursor
 	fmt.Print("\n")
 }
