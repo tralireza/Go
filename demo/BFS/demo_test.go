@@ -47,15 +47,15 @@ func TestDFS(t *testing.T) {
 }
 
 func TestShort(t *testing.T) {
-	d := NewDemo(40, 56)
+	d := NewDemo(32, 56)
 	d.AddBlock(512)
 	d.AddDoor(16)
-	d.BFS(Point{5, 28})
+	d.BFS(Point{16, 28})
 }
 
 func TestQuick(t *testing.T) {
-	d := NewDemo(40, 56)
+	d := NewDemo(32, 56)
 	d.AddBlock(512)
 	d.AddDoor(16)
-	d.DFS(Point{5, 28})
+	d.DFS(Point{16, 28})
 }
