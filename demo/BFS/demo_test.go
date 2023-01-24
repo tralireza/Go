@@ -11,6 +11,20 @@ func init() {
 	log.Print("> BFS Demo")
 }
 
+func TestValidGrid(t *testing.T) {
+	d := NewDemo(3, -3)
+	d.Draw()
+
+	d.AddBlock(12)
+	d.Draw()
+
+	d.AddDoor(16)
+	d.Draw()
+
+	d.SetStart(Point{7, 8})
+	d.Draw()
+}
+
 func TestGrid(t *testing.T) {
 	fmt.Printf("\033[2J") // cls: clear screen
 
