@@ -12,7 +12,7 @@ func init() {
 	log.SetFlags(0)
 }
 
-type Point struct{ row, col int }
+type Point struct{ Row, Col int }
 type Demo struct {
 	M, N             int
 	Grid             map[Point]rune  // visual
@@ -41,6 +41,13 @@ const (
 )
 
 func NewDemo(m, n int) *Demo {
+	if m < 3 {
+		m = 3
+	}
+	if n < 3 {
+		n = 3
+	}
+
 	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}, shortest: math.MaxInt}
 
 	g := map[Point]rune{}
@@ -58,7 +65,21 @@ func NewDemo(m, n int) *Demo {
 	return d
 }
 
+func (o *Demo) SetStart(p Point) {
+	if p.Row < 0 || p.Row >= o.M {
+		p.Row = rand.Intn(o.M-2) + 1
+	}
+	if p.Col < 0 || p.Col >= o.N {
+		p.Col = rand.Intn(o.N-2) + 1
+	}
+	o.Grid[p] = Start
+}
+
 func (o *Demo) AddBlock(k int) {
+	if k > (o.M-2)*(o.N-2) {
+		k = (o.M - 2) * (o.N - 2)
+	}
+
 	for k > 0 {
 		i, j := rand.Intn(o.M-1)+1, rand.Intn(o.N-1)+1
 		if o.Grid[Point{i, j}] == Space {
@@ -69,14 +90,18 @@ func (o *Demo) AddBlock(k int) {
 }
 
 func (o *Demo) AddDoor(k int) {
+	if k > 2*(o.M+o.N-2) {
+		k = 2 * (o.M + o.N - 2)
+	}
+
 	for k > 0 {
 		var i, j int
 		switch rand.Intn(2) {
 		case 0:
 			i = rand.Intn(2) * (o.M - 1)
-			j = rand.Intn(o.N-1) + 1
+			j = rand.Intn(o.N)
 		default:
-			i = rand.Intn(o.M-1) + 1
+			i = rand.Intn(o.M)
 			j = rand.Intn(2) * (o.N - 1)
 		}
 		if o.Grid[Point{i, j}] == Wall {
@@ -116,8 +141,8 @@ func (o *Demo) adjacents(p Point) []Point {
 	P := []Point{}
 	dirs := []int{0, 1, 0, -1, 0}
 	for i := range dirs[:4] {
-		q := Point{p.row + dirs[i], p.col + dirs[i+1]}
-		if q.row >= 0 && o.M > q.row && q.col >= 0 && o.N > q.col && o.Grid[q] != Wall {
+		q := Point{p.Row + dirs[i], p.Col + dirs[i+1]}
+		if q.Row >= 0 && o.M > q.Row && q.Col >= 0 && o.N > q.Col && o.Grid[q] != Wall {
 			P = append(P, q)
 		}
 	}
@@ -135,13 +160,13 @@ func (o *Demo) Breadcrumb(exit Point, bline bool) {
 				o.Grid[p] = Bee
 			case false:
 				switch {
-				case prv.row < p.row:
+				case prv.Row < p.Row:
 					o.Grid[p] = Up
-				case prv.row > p.row:
+				case prv.Row > p.Row:
 					o.Grid[p] = Down
-				case prv.col < p.col:
+				case prv.Col < p.Col:
 					o.Grid[p] = Left
-				case prv.col > p.col:
+				case prv.Col > p.Col:
 					o.Grid[p] = Right
 				}
 			}
@@ -152,7 +177,7 @@ func (o *Demo) Breadcrumb(exit Point, bline bool) {
 }
 
 func (o *Demo) success(p Point) bool {
-	if p.row == 0 || p.row == o.M-1 || p.col == 0 || p.col == o.N-1 {
+	if p.Row == 0 || p.Row == o.M-1 || p.Col == 0 || p.Col == o.N-1 {
 		o.fdoors++
 
 		if o.D[p] < o.shortest {
