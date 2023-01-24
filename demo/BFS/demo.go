@@ -1,4 +1,4 @@
-package dBFS
+package search
 
 import (
 	"fmt"
