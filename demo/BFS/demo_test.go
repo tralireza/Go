@@ -21,8 +21,11 @@ func TestValidGrid(t *testing.T) {
 	d.AddDoor(16)
 	d.Draw()
 
-	d.SetStart(Point{7, 8})
+	p := Point{7, 8}
+	d.SetStart(p)
 	d.Draw()
+
+	d.BFS(p)
 }
 
 func TestGrid(t *testing.T) {

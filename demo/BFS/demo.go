@@ -65,7 +65,7 @@ func NewDemo(m, n int) *Demo {
 	return d
 }
 
-func (o *Demo) SetStart(p Point) {
+func (o *Demo) SetStart(p Point) Point {
 	if p.Row < 0 || p.Row >= o.M {
 		p.Row = rand.Intn(o.M-2) + 1
 	}
@@ -73,6 +73,7 @@ func (o *Demo) SetStart(p Point) {
 		p.Col = rand.Intn(o.N-2) + 1
 	}
 	o.Grid[p] = Start
+	return p
 }
 
 func (o *Demo) AddBlock(k int) {
@@ -176,7 +177,7 @@ func (o *Demo) Breadcrumb(exit Point, bline bool) {
 	}
 }
 
-func (o *Demo) success(p Point) bool {
+func (o *Demo) isDoor(p Point) bool {
 	if p.Row == 0 || p.Row == o.M-1 || p.Col == 0 || p.Col == o.N-1 {
 		o.fdoors++
 
@@ -186,7 +187,7 @@ func (o *Demo) success(p Point) bool {
 			}
 			o.shortest = o.D[p]
 			o.exit = p
-			o.Breadcrumb(o.exit, true)
+			o.Breadcrumb(p, true)
 		} else {
 			o.Breadcrumb(p, false)
 		}
@@ -217,13 +218,13 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	fmt.Print("\033[2J")   // clear screen
 	fmt.Print("\x1b[?25l") // low(hide) cursor
 
-	o.start = s
+	o.start = o.SetStart(s)
 	o.Grid[s] = Start
 	o.D[s] = 0
 
 	o.Draw()
 
-	Q := []Point{s}
+	Q := []Point{o.start}
 	for len(Q) > 0 {
 		u := dQueue(&Q)
 
@@ -236,7 +237,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 			}
 		}
 
-		if !o.success(u) && o.Grid[u] != Start {
+		if !o.isDoor(u) && o.Grid[u] != Start {
 			o.Grid[u] = Done
 		}
 
