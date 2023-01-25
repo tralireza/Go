@@ -340,3 +340,27 @@ func Test402(t *testing.T) {
 	log.Print("0 ?= ", removeKdigits("10200", 2))
 	log.Print("122 ?= ", removeKdigits("12234", 2))
 }
+
+// 42h Trapping Rain Water
+func Test42(t *testing.T) {
+	trap := func(height []int) int {
+		l, r := make([]int, len(height)), make([]int, len(height))
+		l[0], r[len(height)-1] = height[0], height[len(height)-1]
+
+		for i := 1; i < len(height); i++ {
+			l[i] = max(l[i-1], height[i])
+		}
+		for i := len(height) - 2; i >= 0; i-- {
+			r[i] = max(r[i+1], height[i])
+		}
+
+		w := 0
+		for i := 0; i < len(height); i++ {
+			w += min(l[i], r[i]) - height[i]
+		}
+		return w
+	}
+
+	log.Print("6 ?= ", trap([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
+	log.Print("9 ?= ", trap([]int{4, 2, 0, 3, 2, 5}))
+}
