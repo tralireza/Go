@@ -361,6 +361,27 @@ func Test42(t *testing.T) {
 		return w
 	}
 
-	log.Print("6 ?= ", trap([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
-	log.Print("9 ?= ", trap([]int{4, 2, 0, 3, 2, 5}))
+	pointers := func(height []int) int {
+		l, r := 0, len(height)-1
+		lx, rx := height[l], height[r]
+
+		w := 0
+		for l < r {
+			if lx < rx {
+				w += lx - height[l]
+				l++
+				lx = max(lx, height[l])
+			} else {
+				w += rx - height[r]
+				r--
+				rx = max(rx, height[r])
+			}
+		}
+		return w
+	}
+
+	for _, f := range []func([]int) int{trap, pointers} {
+		log.Print("6 ?= ", f([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
+		log.Print("9 ?= ", f([]int{4, 2, 0, 3, 2, 5}))
+	}
 }
