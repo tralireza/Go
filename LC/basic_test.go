@@ -354,6 +354,8 @@ func Test42(t *testing.T) {
 			r[i] = max(r[i+1], height[i])
 		}
 
+		log.Print(l, r)
+
 		w := 0
 		for i := 0; i < len(height); i++ {
 			w += min(l[i], r[i]) - height[i]
