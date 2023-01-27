@@ -11,6 +11,31 @@ func init() {
 	log.Print("> BFS Demo")
 }
 
+func TestBreadcrumb(t *testing.T) {
+	d := NewDemo(8, 16)
+	d.SetStart(Point{3, 8})
+
+	b, e := Point{3, 15}, Point{7, 13}
+	d.Grid[b], d.Grid[e] = Success, Success
+	for j := 15; j > 8; j-- {
+		d.P[Point{3, j}] = Point{3, j - 1}
+	}
+	for i := 7; i > 3; i-- {
+		d.P[Point{i, 13}] = Point{i - 1, 13}
+	}
+
+	d.Breadcrumb(b, 0)
+	d.Draw()
+	time.Sleep(time.Second)
+	d.Breadcrumb(e, 2) // must not clear Beeline
+	d.Draw()
+	time.Sleep(time.Second)
+	d.Breadcrumb(b, 1)
+	d.Draw()
+
+	fmt.Print("\n")
+}
+
 func TestValidGrid(t *testing.T) {
 	d := NewDemo(3, -3)
 	d.Draw()
