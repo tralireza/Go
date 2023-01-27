@@ -25,7 +25,7 @@ type Demo struct {
 }
 
 const (
-	Space = '🪡'
+	Space = '👣'
 	Wall  = '🧱'
 
 	Start   = '👻' // White
@@ -150,29 +150,29 @@ func (o *Demo) adjacents(p Point) []Point {
 	return P
 }
 
-func (o *Demo) Breadcrumb(exit Point, bline bool) {
+func (o *Demo) Breadcrumb(exit Point, m int) {
 	p := exit
 	for o.Grid[p] != Start {
 		prv := o.P[p]
-
 		if o.Grid[p] != Success {
-			switch bline {
-			case true:
+			switch m {
+			case 0:
 				o.Grid[p] = Bee
-			case false:
-				switch {
-				case prv.Row < p.Row:
-					o.Grid[p] = Up
-				case prv.Row > p.Row:
-					o.Grid[p] = Down
-				case prv.Col < p.Col:
-					o.Grid[p] = Left
-				case prv.Col > p.Col:
-					o.Grid[p] = Right
+			case 1, 2: // 2: keep Beeline
+				if m == 1 || o.Grid[p] != Bee {
+					switch {
+					case prv.Row < p.Row:
+						o.Grid[p] = Up
+					case prv.Row > p.Row:
+						o.Grid[p] = Down
+					case prv.Col < p.Col:
+						o.Grid[p] = Left
+					case prv.Col > p.Col:
+						o.Grid[p] = Right
+					}
 				}
 			}
 		}
-
 		p = prv
 	}
 }
@@ -183,13 +183,13 @@ func (o *Demo) isDoor(p Point) bool {
 
 		if o.D[p] < o.shortest {
 			if o.shortest < math.MaxInt {
-				o.Breadcrumb(o.exit, false)
+				o.Breadcrumb(o.exit, 1)
 			}
 			o.shortest = o.D[p]
 			o.exit = p
-			o.Breadcrumb(p, true)
+			o.Breadcrumb(p, 0)
 		} else {
-			o.Breadcrumb(p, false)
+			o.Breadcrumb(p, 2)
 		}
 		o.Grid[p] = Success
 
@@ -247,7 +247,6 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	}
 
 	fmt.Print("\033[2J")
-	o.Breadcrumb(o.exit, true)
 	o.Draw()
 	o.Stat(0)
 	fmt.Print("\x1b[?25h") // high(show) cursor
