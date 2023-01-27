@@ -11,6 +11,14 @@ func init() {
 	log.Print("> BFS Demo")
 }
 
+func TestSpace(t *testing.T) {
+	fmt.Print("\033[2J")
+	fmt.Print("123456")
+	fmt.Print("\033[3;3H")
+	fmt.Printf("%c%c", rune(0x1f37a), rune(0x1f4c0))
+	fmt.Print("\n")
+}
+
 func TestBreadcrumb(t *testing.T) {
 	d := NewDemo(8, 16)
 	d.SetStart(Point{3, 8})
@@ -23,6 +31,7 @@ func TestBreadcrumb(t *testing.T) {
 	for i := 7; i > 3; i-- {
 		d.P[Point{i, 13}] = Point{i - 1, 13}
 	}
+	fmt.Print("\033[2J")
 
 	d.Breadcrumb(b, 0)
 	d.Draw()
@@ -54,7 +63,7 @@ func TestValidGrid(t *testing.T) {
 }
 
 func TestGrid(t *testing.T) {
-	fmt.Printf("\033[2J") // cls: clear screen
+	fmt.Print("\033[2J") // cls: clear screen
 
 	d := NewDemo(10, 56)
 	d.AddBlock(128)
