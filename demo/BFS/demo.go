@@ -25,7 +25,7 @@ type Demo struct {
 }
 
 const (
-	Space = '👣'
+	Space = ' '
 	Wall  = '🧱'
 
 	Start   = '👻' // White
@@ -117,6 +117,9 @@ func (o *Demo) Draw() {
 		fmt.Printf("\033[%d;%dH", i+1, 1)
 		for j := range o.N {
 			fmt.Printf("%c", o.Grid[Point{i, j}])
+			if o.Grid[Point{i, j}] == ' ' {
+				fmt.Print(" ")
+			}
 		}
 	}
 }
