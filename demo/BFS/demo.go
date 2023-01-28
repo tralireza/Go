@@ -127,17 +127,17 @@ func (o *Demo) Draw() {
 func (o *Demo) Stat(t int) {
 	fmt.Printf("\033[%d;%dH", o.M+1, 1) // move cursor/position
 	if t == 0 {
-		fmt.Printf("[ 💅 ]   ") 
+		fmt.Printf("[ 💅 ]")
 	} else {
-		fmt.Printf("[ %c ]   ", []rune{'💿', '📀'}[o.steps%2])
+		fmt.Printf("[ %c ]", []rune{'💿', '📀'}[o.steps%2])
 		o.steps++
 	}
 
-	fmt.Printf("%c%3d     %c%3d     %c", Looking, t, Success, o.fdoors, Bee)
+	fmt.Printf("     %4d %c   %4d %c   ", t, Looking, o.fdoors, Success)
 	if o.shortest < math.MaxInt {
-		fmt.Printf("% 3d", o.shortest)
+		fmt.Printf("%4d %c", o.shortest, Bee)
 	} else {
-		fmt.Print(" ∞")
+		fmt.Printf("   ∞ %c", Bee)
 	}
 }
 
