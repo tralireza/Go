@@ -397,11 +397,12 @@ func Test85(t *testing.T) {
 		for i := range len(csum) {
 			csum[i] = make([]int, len(matrix[0])+1)
 		}
-		for j := 1; j < len(csum[0]); j++ {
-			for i := 1; i < len(csum); i++ {
-				csum[i][j] = csum[i-1][j] + int(matrix[i-1][j-1]-'0')
+		for j := 0; j < len(matrix[0]); j++ {
+			for i := 0; i < len(matrix); i++ {
+				csum[i+1][j+1] = csum[i][j+1] + int(matrix[i][j]-'0')
 			}
 		}
+
 		log.Printf("%q", matrix)
 		log.Print(csum)
 
@@ -415,7 +416,6 @@ func Test85(t *testing.T) {
 					} else {
 						area = 0
 					}
-
 					xarea = max(xarea, area)
 				}
 
