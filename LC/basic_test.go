@@ -387,3 +387,45 @@ func Test42(t *testing.T) {
 		log.Print("9 ?= ", f([]int{4, 2, 0, 3, 2, 5}))
 	}
 }
+
+// 85 Maximal Rectangle
+func Test85(t *testing.T) {
+	maximalRectangle := func(matrix [][]byte) int {
+		xarea := 0
+
+		csum := make([][]int, len(matrix)+1)
+		for i := range len(csum) {
+			csum[i] = make([]int, len(matrix[0])+1)
+		}
+		for j := 1; j < len(csum[0]); j++ {
+			for i := 1; i < len(csum); i++ {
+				csum[i][j] = csum[i-1][j] + int(matrix[i-1][j-1]-'0')
+			}
+		}
+		log.Printf("%q", matrix)
+		log.Print(csum)
+
+		for t := 0; t < len(matrix); t++ {
+			for b := len(matrix); b > t; b-- {
+
+				area := 0
+				for c := 0; c < len(matrix[0]); c++ {
+					if csum[b][c+1]-csum[t][c+1] == b-t {
+						area += b - t
+					} else {
+						area = 0
+					}
+
+					xarea = max(xarea, area)
+				}
+
+			}
+		}
+
+		return xarea
+	}
+
+	log.Print("6 ?= ", maximalRectangle([][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}))
+	log.Print("0 ?= ", maximalRectangle([][]byte{{'0'}}))
+	log.Print("1 ?= ", maximalRectangle([][]byte{{'1'}}))
+}
