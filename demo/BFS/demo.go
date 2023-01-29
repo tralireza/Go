@@ -66,10 +66,10 @@ func NewDemo(m, n int) *Demo {
 }
 
 func (o *Demo) SetStart(p Point) Point {
-	if p.Row < 0 || p.Row >= o.M {
+	if p.Row <= 0 || p.Row >= o.M-1 {
 		p.Row = rand.Intn(o.M-2) + 1
 	}
-	if p.Col < 0 || p.Col >= o.N {
+	if p.Col <= 0 || p.Col >= o.N-1 {
 		p.Col = rand.Intn(o.N-2) + 1
 	}
 	o.Grid[p] = Start
@@ -222,7 +222,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	fmt.Print("\x1b[?25l") // low(hide) cursor
 
 	o.start = o.SetStart(s)
-	o.Grid[s] = Start
+	o.Grid[o.start] = Start
 	o.D[s] = 0
 
 	o.Draw()

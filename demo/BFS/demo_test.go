@@ -55,7 +55,7 @@ func TestValidGrid(t *testing.T) {
 	d.AddDoor(16)
 	d.Draw()
 
-	p := Point{7, 8}
+	p := Point{0, 0}
 	d.SetStart(p)
 	d.Draw()
 
