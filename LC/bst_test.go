@@ -129,7 +129,31 @@ func Test404(t *testing.T) {
 	}
 
 	type T = TreeNode
-	for _, f := range []func(*T) int{sumOfLeftLeaves} {
+
+	flagLeft := func(root *T) int {
+		var fsum func(*T, bool) int
+		fsum = func(n *T, left bool) int {
+			if n.Left == nil && n.Right == nil {
+				if left {
+					return n.Val
+				}
+				return 0
+			}
+
+			v := 0
+			if n.Left != nil {
+				v += fsum(n.Left, true)
+			}
+			if n.Right != nil {
+				v += fsum(n.Right, false)
+			}
+			return v
+		}
+
+		return fsum(root, false)
+	}
+
+	for _, f := range []func(*T) int{sumOfLeftLeaves, flagLeft} {
 		log.Print("24 ?= ", f(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
 		log.Print("0 ?= ", f(&T{Val: 3}))
 	}
