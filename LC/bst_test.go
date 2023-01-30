@@ -104,3 +104,33 @@ func Test530(t *testing.T) {
 	log.Print("1 =? ", minimumDifference(&T{2, &T{Val: 1}, &T{Val: 3}}))
 	log.Print("1 =? ", minimumDifference(&T{4, &T{2, nil, &T{Val: 3}}, &T{Val: 6}}))
 }
+
+// 404 Sum of Left Leaves
+func Test404(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	var sumOfLeftLeaves func(*TreeNode) int
+	sumOfLeftLeaves = func(root *TreeNode) int {
+		lsum := 0
+		if root.Left != nil {
+			if root.Left.Left == nil && root.Left.Right == nil {
+				lsum += root.Left.Val
+			} else {
+				lsum += sumOfLeftLeaves(root.Left)
+			}
+		}
+		if root.Right != nil {
+			lsum += sumOfLeftLeaves(root.Right)
+		}
+		return lsum
+	}
+
+	type T = TreeNode
+	for _, f := range []func(*T) int{sumOfLeftLeaves} {
+		log.Print("24 ?= ", f(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+		log.Print("0 ?= ", f(&T{Val: 3}))
+	}
+}
