@@ -25,14 +25,14 @@ type Demo struct {
 }
 
 const (
-	Space = ' '
+	Space = rune(0x3000) // CJK width space
 	Wall  = '🧱'
 
-	Start   = '👻' // White
-	Looking = '👀' // Gray
-	Done    = '🐾' // Black
-	Success = '👍' // Black
-	Bee     = '🐝' // Black (shortest distance)
+	Start   = '👻' // node color: White
+	Looking = '👀' // node color: Gray
+	Done    = '🐾' // node color: Black
+	Success = '👍' // node color: Black
+	Bee     = '🐝' // node color: Black (shortest distance)
 
 	Up    = '👆'
 	Down  = '👇'
@@ -116,10 +116,11 @@ func (o *Demo) Draw() {
 	for i := range o.M {
 		fmt.Printf("\033[%d;%dH", i+1, 1)
 		for j := range o.N {
-			fmt.Printf("%c", o.Grid[Point{i, j}])
-			if o.Grid[Point{i, j}] == ' ' {
-				fmt.Print(" ")
+			if o.Grid[Point{i, j}] == Done {
+				fmt.Printf("\x1b[38;5;195m%c\x1b[0m", Space)
+				continue
 			}
+			fmt.Printf("%c", o.Grid[Point{i, j}])
 		}
 	}
 }
