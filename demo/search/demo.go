@@ -50,17 +50,22 @@ func NewDemo(m, n int) *Demo {
 
 	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}, shortest: math.MaxInt}
 
-	g := map[Point]rune{}
+	g, color := map[Point]rune{}, make([][]byte, m)
 	for i := 0; i < m; i++ {
+		color[i] = make([]byte, n)
 		for j := 0; j < n; j++ {
 			v := Space
 			if i == 0 || i == m-1 || j == 0 || j == n-1 {
 				v = Wall
 			}
 			g[Point{i, j}] = v
+			if v == Space {
+				color[i][j] = 'W'
+			}
 		}
 	}
 	d.Grid = g
+	d.Color = color
 
 	return d
 }
@@ -229,11 +234,13 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	o.Draw()
 
 	Q := []Point{o.start}
+	o.Color[o.start.Row][o.start.Col] = 'G' // Gray: Visiting
 	for len(Q) > 0 {
 		u := dQueue(&Q)
 
 		for _, v := range o.adjacents(u) {
 			if o.Grid[v] == Space {
+				o.Color[v.Row][v.Col] = 'G' // Gray: Visiting
 				o.Grid[v] = Looking
 				o.D[v], o.P[v] = 1+o.D[u], u
 
@@ -241,6 +248,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 			}
 		}
 
+		o.Color[u.Row][u.Col] = 'B' // Black: Visited
 		if !o.isDoor(u) && o.Grid[u] != Start {
 			o.Grid[u] = Done
 		}
