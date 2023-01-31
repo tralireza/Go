@@ -60,20 +60,25 @@ func TestValidGrid(t *testing.T) {
 }
 
 func TestGrid(t *testing.T) {
-	fmt.Print("\033[2J") // cls: clear screen
+	fmt.Print("\033[2J")    // cls: clear screen
+	fmt.Printf("\x1b[?25l") // low(hide) cursor
 
 	d := NewDemo(10, 56)
+	d.SetStart(Point{4, 27})
+	d.Color[4][27] = 'G'
+	d.Grid[Point{4, 28}], d.Color[5][28] = Done, 'B'
+	d.Grid[Point{4, 29}], d.Color[4][29] = Looking, 'G'
+
 	d.AddBlock(128)
 	d.AddDoor(16)
 
-	fmt.Printf("\x1b[?25l") // low(hide) cursor
 	d.Draw()
 	d.Stat(3)
 	time.Sleep(425 * time.Millisecond)
 	d.Stat(3)
 	time.Sleep(425 * time.Millisecond)
-
 	d.Stat(0)
+
 	fmt.Printf("\n")
 	fmt.Printf("\x1b[?25h") // high(show) cursor
 }
