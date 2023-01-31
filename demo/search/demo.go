@@ -21,7 +21,8 @@ type Demo struct {
 	start            Point           // source/start
 	fdoors, shortest int             // doors found, shortest path
 	exit             Point           // shortest distance exit
-	steps            int             // steps
+	steps            uint            // steps
+	Color            [][]byte        // 'W'hite, 'G'ray, 'B'lack -> Not visited, Visiting, Visited
 }
 
 const (
