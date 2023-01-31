@@ -11,11 +11,14 @@ func init() {
 	log.Print("> BFS Demo")
 }
 
-func TestSpace(t *testing.T) {
-	fmt.Print("\033[2J")
-	fmt.Print("12|34|56|")
-	fmt.Print("\033[3;1H")
-	fmt.Printf("%c|%c|%c|", rune(0x3000), rune(0x1f37a), rune(0x1f4c0))
+func TestChars(t *testing.T) {
+	fmt.Print("\x1b[2J\x1b[H") // clear screen, cursor home
+	fmt.Print("\x1b[2;1H")
+	fmt.Printf("%c", Start)
+	fmt.Print("|12|34|56|78|")
+	fmt.Print("\x1b[3;1H")
+	fmt.Printf("%c|%c|%c|%c|%c|", rune(0x3000), rune(0x1f37a), rune(0x1f4c0), Looking, Done)
+	fmt.Printf("\x1b[4;1H\x1b[38;5;79m%s|%s|12\x1b[0m|%c", []byte{'*', '*'}, string([]rune{Done}), '🥽')
 	fmt.Print("\n")
 }
 
@@ -60,14 +63,13 @@ func TestValidGrid(t *testing.T) {
 }
 
 func TestGrid(t *testing.T) {
-	fmt.Print("\033[2J")    // cls: clear screen
+	fmt.Print("\x1b[2J")    // cls: clear screen
 	fmt.Printf("\x1b[?25l") // low(hide) cursor
 
 	d := NewDemo(10, 56)
 	d.SetStart(Point{4, 27})
-	d.Color[4][27] = 'G'
-	d.Grid[Point{4, 28}], d.Color[5][28] = Done, 'B'
-	d.Grid[Point{4, 29}], d.Color[4][29] = Looking, 'G'
+	d.Grid[Point{4, 28}], d.Grid[Point{3, 27}] = Done, Done
+	d.Grid[Point{4, 29}], d.Grid[Point{5, 27}] = Looking, Looking
 
 	d.AddBlock(128)
 	d.AddDoor(16)
