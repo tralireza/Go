@@ -31,7 +31,7 @@ const (
 
 	Start   = '👻' // node color: White
 	Looking = '👀' // node color: Gray
-	Done    = '🐾' // node color: Black
+	Done    = '🥽' // node color: Black
 	Success = '👍' // node color: Black
 	Bee     = '🐝' // node color: Black (shortest distance)
 
@@ -113,6 +113,7 @@ func (o *Demo) AddDoor(k int) {
 		}
 		if o.Grid[Point{i, j}] == Wall {
 			o.Grid[Point{i, j}] = Space
+			o.Color[i][j] = 'W'
 			k--
 		}
 	}
@@ -120,7 +121,7 @@ func (o *Demo) AddDoor(k int) {
 
 func (o *Demo) Draw() {
 	for i := range o.M {
-		fmt.Printf("\033[%d;%dH", i+1, 1)
+		fmt.Printf("\x1b[%d;%dH", i+1, 1)
 		for j := range o.N {
 			if o.Grid[Point{i, j}] == Done {
 				fmt.Printf("\x1b[38;5;195m%c\x1b[0m", Space)
@@ -132,7 +133,7 @@ func (o *Demo) Draw() {
 }
 
 func (o *Demo) Stat(t int) {
-	fmt.Printf("\033[%d;%dH", o.M+1, 1) // move cursor/position
+	fmt.Printf("\x1b[%d;%dH", o.M+1, 1) // move cursor/position
 	if t == 0 {
 		fmt.Printf("[ 💅 ]")
 	} else {
@@ -225,7 +226,7 @@ func (o *Demo) BFS(s Point) {
 }
 
 func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
-	fmt.Print("\033[2J")   // clear screen
+	fmt.Print("\x1b[2J")   // clear screen
 	fmt.Print("\x1b[?25l") // low(hide) cursor
 
 	o.start = o.SetStart(s)
@@ -240,7 +241,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 		u := dQueue(&Q)
 
 		for _, v := range o.adjacents(u) {
-			if o.Grid[v] == Space {
+			if o.Color[v.Row][v.Col] == 'W' { // White: Not visited
 				o.Color[v.Row][v.Col] = 'G' // Gray: Visiting
 				o.Grid[v] = Looking
 				o.D[v], o.P[v] = 1+o.D[u], u
@@ -259,7 +260,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 		time.Sleep(75 * time.Millisecond)
 	}
 
-	fmt.Print("\033[2J")
+	fmt.Print("\x1b[2J")
 	o.Draw()
 	o.Stat(0)
 	fmt.Print("\x1b[?25h") // high(show) cursor
