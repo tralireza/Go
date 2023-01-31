@@ -48,14 +48,11 @@ func TestBreadcrumb(t *testing.T) {
 func TestValidGrid(t *testing.T) {
 	d := NewDemo(3, -3)
 	d.Draw()
-
 	d.AddBlock(12)
 	d.Draw()
-
 	d.AddDoor(16)
 	d.Draw()
-
-	p := Point{0, 0}
+	p := Point{0, 7}
 	d.SetStart(p)
 	d.Draw()
 
