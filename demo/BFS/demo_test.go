@@ -13,9 +13,9 @@ func init() {
 
 func TestSpace(t *testing.T) {
 	fmt.Print("\033[2J")
-	fmt.Print("123456")
-	fmt.Print("\033[3;3H")
-	fmt.Printf("%c%c", rune(0x1f37a), rune(0x1f4c0))
+	fmt.Print("12|34|56|")
+	fmt.Print("\033[3;1H")
+	fmt.Printf("%c|%c|%c|", rune(0x3000), rune(0x1f37a), rune(0x1f4c0))
 	fmt.Print("\n")
 }
 
