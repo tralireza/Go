@@ -158,3 +158,40 @@ func Test404(t *testing.T) {
 		log.Print("0 ?= ", f(&T{Val: 3}))
 	}
 }
+
+// 129m Sum Root to Leaf Numbers
+func Test129(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	sumNumbers := func(root *TreeNode) int {
+		tsum := 0
+
+		S, V := []*TreeNode{root}, []int{root.Val}
+		var n *TreeNode
+		var v int
+		for len(S) > 0 {
+			n, S = S[len(S)-1], S[:len(S)-1]
+			v, V = V[len(V)-1], V[:len(V)-1]
+
+			for _, c := range []*TreeNode{n.Left, n.Right} {
+				if c != nil {
+					S, V = append(S, c), append(V, 10*v+c.Val)
+				}
+			}
+
+			log.Print(S, V)
+			if n.Left == nil && n.Right == nil {
+				tsum += v
+			}
+		}
+
+		return tsum
+	}
+
+	type T = TreeNode
+	log.Print("25 ?= ", sumNumbers(&T{1, &T{Val: 2}, &T{Val: 3}}))
+	log.Print("1026 ?= ", sumNumbers(&T{4, &T{9, &T{Val: 5}, &T{Val: 1}}, &T{Val: 0}}))
+}
