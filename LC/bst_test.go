@@ -191,7 +191,30 @@ func Test129(t *testing.T) {
 		return tsum
 	}
 
+	recursive := func(root *TreeNode) int {
+		tsum := 0
+
+		var dfs func(*TreeNode, int)
+		dfs = func(n *TreeNode, v int) {
+			if n.Left == nil && n.Right == nil {
+				tsum += 10*v + n.Val
+			}
+			if n.Left != nil {
+				dfs(n.Left, 10*v+n.Val)
+			}
+			if n.Right != nil {
+				dfs(n.Right, 10*v+n.Val)
+			}
+		}
+
+		dfs(root, 0)
+		return tsum
+	}
+
 	type T = TreeNode
-	log.Print("25 ?= ", sumNumbers(&T{1, &T{Val: 2}, &T{Val: 3}}))
-	log.Print("1026 ?= ", sumNumbers(&T{4, &T{9, &T{Val: 5}, &T{Val: 1}}, &T{Val: 0}}))
+	for _, f := range []func(*TreeNode) int{sumNumbers, recursive} {
+		log.Print("12(12) ?= ", f(&T{1, &T{Val: 2}, nil}))
+		log.Print("25(12+13) ?= ", f(&T{1, &T{Val: 2}, &T{Val: 3}}))
+		log.Print("1026(495+491+40) ?= ", f(&T{4, &T{9, &T{Val: 5}, &T{Val: 1}}, &T{Val: 0}}))
+	}
 }
