@@ -194,20 +194,21 @@ func Test129(t *testing.T) {
 	recursive := func(root *TreeNode) int {
 		tsum := 0
 
-		var dfs func(*TreeNode, int)
-		dfs = func(n *TreeNode, v int) {
+		var walk func(*TreeNode, int)
+		walk = func(n *TreeNode, v int) {
 			if n.Left == nil && n.Right == nil {
 				tsum += 10*v + n.Val
 			}
+
 			if n.Left != nil {
-				dfs(n.Left, 10*v+n.Val)
+				walk(n.Left, 10*v+n.Val)
 			}
 			if n.Right != nil {
-				dfs(n.Right, 10*v+n.Val)
+				walk(n.Right, 10*v+n.Val)
 			}
 		}
 
-		dfs(root, 0)
+		walk(root, 0)
 		return tsum
 	}
 
