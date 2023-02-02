@@ -27,7 +27,7 @@ func TestBreadcrumb(t *testing.T) {
 	d.SetStart(Point{3, 8})
 
 	b, e := Point{3, 15}, Point{7, 13}
-	d.Grid[b], d.Grid[e] = Success, Success
+	d.Grid[b.Row][b.Col], d.Grid[e.Row][e.Col] = Success, Success
 	for j := 15; j > 8; j-- {
 		d.P[Point{3, j}] = Point{3, j - 1}
 	}
@@ -68,8 +68,8 @@ func TestGrid(t *testing.T) {
 
 	d := NewDemo(10, 56)
 	d.SetStart(Point{4, 27})
-	d.Grid[Point{4, 28}], d.Grid[Point{3, 27}] = Done, Done
-	d.Grid[Point{4, 29}], d.Grid[Point{5, 27}] = Looking, Looking
+	d.Grid[4][28], d.Grid[3][27] = Done, Done
+	d.Grid[4][29], d.Grid[5][27] = Looking, Looking
 
 	d.AddBlock(128)
 	d.AddDoor(16)

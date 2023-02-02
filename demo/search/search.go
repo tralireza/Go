@@ -15,7 +15,7 @@ func init() {
 type Point struct{ Row, Col int }
 type Demo struct {
 	M, N             int
-	Grid             map[Point]rune  // visual
+	Grid             [][]rune        // visual
 	P                map[Point]Point // parent/predecessor
 	D                map[Point]int   // distance to source/start
 	start            Point           // source/start
@@ -51,22 +51,20 @@ func NewDemo(m, n int) *Demo {
 
 	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}, shortest: math.MaxInt}
 
-	g, color := map[Point]rune{}, make([][]byte, m)
+	g, c := make([][]rune, m), make([][]byte, m)
 	for i := 0; i < m; i++ {
-		color[i] = make([]byte, n)
+		g[i], c[i] = make([]rune, n), make([]byte, n)
 		for j := 0; j < n; j++ {
-			v := Space
+			g[i][j] = Space
 			if i == 0 || i == m-1 || j == 0 || j == n-1 {
-				v = Wall
-			}
-			g[Point{i, j}] = v
-			if v == Space {
-				color[i][j] = 'W'
+				g[i][j] = Wall
+			} else {
+				c[i][j] = 'W'
 			}
 		}
 	}
 	d.Grid = g
-	d.Color = color
+	d.Color = c
 
 	return d
 }
@@ -78,7 +76,7 @@ func (o *Demo) SetStart(p Point) Point {
 	if p.Col <= 0 || p.Col >= o.N-1 {
 		p.Col = rand.Intn(o.N-2) + 1
 	}
-	o.Grid[p] = Start
+	o.Grid[p.Row][p.Col] = Start
 	return p
 }
 
@@ -89,8 +87,8 @@ func (o *Demo) AddBlock(k int) {
 
 	for k > 0 {
 		i, j := rand.Intn(o.M-1)+1, rand.Intn(o.N-1)+1
-		if o.Grid[Point{i, j}] == Space {
-			o.Grid[Point{i, j}] = Wall
+		if o.Grid[i][j] == Space {
+			o.Grid[i][j] = Wall
 			k--
 		}
 	}
@@ -105,14 +103,12 @@ func (o *Demo) AddDoor(k int) {
 		var i, j int
 		switch rand.Intn(2) {
 		case 0:
-			i = rand.Intn(2) * (o.M - 1)
-			j = rand.Intn(o.N)
+			i, j = rand.Intn(2)*(o.M-1), rand.Intn(o.N)
 		default:
-			i = rand.Intn(o.M)
-			j = rand.Intn(2) * (o.N - 1)
+			i, j = rand.Intn(o.M), rand.Intn(2)*(o.N-1)
 		}
-		if o.Grid[Point{i, j}] == Wall {
-			o.Grid[Point{i, j}] = Space
+		if o.Grid[i][j] == Wall {
+			o.Grid[i][j] = Space
 			o.Color[i][j] = 'W'
 			k--
 		}
@@ -123,7 +119,7 @@ func (o *Demo) Draw() {
 	for i := range o.M {
 		fmt.Printf("\x1b[%d;%dH", i+1, 1)
 		for j := range o.N {
-			fmt.Printf("%c", o.Grid[Point{i, j}])
+			fmt.Printf("%c", o.Grid[i][j])
 		}
 	}
 }
@@ -150,37 +146,39 @@ func (o *Demo) adjacents(p Point) []Point {
 	dirs := []int{0, 1, 0, -1, 0}
 	for i := range dirs[:4] {
 		q := Point{p.Row + dirs[i], p.Col + dirs[i+1]}
-		if q.Row >= 0 && o.M > q.Row && q.Col >= 0 && o.N > q.Col && o.Grid[q] != Wall {
+		if q.Row >= 0 && o.M > q.Row && q.Col >= 0 && o.N > q.Col && o.Grid[q.Row][q.Col] != Wall {
 			P = append(P, q)
 		}
 	}
 	return P
 }
 
-func (o *Demo) Breadcrumb(exit Point, m int) {
-	p := exit
-	for o.Grid[p] != Start {
-		prv := o.P[p]
-		if o.Grid[p] != Success {
-			switch m {
+func (o *Demo) Breadcrumb(exit Point, taste int) {
+	i, j := exit.Row, exit.Col
+	for o.Grid[i][j] != Start {
+		prv := o.P[Point{i, j}]
+		if o.Grid[i][j] != Success {
+			switch taste { // Breadcrumb Taste
 			case 0:
-				o.Grid[p] = Bee
+				o.Grid[i][j] = Bee
 			case 1, 2: // 2: keep Beeline
-				if m == 1 || o.Grid[p] != Bee {
+				if taste == 1 || o.Grid[i][j] != Bee {
+					var r rune
 					switch {
-					case prv.Row < p.Row:
-						o.Grid[p] = Up
-					case prv.Row > p.Row:
-						o.Grid[p] = Down
-					case prv.Col < p.Col:
-						o.Grid[p] = Left
-					case prv.Col > p.Col:
-						o.Grid[p] = Right
+					case prv.Row < i:
+						r = Up
+					case prv.Row > i:
+						r = Down
+					case prv.Col < j:
+						r = Left
+					case prv.Col > j:
+						r = Right
 					}
+					o.Grid[i][j] = r
 				}
 			}
 		}
-		p = prv
+		i, j = prv.Row, prv.Col
 	}
 }
 
@@ -198,7 +196,7 @@ func (o *Demo) isDoor(p Point) bool {
 		} else {
 			o.Breadcrumb(p, 2)
 		}
-		o.Grid[p] = Success
+		o.Grid[p.Row][p.Col] = Success
 
 		return true
 	}
@@ -226,7 +224,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	fmt.Print("\x1b[?25l") // low(hide) cursor
 
 	o.start = o.SetStart(s)
-	o.Grid[o.start] = Start
+	o.Grid[o.start.Row][o.start.Col] = Start
 	o.D[s] = 0
 
 	o.Draw()
@@ -239,7 +237,7 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 		for _, v := range o.adjacents(u) {
 			if o.Color[v.Row][v.Col] == 'W' { // White: Not visited
 				o.Color[v.Row][v.Col] = 'G' // Gray: Visiting
-				o.Grid[v] = Looking
+				o.Grid[v.Row][v.Col] = Looking
 				o.D[v], o.P[v] = 1+o.D[u], u
 
 				Q = append(Q, v)
@@ -247,8 +245,8 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 		}
 
 		o.Color[u.Row][u.Col] = 'B' // Black: Visited
-		if !o.isDoor(u) && o.Grid[u] != Start {
-			o.Grid[u] = Done
+		if !o.isDoor(u) && o.Grid[u.Row][u.Col] != Start {
+			o.Grid[u.Row][u.Col] = Done
 		}
 
 		o.Draw()
