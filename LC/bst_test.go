@@ -232,18 +232,18 @@ func Test988(t *testing.T) {
 
 		var walk func(*TreeNode, string)
 		walk = func(n *TreeNode, s string) {
+			s = string('a'+byte(n.Val)) + s
 			if n.Left == nil && n.Right == nil {
-				s = string('a'+byte(n.Val)) + s
 				if ms == "" || s < ms {
 					ms = s
 				}
 			}
 
 			if n.Left != nil {
-				walk(n.Left, string('a'+byte(n.Val))+s)
+				walk(n.Left, s)
 			}
 			if n.Right != nil {
-				walk(n.Right, string('a'+byte(n.Val))+s)
+				walk(n.Right, s)
 			}
 		}
 
