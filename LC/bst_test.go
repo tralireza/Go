@@ -219,3 +219,37 @@ func Test129(t *testing.T) {
 		log.Print("1026(495+491+40) ?= ", f(&T{4, &T{9, &T{Val: 5}, &T{Val: 1}}, &T{Val: 0}}))
 	}
 }
+
+// 988m Smallest Starting from Leaf
+func Test988(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	smallestFromLeaf := func(root *TreeNode) string {
+		ms := ""
+
+		var walk func(*TreeNode, string)
+		walk = func(n *TreeNode, s string) {
+			if n.Left == nil && n.Right == nil {
+				if ms == "" || s < ms {
+					ms = s
+				}
+			}
+
+			if n.Left != nil {
+				walk(n.Left, string('a'+byte(n.Left.Val))+s)
+			}
+			if n.Right != nil {
+				walk(n.Right, string('a'+byte(n.Right.Val))+s)
+			}
+		}
+
+		walk(root, string('a'+byte(root.Val)))
+		return ms
+	}
+
+	type T = TreeNode
+	log.Print("dba ?= ", smallestFromLeaf(&T{0, &T{1, &T{Val: 3}, &T{Val: 4}}, &T{2, &T{Val: 3}, &T{Val: 4}}}))
+}
