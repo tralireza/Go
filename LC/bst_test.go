@@ -254,3 +254,34 @@ func Test988(t *testing.T) {
 	type T = TreeNode
 	log.Print("dba ?= ", smallestFromLeaf(&T{0, &T{1, &T{Val: 3}, &T{Val: 4}}, &T{2, &T{Val: 3}, &T{Val: 4}}}))
 }
+
+// 124h Binary Tree Maximum Path Sum
+func Test(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	maxPathSum := func(root *TreeNode) int {
+		x := math.MinInt
+
+		var mxSum func(*TreeNode) int
+		mxSum = func(n *TreeNode) int {
+			if n == nil {
+				return 0
+			}
+
+			ls, rs := max(0, mxSum(n.Left)), max(0, mxSum(n.Right))
+			x = max(x, ls+n.Val+rs)
+			return n.Val + max(ls, rs)
+		}
+		mxSum(root)
+
+		return x
+	}
+
+	type T = TreeNode
+	log.Print("42 ?= ", maxPathSum(&T{-10, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+	log.Print("5 ?= ", maxPathSum(&T{1, &T{Val: -5}, &T{Val: 4}}))
+	log.Print("-3 ?= ", maxPathSum(&T{Val: -3}))
+}
