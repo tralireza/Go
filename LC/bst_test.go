@@ -317,7 +317,37 @@ func Test623(t *testing.T) {
 		return root
 	}
 
+	draw := func(n *TreeNode) {
+		Q := []*TreeNode{}
+		for len(Q) > 0 || n != nil {
+			if n != nil {
+				Q = append(Q, n)
+				n = n.Left
+			} else {
+				n, Q = Q[len(Q)-1], Q[:len(Q)-1]
+
+				l, r := '-', '-'
+				if n.Left != nil {
+					l = '*'
+				}
+				if n.Right != nil {
+					r = '*'
+				}
+				fmt.Printf("{%c %d %c}", l, n.Val, r)
+
+				n = n.Right
+			}
+		}
+		fmt.Print("\n")
+	}
+
 	type T = TreeNode
-	log.Print(" ?= ", addOneRow(&T{Val: 1}, 0, 1))
-	log.Print(" ?= ", addOneRow(&T{1, &T{Val: 2}, &T{Val: 2}}, 0, 2))
+	var r *T
+	r = &T{Val: 1}
+	draw(r)
+	draw(addOneRow(r, 0, 1))
+	log.Print("===")
+	r = &T{1, &T{Val: 2}, &T{Val: 2}}
+	draw(r)
+	draw(addOneRow(r, 0, 2))
 }
