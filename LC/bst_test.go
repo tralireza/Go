@@ -8,18 +8,17 @@ import (
 )
 
 func init() {
-	log.Print("> Binary Search Tree")
-	_ = eBT{}
+	log.Print("> Binary Tree & BST")
 }
 
-type eBT struct {
-	Val         any
-	Left, Right *eBT
+type TreeNode struct {
+	Val         int
+	Left, Right *TreeNode
 }
 
 // InOrder walk with Stack, non-recursive
 func TestInOrder(t *testing.T) {
-	type Tree = eBT
+	type Tree = TreeNode
 
 	rInOrder := func(root *Tree, visit func(*Tree)) {
 		var walk func(*Tree, func(*Tree))
@@ -285,4 +284,41 @@ func Test(t *testing.T) {
 	log.Print("42 ?= ", maxPathSum(&T{-10, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
 	log.Print("5 ?= ", maxPathSum(&T{1, &T{Val: -5}, &T{Val: 4}}))
 	log.Print("-3 ?= ", maxPathSum(&T{Val: -3}))
+}
+
+// 623m Add One Row to Tree
+func Test623(t *testing.T) {
+	addOneRow := func(root *TreeNode, val int, depth int) *TreeNode {
+		if depth == 1 {
+			return &TreeNode{val, root, nil}
+		}
+
+		Q := []*TreeNode{root}
+		var n *TreeNode
+
+		depth--
+		for depth > 1 {
+			for k := len(Q); k > 0; k-- {
+				n, Q = Q[0], Q[1:]
+				for _, v := range []*TreeNode{n.Left, n.Right} {
+					if v != nil {
+						Q = append(Q, v)
+					}
+				}
+			}
+			depth--
+		}
+
+		for len(Q) > 0 {
+			n, Q = Q[0], Q[1:]
+			n.Left = &TreeNode{val, n.Left, nil}
+			n.Right = &TreeNode{val, n.Right, nil}
+		}
+
+		return root
+	}
+
+	type T = TreeNode
+	log.Print(" ?= ", addOneRow(&T{Val: 1}, 0, 1))
+	log.Print(" ?= ", addOneRow(&T{1, &T{Val: 2}, &T{Val: 2}}, 0, 2))
 }
