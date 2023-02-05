@@ -296,8 +296,7 @@ func Test623(t *testing.T) {
 		Q := []*TreeNode{root}
 		var n *TreeNode
 
-		depth--
-		for depth > 1 {
+		for depth-1 > 1 {
 			for k := len(Q); k > 0; k-- {
 				n, Q = Q[0], Q[1:]
 				for _, v := range []*TreeNode{n.Left, n.Right} {
@@ -312,7 +311,7 @@ func Test623(t *testing.T) {
 		for len(Q) > 0 {
 			n, Q = Q[0], Q[1:]
 			n.Left = &TreeNode{val, n.Left, nil}
-			n.Right = &TreeNode{val, n.Right, nil}
+			n.Right = &TreeNode{val, nil, n.Right}
 		}
 
 		return root
