@@ -317,6 +317,31 @@ func Test623(t *testing.T) {
 		return root
 	}
 
+	recursive := func(root *TreeNode, val int, depth int) *TreeNode {
+		if depth == 1 {
+			return &TreeNode{Val: val, Left: root}
+		}
+
+		var preOrder func(*TreeNode, int)
+		preOrder = func(n *TreeNode, depth int) {
+			if n == nil {
+				return
+			}
+
+			if depth == 1 {
+				n.Left = &TreeNode{Val: val, Left: n.Left}
+				n.Right = &TreeNode{Val: val, Right: n.Right}
+				return
+			}
+
+			preOrder(n.Left, depth-1)
+			preOrder(n.Right, depth-1)
+		}
+
+		preOrder(root, depth-1)
+		return root
+	}
+
 	draw := func(n *TreeNode) {
 		Q := []*TreeNode{}
 		for len(Q) > 0 || n != nil {
@@ -343,11 +368,15 @@ func Test623(t *testing.T) {
 
 	type T = TreeNode
 	var r *T
-	r = &T{Val: 1}
-	draw(r)
-	draw(addOneRow(r, 0, 1))
-	log.Print("===")
-	r = &T{1, &T{Val: 2}, &T{Val: 2}}
-	draw(r)
-	draw(addOneRow(r, 0, 2))
+
+	for _, f := range []func(*TreeNode, int, int) *TreeNode{recursive, addOneRow} {
+		r = &T{Val: 1}
+		draw(r)
+		draw(f(r, 0, 1))
+		log.Print("===")
+		r = &T{1, &T{Val: 2}, &T{Val: 2}}
+		draw(r)
+		draw(f(r, 0, 2))
+		log.Print("===")
+	}
 }
