@@ -399,11 +399,11 @@ func Test114(t *testing.T) {
 
 		for n != nil {
 			if n.Left != nil {
-				p := n.Left
-				for p.Right != nil { // finding rightmost node of left child of n
-					p = p.Right
+				r := n.Left
+				for r.Right != nil { // finding rightmost node of left child of n
+					r = r.Right
 				}
-				p.Right = n.Right // right child of n is at right most of left child of n
+				r.Right = n.Right // right child of n is at right most of left child of n
 				n.Right = n.Left  // move all to right child of n
 				n.Left = nil
 			}
