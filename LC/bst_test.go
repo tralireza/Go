@@ -16,6 +16,17 @@ type TreeNode struct {
 	Left, Right *TreeNode
 }
 
+func (o TreeNode) String() string {
+	l, r := '-', '-'
+	if o.Left != nil {
+		l = '*'
+	}
+	if o.Right != nil {
+		r = '*'
+	}
+	return fmt.Sprintf("{%c %d %c}", l, o.Val, r)
+}
+
 // InOrder walk with Stack, non-recursive
 func TestInOrder(t *testing.T) {
 	type Tree = TreeNode
@@ -379,4 +390,32 @@ func Test623(t *testing.T) {
 		draw(f(r, 0, 2))
 		log.Print("===")
 	}
+}
+
+// 114m Flatten Binary Tree to Linked List
+func Test114(t *testing.T) {
+	flatten := func(root *TreeNode) {
+		cur := root
+		for cur != nil {
+			if cur.Left != nil {
+				p := cur.Left
+				for p.Right != nil {
+					p = p.Right
+				}
+				p.Right = cur.Right
+				cur.Right = cur.Left
+				cur.Left = nil
+			}
+			cur = cur.Right
+		}
+	}
+
+	type T = TreeNode
+
+	n := &T{1, &T{2, &T{Val: 3}, &T{Val: 4}}, &T{5, nil, &T{Val: 6}}}
+	flatten(n)
+	for ; n != nil; n = n.Right {
+		fmt.Print(n)
+	}
+	fmt.Print("\n")
 }
