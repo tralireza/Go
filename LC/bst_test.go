@@ -395,18 +395,20 @@ func Test623(t *testing.T) {
 // 114m Flatten Binary Tree to Linked List
 func Test114(t *testing.T) {
 	flatten := func(root *TreeNode) {
-		cur := root
-		for cur != nil {
-			if cur.Left != nil {
-				p := cur.Left
-				for p.Right != nil {
+		n := root
+
+		for n != nil {
+			if n.Left != nil {
+				p := n.Left
+				for p.Right != nil { // finding rightmost node of left child of n
 					p = p.Right
 				}
-				p.Right = cur.Right
-				cur.Right = cur.Left
-				cur.Left = nil
+				p.Right = n.Right // right child of n is at right most of left child of n
+				n.Right = n.Left  // move all to right child of n
+				n.Left = nil
 			}
-			cur = cur.Right
+
+			n = n.Right
 		}
 	}
 
