@@ -12,8 +12,8 @@ func init() {
 }
 
 func TestChars(t *testing.T) {
-	fmt.Print("\x1b[2J\x1b[H") // clear screen, cursor home
-	fmt.Print("\x1b[2;1H")
+	fmt.Print("\x1b[2J")   // clear screen
+	fmt.Print("\x1b[2;1H") // cursor move 2x1
 	fmt.Printf("%c", Start)
 	fmt.Print("|12|34|56|78|")
 	fmt.Print("\x1b[3;1H")
@@ -34,7 +34,8 @@ func TestBreadcrumb(t *testing.T) {
 	for i := 7; i > 3; i-- {
 		d.P[Point{i, 13}] = Point{i - 1, 13}
 	}
-	fmt.Print("\033[2J")
+	fmt.Print("\x1b[2J")
+	fmt.Printf("\x1b[?25l") // low(hide) cursor
 
 	d.Breadcrumb(b, 0)
 	d.Draw()
@@ -45,6 +46,7 @@ func TestBreadcrumb(t *testing.T) {
 	d.Breadcrumb(b, 1)
 	d.Draw()
 
+	fmt.Printf("\x1b[?25h") // high(show) cursor
 	fmt.Print("\n")
 }
 
@@ -58,7 +60,6 @@ func TestValidGrid(t *testing.T) {
 	p := Point{0, 7}
 	d.SetStart(p)
 	d.Draw()
-
 	d.BFS(p)
 }
 
@@ -81,15 +82,14 @@ func TestGrid(t *testing.T) {
 	time.Sleep(425 * time.Millisecond)
 	d.Stat(0)
 
-	fmt.Printf("\n")
 	fmt.Printf("\x1b[?25h") // high(show) cursor
+	fmt.Printf("\n")
 }
 
 func TestBFS(t *testing.T) {
 	d := NewDemo(10, 56)
 	d.AddBlock(128)
 	d.AddDoor(16)
-
 	d.BFS(Point{5, 28})
 }
 
@@ -97,7 +97,6 @@ func TestDFS(t *testing.T) {
 	d := NewDemo(10, 56)
 	d.AddBlock(128)
 	d.AddDoor(16)
-
 	d.DFS(Point{5, 28})
 }
 
