@@ -14,15 +14,16 @@ func init() {
 
 type Point struct{ Row, Col int }
 type Demo struct {
-	M, N             int
-	Grid             [][]rune        // visual
-	P                map[Point]Point // parent/predecessor
-	D                map[Point]int   // distance to source/start
-	start            Point           // source/start
-	fdoors, shortest int             // doors found, shortest path
-	exit             Point           // shortest distance exit
-	steps            uint            // steps
-	Color            [][]byte        // 'W'hite, 'G'ray, 'B'lack -> Not visited, Visiting, Visited
+	M, N  int              // M:rows x N:columns
+	Grid  [][]rune         // Grid data, adjacencies
+	P     map[Point]Point  // parent/predecessor
+	D     map[Point]int    // distance to source/start
+	Color [][]byte         // 'W'hite, 'G'ray, 'B'lack -> Not visited, Visiting, Visited
+	DF    map[Point][]uint // node time -> 0: discovery, 1: finish
+	ctime uint             // current monotonic time
+
+	fdoors, shortest int   // doors found, shortest path
+	start, exit      Point // source/start, shortest distance exit
 }
 
 const (
@@ -49,7 +50,14 @@ func NewDemo(m, n int) *Demo {
 		n = 3
 	}
 
-	d := &Demo{M: m, N: n, P: map[Point]Point{}, D: map[Point]int{}, shortest: math.MaxInt}
+	d := &Demo{M: m, N: n,
+		Grid:     [][]rune{},
+		P:        map[Point]Point{},
+		D:        map[Point]int{},
+		Color:    [][]byte{},
+		DF:       map[Point][]uint{},
+		shortest: math.MaxInt,
+	}
 
 	g, c := make([][]rune, m), make([][]byte, m)
 	for i := 0; i < m; i++ {
@@ -129,8 +137,7 @@ func (o *Demo) Stat(t int) {
 	if t == 0 {
 		fmt.Printf("[ 💅 ]")
 	} else {
-		fmt.Printf("[ %c ]", []rune{'💿', '📀'}[o.steps%2])
-		o.steps++
+		fmt.Printf("[ %c ]", []rune{'💿', '📀'}[o.ctime%2])
 	}
 
 	fmt.Printf("     %4d %c   %4d %c   ", t, Looking, o.fdoors, Success)
@@ -234,9 +241,13 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 	for len(Q) > 0 {
 		u := dQueue(&Q)
 
+		o.ctime++
+		o.DF[u] = []uint{o.ctime}
+
 		for _, v := range o.adjacents(u) {
 			if o.Color[v.Row][v.Col] == 'W' { // White: Not visited
 				o.Color[v.Row][v.Col] = 'G' // Gray: Visiting
+
 				o.Grid[v.Row][v.Col] = Looking
 				o.D[v], o.P[v] = 1+o.D[u], u
 
@@ -244,7 +255,10 @@ func (o *Demo) search(s Point, dQueue func(Q *[]Point) Point) {
 			}
 		}
 
+		o.ctime++
+		o.DF[u] = append(o.DF[u], o.ctime)
 		o.Color[u.Row][u.Col] = 'B' // Black: Visited
+
 		if !o.isDoor(u) && o.Grid[u.Row][u.Col] != Start {
 			o.Grid[u.Row][u.Col] = Done
 		}
