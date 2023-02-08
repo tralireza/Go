@@ -433,19 +433,19 @@ func Test85(t *testing.T) {
 // 2371h Minimize Maximum Value in a Grid
 func Test237(t *testing.T) {
 	minScore := func(grid [][]int) [][]int {
-		m := [][]int{} // x, y, grid[x][y]
+		V := [][]int{} // x, y, grid[x][y]
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[0]); j++ {
-				m = append(m, []int{i, j, grid[i][j]})
+				V = append(V, []int{i, j, grid[i][j]})
 			}
 		}
 
-		slices.SortFunc(m, func(a, b []int) int { return a[2] - b[2] })
-		log.Print(m)
+		slices.SortFunc(V, func(a, b []int) int { return a[2] - b[2] })
+		log.Print(V)
 
 		log.Print(grid)
 		xrow, xcol := make([]int, len(grid)), make([]int, len(grid[0]))
-		for _, v := range m {
+		for _, v := range V {
 			i, j := v[0], v[1]
 			x := max(xrow[i], xcol[j]) + 1
 			xrow[i], xcol[j] = x, x
@@ -456,4 +456,5 @@ func Test237(t *testing.T) {
 
 	log.Print(" ?= ", minScore([][]int{{3, 1}, {2, 5}}))
 	log.Print(" ?= ", minScore([][]int{{2, 4, 5}, {7, 3, 9}}))
+	log.Print(" ?= ", minScore([][]int{{2, 4, 5, 13}, {18, 3, 9, 1}, {12, 8, 17, 6}}))
 }
