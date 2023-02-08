@@ -429,3 +429,31 @@ func Test85(t *testing.T) {
 	log.Print("0 ?= ", maximalRectangle([][]byte{{'0'}}))
 	log.Print("1 ?= ", maximalRectangle([][]byte{{'1'}}))
 }
+
+// 2371h Minimize Maximum Value in a Grid
+func Test237(t *testing.T) {
+	minScore := func(grid [][]int) [][]int {
+		m := [][]int{} // x, y, grid[x][y]
+		for i := 0; i < len(grid); i++ {
+			for j := 0; j < len(grid[0]); j++ {
+				m = append(m, []int{i, j, grid[i][j]})
+			}
+		}
+
+		slices.SortFunc(m, func(a, b []int) int { return a[2] - b[2] })
+		log.Print(m)
+
+		log.Print(grid)
+		xrow, xcol := make([]int, len(grid)), make([]int, len(grid[0]))
+		for _, v := range m {
+			i, j := v[0], v[1]
+			x := max(xrow[i], xcol[j]) + 1
+			xrow[i], xcol[j] = x, x
+			grid[i][j] = x
+		}
+		return grid
+	}
+
+	log.Print(" ?= ", minScore([][]int{{3, 1}, {2, 5}}))
+	log.Print(" ?= ", minScore([][]int{{2, 4, 5}, {7, 3, 9}}))
+}
