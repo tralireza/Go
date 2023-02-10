@@ -432,7 +432,7 @@ func Test85(t *testing.T) {
 
 // 2371h Minimize Maximum Value in a Grid
 func Test237(t *testing.T) {
-	minScore := func(grid [][]int, fSelect func([][]int, [][]int)) [][]int {
+	minScore := func(grid [][]int, fSelect func(grid, places [][]int)) [][]int {
 		places := [][]int{} // grid[x][y], x, y
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[0]); j++ {
