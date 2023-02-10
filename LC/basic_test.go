@@ -432,29 +432,54 @@ func Test85(t *testing.T) {
 
 // 2371h Minimize Maximum Value in a Grid
 func Test237(t *testing.T) {
-	minScore := func(grid [][]int) [][]int {
+	minScore := func(grid [][]int, fSelect func([][]int, [][]int)) [][]int {
 		V := [][]int{} // x, y, grid[x][y]
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[0]); j++ {
-				V = append(V, []int{i, j, grid[i][j]})
+				V = append(V, []int{grid[i][j], i, j})
 			}
 		}
 
-		slices.SortFunc(V, func(a, b []int) int { return a[2] - b[2] })
+		slices.SortFunc(V, func(a, b []int) int { return a[0] - b[0] })
 		log.Print(V)
 
 		log.Print(grid)
-		xrow, xcol := make([]int, len(grid)), make([]int, len(grid[0]))
-		for _, v := range V {
-			i, j := v[0], v[1]
-			x := max(xrow[i], xcol[j]) + 1
-			xrow[i], xcol[j] = x, x
-			grid[i][j] = x
-		}
+		fSelect(grid, V)
+
 		return grid
 	}
 
-	log.Print(" ?= ", minScore([][]int{{3, 1}, {2, 5}}))
-	log.Print(" ?= ", minScore([][]int{{2, 4, 5}, {7, 3, 9}}))
-	log.Print(" ?= ", minScore([][]int{{2, 4, 5, 13}, {18, 3, 9, 1}, {12, 8, 17, 6}}))
+	simpleSelect := func(grid, V [][]int) {
+		for i := 0; i < len(grid); i++ {
+			for j := 0; j < len(grid[0]); j++ {
+				grid[i][j] = 0
+			}
+		}
+
+		for _, v := range V {
+			i, j := v[1], v[2]
+			xcol := 0
+			for k := 0; k < len(grid); k++ {
+				xcol = max(xcol, grid[k][j])
+			}
+			x := max(slices.Max(grid[i]), xcol) + 1
+			grid[i][j] = x
+		}
+	}
+
+	fastSelect := func(grid, V [][]int) {
+		xrow, xcol := make([]int, len(grid)), make([]int, len(grid[0]))
+		for _, v := range V {
+			i, j := v[1], v[2]
+			x := max(xrow[i], xcol[j]) + 1
+			grid[i][j] = x
+			xrow[i], xcol[j] = x, x
+		}
+	}
+
+	for _, f := range []func([][]int, [][]int){simpleSelect, fastSelect} {
+		log.Print(" ?= ", minScore([][]int{{3, 1}, {2, 5}}, f))
+		log.Print(" ?= ", minScore([][]int{{2, 4, 5}, {7, 3, 9}}, f))
+		log.Print(" ?= ", minScore([][]int{{2, 4, 5, 13}, {18, 3, 9, 1}, {12, 8, 17, 6}}, f))
+	}
 }
