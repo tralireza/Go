@@ -449,6 +449,7 @@ func Test237(t *testing.T) {
 		return grid
 	}
 
+	// O(n3) n~m -> may TLE with large input
 	simpleSelect := func(grid, places [][]int) {
 		for i := 0; i < len(grid); i++ {
 			for j := 0; j < len(grid[0]); j++ {
@@ -467,6 +468,7 @@ func Test237(t *testing.T) {
 		}
 	}
 
+	// O(n2) n~m
 	fastSelect := func(grid, places [][]int) {
 		xrow, xcol := make([]int, len(grid)), make([]int, len(grid[0]))
 		for _, v := range places {
