@@ -485,3 +485,38 @@ func Test237(t *testing.T) {
 		log.Print(" ?= ", minScore([][]int{{2, 4, 5, 13}, {18, 3, 9, 1}, {12, 8, 17, 6}}, f))
 	}
 }
+
+// 568h Maximum Vacation Days
+func Test(t *testing.T) {
+	maxVacationDays := func(flights [][]int, days [][]int) int {
+		W, M := len(days[0]), map[[2]int]int{}
+
+		var calc func(c, w int) int
+		calc = func(c, w int) int {
+			if w >= W {
+				return 0
+			}
+
+			if v, ok := M[[2]int{c, w}]; ok {
+				return v
+			}
+
+			best := days[c][w] + calc(c, w+1)
+			for i, f := range flights[c] {
+				if f == 1 {
+					best = max(days[i][w]+calc(i, w+1), best)
+				}
+			}
+
+			M[[2]int{c, w}] = best
+			return best
+		}
+
+		x := calc(0, 0)
+		log.Print(M)
+
+		return x
+	}
+
+	log.Print("12 ?= ", maxVacationDays([][]int{{0, 1, 1}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
+}
