@@ -519,4 +519,5 @@ func Test(t *testing.T) {
 	}
 
 	log.Print("12 ?= ", maxVacationDays([][]int{{0, 1, 1}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
+	log.Print("5 ?= ", maxVacationDays([][]int{{0, 0, 0}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
 }
