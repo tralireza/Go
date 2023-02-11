@@ -267,7 +267,7 @@ func Test988(t *testing.T) {
 }
 
 // 124h Binary Tree Maximum Path Sum
-func Test(t *testing.T) {
+func Test124(t *testing.T) {
 	type TreeNode struct {
 		Val         int
 		Left, Right *TreeNode
