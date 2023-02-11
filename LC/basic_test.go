@@ -488,7 +488,8 @@ func Test237(t *testing.T) {
 
 // 568h Maximum Vacation Days
 func Test(t *testing.T) {
-	maxVacationDays := func(flights [][]int, days [][]int) int {
+	maxVacationDays := func(flights, days [][]int) int {
+		// W: weeks, M: cache
 		W, M := len(days[0]), map[[2]int]int{}
 
 		var calc func(c, w int) int
@@ -518,6 +519,39 @@ func Test(t *testing.T) {
 		return x
 	}
 
-	log.Print("12 ?= ", maxVacationDays([][]int{{0, 1, 1}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
-	log.Print("5 ?= ", maxVacationDays([][]int{{0, 0, 0}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
+	// DP: Bottom-Up
+	bottomUp := func(flights, days [][]int) int {
+		// dp Week X City -> max: vdays
+		dp := make([][]int, len(days))
+		for c := range days {
+			dp[c] = make([]int, len(days[0]))
+		}
+
+		dp[0][0] = days[0][0]
+		for w := 0; w < len(days[0]); w++ {
+			for c := 0; c < len(days); c++ {
+				if w == 0 && c == 0 || w > 0 && dp[w-1][c] > 0 {
+					dp[w][c] = days[c][w]
+					for d, f := range flights[c] {
+						if f == 1 {
+							dp[w][d] = days[d][w]
+						}
+					}
+				}
+			}
+		}
+
+		log.Print(dp)
+
+		x := 0
+		for w := 0; w < len(days[0]); w++ {
+			x += slices.Max(dp[w])
+		}
+		return x
+	}
+
+	for _, f := range []func(flights, days [][]int) int{maxVacationDays, bottomUp} {
+		log.Print("12 ?= ", f([][]int{{0, 1, 1}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
+		log.Print("5 ?= ", f([][]int{{0, 0, 0}, {1, 0, 1}, {1, 1, 0}}, [][]int{{1, 3, 1}, {6, 0, 3}, {3, 3, 3}}))
+	}
 }
