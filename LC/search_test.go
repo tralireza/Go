@@ -222,3 +222,33 @@ func Test2300(t *testing.T) {
 	log.Print("[2 0 2] ?= ", successfulPairs([]int{3, 1, 2}, []int{8, 5, 8}, 16))
 	log.Print("[1 4 3] ?= ", successfulPairs([]int{1, 4, 2}, []int{2, 5, 1, 3}, 4))
 }
+
+// 463 Island Perimeter
+func Test463(t *testing.T) {
+	islandPerimeter := func(grid [][]int) int {
+		Rows, Cols := len(grid), len(grid[0])
+		Dirs := []int{0, 1, 0, -1, 0}
+		perimeter := 0
+
+		for r := 0; r < Rows; r++ {
+			for c := 0; c < Cols; c++ {
+				if grid[r][c] == 0 {
+					continue
+				}
+
+				for k := range Dirs[:4] {
+					p, q := r+Dirs[k], c+Dirs[k+1]
+					if p < 0 || p > Rows-1 || q < 0 || q > Cols-1 || grid[p][q] == 0 {
+						perimeter++
+					}
+				}
+			}
+		}
+
+		return perimeter
+	}
+
+	log.Print("16 ?= ", islandPerimeter([][]int{{0, 1, 0, 0}, {1, 1, 1, 0}, {0, 1, 0, 0}, {1, 1, 0, 0}}))
+	log.Print("4 ?= ", islandPerimeter([][]int{{0, 1, 0}}))
+	log.Print("4 ?= ", islandPerimeter([][]int{{1}}))
+}
