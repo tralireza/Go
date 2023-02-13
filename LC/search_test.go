@@ -228,8 +228,8 @@ func Test463(t *testing.T) {
 	islandPerimeter := func(grid [][]int) int {
 		Rows, Cols := len(grid), len(grid[0])
 		Dirs := []int{0, 1, 0, -1, 0}
-		perimeter := 0
 
+		perimeter := 0
 		for r := 0; r < Rows; r++ {
 			for c := 0; c < Cols; c++ {
 				if grid[r][c] == 0 {
@@ -244,7 +244,6 @@ func Test463(t *testing.T) {
 				}
 			}
 		}
-
 		return perimeter
 	}
 
