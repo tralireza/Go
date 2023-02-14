@@ -355,7 +355,24 @@ func Test139(t *testing.T) {
 		return possible(0)
 	}
 
-	log.Print("true ?= ", wordBreak("applepenapple", []string{"apple", "pen"}))
-	log.Print("false ?= ", wordBreak("catsandogs", []string{"cats", "dog", "sand", "and", "cat"}))
-	log.Print("(TLE) false ?= ", wordBreak("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", []string{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"}))
+	// DP: Bottom-Up
+	bottomUp := func(s string, wordDict []string) bool {
+		D := make([]bool, len(s)+1)
+		D[0] = true
+		for i := 1; i <= len(s); i++ {
+			for _, w := range wordDict {
+				if i-len(w) >= 0 && s[i-len(w):i] == w {
+					D[i] = D[i-len(w)] || D[i]
+				}
+			}
+		}
+
+		return D[len(s)]
+	}
+
+	for _, f := range []func(string, []string) bool{wordBreak, bottomUp} {
+		log.Print("(TLE) false ?= ", f("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", []string{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"}))
+		log.Print("true ?= ", f("applepenapple", []string{"apple", "pen"}))
+		log.Print("false ?= ", f("catsandogs", []string{"cats", "dog", "sand", "and", "cat"}))
+	}
 }
