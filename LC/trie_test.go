@@ -320,3 +320,42 @@ func Test79(t *testing.T) {
 	log.Print("true ?= ", exist(boardSet(), "ABCCFSADEESE"))
 	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'E', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCEFSADEESE"))
 }
+
+// 139m Word Break
+func Test139(t *testing.T) {
+	wordBreak := func(s string, wordDict []string) bool {
+		Visited := map[int]struct{}{}
+
+		var possible func(int) bool
+		possible = func(start int) bool {
+			if start == len(s) {
+				return true
+			}
+
+			log.Print(Visited)
+			if _, ok := Visited[start]; ok {
+				return false
+			}
+
+			subs := s[start:]
+			for _, w := range wordDict {
+				log.Printf("%d %s %s", start, subs, w)
+
+				if strings.HasPrefix(subs, w) {
+					if possible(start + len(w)) {
+						return true
+					} else {
+						Visited[start+len(w)] = struct{}{}
+					}
+				}
+			}
+
+			return false
+		}
+
+		return possible(0)
+	}
+
+	log.Print("true ?= ", wordBreak("applepenapple", []string{"apple", "pen"}))
+	log.Print("false ?= ", wordBreak("catsandogs", []string{"cats", "dog", "sand", "and", "cat"}))
+}
