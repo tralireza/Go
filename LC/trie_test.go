@@ -361,8 +361,8 @@ func Test139(t *testing.T) {
 		D[0] = true
 		for i := 1; i <= len(s); i++ {
 			for _, w := range wordDict {
-				if i-len(w) >= 0 && s[i-len(w):i] == w {
-					D[i] = D[i-len(w)] || D[i]
+				if i-len(w) >= 0 && s[i-len(w):i] == w && D[i-len(w)] {
+					D[i] = true
 				}
 			}
 		}
