@@ -332,7 +332,6 @@ func Test139(t *testing.T) {
 				return true
 			}
 
-			log.Print(Visited)
 			if _, ok := Visited[start]; ok {
 				return false
 			}
@@ -358,4 +357,5 @@ func Test139(t *testing.T) {
 
 	log.Print("true ?= ", wordBreak("applepenapple", []string{"apple", "pen"}))
 	log.Print("false ?= ", wordBreak("catsandogs", []string{"cats", "dog", "sand", "and", "cat"}))
+	log.Print("(TLE) false ?= ", wordBreak("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", []string{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"}))
 }
