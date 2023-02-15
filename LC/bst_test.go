@@ -46,17 +46,12 @@ func Test536(t *testing.T) {
 					n.Left = c
 				}
 			default:
-				v, sign := 0, 1
-				if s[i] == '-' {
-					sign = -1
-					i++
+				start := i
+				for ; i < len(s) && s[i] != '(' && s[i] != ')'; i++ {
 				}
-				for i < len(s) && '0' <= s[i] && s[i] <= '9' {
-					v = 10*v + int(s[i]-'0')
-					i++
-				}
+				v, _ := strconv.Atoi(s[start:i])
+				n = &TreeNode{Val: v}
 				i--
-				n = &TreeNode{Val: sign * int(v)}
 			}
 		}
 
