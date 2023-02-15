@@ -27,6 +27,63 @@ func (o TreeNode) String() string {
 	return fmt.Sprintf("{%c %d %c}", l, o.Val, r)
 }
 
+// 536m Construct Binary Tree from String
+func Test536(t *testing.T) {
+	str2Tree := func(s string) *TreeNode {
+		S := []*TreeNode{}
+		var n *TreeNode
+
+		for i := 0; i < len(s); i++ {
+			switch s[i] {
+			case '(':
+				S = append(S, n)
+			case ')':
+				c := n
+				n, S = S[len(S)-1], S[:len(S)-1]
+				if n.Left != nil {
+					n.Right = c
+				} else {
+					n.Left = c
+				}
+			default:
+				sign := 1
+				if s[i] == '-' {
+					sign = -1
+					i++
+				}
+				v := s[i] - '0'
+				n = &TreeNode{Val: sign * int(v)}
+			}
+		}
+
+		return n
+	}
+
+	Draw := func(n *TreeNode) {
+		Q, l := []*TreeNode{n}, 0
+		for len(Q) > 0 {
+			fmt.Printf("%d ", l)
+			for range len(Q) {
+				n, Q = Q[0], Q[1:]
+				fmt.Print(n)
+				if n.Left != nil {
+					Q = append(Q, n.Left)
+				}
+				if n.Right != nil {
+					Q = append(Q, n.Right)
+				}
+			}
+			l++
+			fmt.Print("\n")
+		}
+	}
+
+	for _, s := range []string{"4(2(3)(1))(6(5))", "-4", "7(3)(4(-2(1)(8)))"} {
+		Draw(str2Tree(s))
+		log.Print("===")
+	}
+}
+
 // InOrder walk with Stack, non-recursive
 func TestInOrder(t *testing.T) {
 	type Tree = TreeNode
