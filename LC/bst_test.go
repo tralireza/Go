@@ -46,12 +46,16 @@ func Test536(t *testing.T) {
 					n.Left = c
 				}
 			default:
-				sign := 1
+				v, sign := 0, 1
 				if s[i] == '-' {
 					sign = -1
 					i++
 				}
-				v := s[i] - '0'
+				for i < len(s) && '0' <= s[i] && s[i] <= '9' {
+					v = 10*v + int(s[i]-'0')
+					i++
+				}
+				i--
 				n = &TreeNode{Val: sign * int(v)}
 			}
 		}
@@ -78,7 +82,7 @@ func Test536(t *testing.T) {
 		}
 	}
 
-	for _, s := range []string{"4(2(3)(1))(6(5))", "-4", "7(3)(4(-2(1)(8)))"} {
+	for _, s := range []string{"4(2(3)(1))(6(5))", "-4203", "7(3901)(4(-29(1)(891)))"} {
 		Draw(str2Tree(s))
 		log.Print("===")
 	}
