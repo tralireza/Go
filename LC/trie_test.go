@@ -376,3 +376,35 @@ func Test139(t *testing.T) {
 		log.Print("false ?= ", f("catsandogs", []string{"cats", "dog", "sand", "and", "cat"}))
 	}
 }
+
+// 472h Concatenated Words
+func Test472(t *testing.T) {
+	findAllConcatenatedWordsInADict := func(words []string) []string {
+		W := []string{}
+
+		for _, w := range words {
+			// DP: w[0..n] -> Y/N segmented?
+			D := make([]bool, len(w)+1)
+			D[0] = true
+
+			for i := 1; i <= len(w); i++ {
+				for j := 0; j < len(words) && !D[i]; j++ {
+					if w == words[j] {
+						continue
+					}
+					if i-len(words[j]) >= 0 && D[i-len(words[j])] && w[i-len(words[j]):i] == words[j] {
+						D[i] = true
+					}
+				}
+			}
+
+			if D[len(w)] {
+				W = append(W, w)
+			}
+		}
+
+		return W
+	}
+
+	log.Print(findAllConcatenatedWordsInADict([]string{"cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"}))
+}
