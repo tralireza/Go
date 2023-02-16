@@ -461,7 +461,39 @@ func Test472(t *testing.T) {
 		return W
 	}
 
-	for _, f := range []func([]string) []string{findAllConcatenatedWordsInADict, trieSearcher} {
+	hashSearcher := func(words []string) []string {
+		W := []string{}
+
+		m := map[string]bool{}
+		for _, w := range words {
+			m[w] = true
+		}
+
+		for _, w := range words {
+			D := make([]bool, len(w)+1)
+			D[0] = true
+
+			for i := 1; i <= len(w); i++ {
+				for j := 0; j < i && !D[i]; j++ {
+					if i == len(w) && j == 0 {
+						continue
+					}
+
+					if D[j] && m[w[j:i]] {
+						D[i] = true
+					}
+				}
+			}
+
+			if D[len(w)] {
+				W = append(W, w)
+			}
+		}
+
+		return W
+	}
+
+	for _, f := range []func([]string) []string{findAllConcatenatedWordsInADict, trieSearcher, hashSearcher} {
 		log.Print(f([]string{"cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"}))
 	}
 }
