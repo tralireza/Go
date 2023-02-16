@@ -406,5 +406,62 @@ func Test472(t *testing.T) {
 		return W
 	}
 
-	log.Print(findAllConcatenatedWordsInADict([]string{"cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"}))
+	trieSearcher := func(words []string) []string {
+		type Trie struct {
+			isNode   bool
+			children [26]*Trie
+		}
+		insert := func(n *Trie, word string) {
+			for i := 0; i < len(word); i++ {
+				child := n.children[word[i]-'a']
+				if child == nil {
+					child = &Trie{}
+					n.children[word[i]-'a'] = child
+				}
+				n = child
+			}
+			n.isNode = true
+		}
+		search := func(n *Trie, word string) bool {
+			for i := 0; i < len(word); i++ {
+				child := n.children[word[i]-'a']
+				if child == nil {
+					return false
+				}
+				n = child
+			}
+			return n.isNode
+		}
+
+		trie := &Trie{}
+		for _, w := range words {
+			insert(trie, w)
+		}
+
+		W := []string{}
+		for _, w := range words {
+			D := make([]bool, len(w)+1)
+			D[0] = true
+
+			for i := 1; i <= len(w); i++ {
+				for j := 0; j < i && !D[i]; j++ {
+					if i == len(w) && j == 0 {
+						continue
+					}
+					if D[j] && search(trie, w[j:i]) {
+						D[i] = true
+					}
+				}
+			}
+
+			if D[len(w)] {
+				W = append(W, w)
+			}
+		}
+		return W
+	}
+
+	for _, f := range []func([]string) []string{findAllConcatenatedWordsInADict, trieSearcher} {
+		log.Print(f([]string{"cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"}))
+	}
 }
