@@ -251,3 +251,42 @@ func Test463(t *testing.T) {
 	log.Print("4 ?= ", islandPerimeter([][]int{{0, 1, 0}}))
 	log.Print("4 ?= ", islandPerimeter([][]int{{1}}))
 }
+
+// 1992m Find All Groups of Farmland
+func Test1992(t *testing.T) {
+	findFarmland := func(land [][]int) [][]int {
+		Cords := [][]int{}
+		Rows, Cols := len(land), len(land[0])
+		Dx, Dy := []int{0, 0, 1, 1}, []int{1, -1, 0, 0}
+
+		var m, n int
+		var dfs func(i, j int)
+		dfs = func(i, j int) {
+			land[i][j] = -1
+			m, n = max(m, i), max(n, j)
+
+			for k := 0; k < 4; k++ {
+				x, y := i+Dx[k], j+Dy[k]
+				if x >= 0 && x < Rows && y >= 0 && y < Cols && land[x][y] == 1 {
+					dfs(x, y)
+				}
+			}
+		}
+
+		for i := 0; i < Rows; i++ {
+			for j := 0; j < Cols; j++ {
+				if land[i][j] == 1 {
+					m, n = i, j
+					dfs(i, j)
+					Cords = append(Cords, []int{i, j, m, n})
+				}
+			}
+		}
+
+		return Cords
+	}
+
+	log.Print(" ?= ", findFarmland([][]int{{1, 0, 0}, {0, 1, 1}, {0, 1, 1}}))
+	log.Print(" ?= ", findFarmland([][]int{{1}}))
+	log.Print(" ?= ", findFarmland([][]int{{0}}))
+}

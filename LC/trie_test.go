@@ -212,14 +212,13 @@ func TestTrieSearch(t *testing.T) {
 	}
 
 	rdr := strings.NewReader("testing\nprefix\ntree\nTrie\nsearch\n1234\n-sign\n+sign")
-	/*
-		  f, err := os.Open("passwords.txt")
-			if err != nil {
-				t.Fatal(err)
-			}
-			defer f.Close()
-			rdr := bufio.NewReader(f)
-	*/
+
+	/* f, err := os.Open("passwords.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+	rdr := bufio.NewReader(f) */
 
 	T := &eTrie{}
 
