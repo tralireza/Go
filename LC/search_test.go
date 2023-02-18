@@ -290,3 +290,22 @@ func Test1992(t *testing.T) {
 	log.Print(" ?= ", findFarmland([][]int{{1}}))
 	log.Print(" ?= ", findFarmland([][]int{{0}}))
 }
+
+// 419m Battleships in a Board
+func Test419(t *testing.T) {
+	countBattleships := func(board [][]byte) int {
+		x := 0
+		for r := 0; r < len(board); r++ {
+			for c := 0; c < len(board[r]); c++ {
+				if board[r][c] == 'X' &&
+					(r == 0 || board[r-1][c] == '.') &&
+					(c == 0 || board[r][c-1] == '.') {
+					x++
+				}
+			}
+		}
+		return x
+	}
+
+	log.Print("2 ?= ", countBattleships([][]byte{{'X', '.', '.', 'X'}, {'.', '.', '.', 'X'}, {'.', '.', '.', 'X'}}))
+}
