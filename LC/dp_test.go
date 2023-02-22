@@ -13,10 +13,47 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 )
 
 func init() {
 	log.Print("> DP (mXdim)")
+}
+
+// DP: Rod-Cutting
+func TestRodCutting(t *testing.T) {
+	rCalls, cache := 0, map[int]int{}
+
+	var maxRevenue func(int, []int, bool) int
+	maxRevenue = func(length int, prices []int, useCache bool) int {
+		rCalls++
+		if length == 0 {
+			return 0
+		}
+		if r, ok := cache[length]; ok {
+			return r
+		}
+
+		r := 0
+		for i := 1; i <= length; i++ {
+			r = max(r, prices[i-1]+maxRevenue(length-i, prices, useCache))
+		}
+		if useCache {
+			cache[length] = r
+		}
+		return r
+	}
+
+	for _, length := range []int{3, 5, 7, 9, 10, 15} {
+		for _, useCache := range []bool{false, true} {
+			ts := time.Now()
+			revenue := maxRevenue(length, []int{1, 5, 8, 9, 10, 17, 17, 20, 24, 30, 31, 33, 35, 37, 40}, useCache)
+			delta := time.Since(ts)
+			log.Printf(" (%2d) ?= %2v | recursive: %5d   caching? %5t  %v", length, revenue, rCalls, useCache, delta)
+			rCalls = 0
+			clear(cache)
+		}
+	}
 }
 
 // 714m Best Time to Buy & Sell with Fee
