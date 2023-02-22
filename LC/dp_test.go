@@ -45,12 +45,28 @@ func TestRodCutting(t *testing.T) {
 	}
 
 	bottomUp := func(length int, prices []int) int {
-		D := make([]int, length+1) // DP: max revenue for length
+		D := make([]int, length+1)     // DP: max revenue for length
+		Cut := make([][]int, length+1) // Recording choices
+
 		for l := 1; l <= length; l++ {
 			for cutAt := 1; cutAt <= l; cutAt++ {
-				D[l] = max(D[l], prices[cutAt-1]+D[l-cutAt])
+				if D[l] < prices[cutAt-1]+D[l-cutAt] {
+					D[l] = prices[cutAt-1] + D[l-cutAt]
+					Cut[l] = []int{cutAt}
+				}
+			}
+
+			// record other equals choices
+			for cutAt := Cut[l][0] + 1; cutAt <= l; cutAt++ {
+				if D[l] == prices[cutAt-1]+D[l-cutAt] {
+					Cut[l] = append(Cut[l], cutAt)
+				}
 			}
 		}
+
+		log.Print(D)
+		log.Print(Cut)
+
 		return D[length]
 	}
 
@@ -65,6 +81,7 @@ func TestRodCutting(t *testing.T) {
 			fCalls = 0
 			clear(cache)
 		}
+		log.Print("===")
 	}
 }
 
