@@ -22,11 +22,11 @@ func init() {
 
 // DP: Rod-Cutting
 func TestRodCutting(t *testing.T) {
-	rCalls, cache := 0, map[int]int{}
+	fCalls, cache := 0, map[int]int{}
 
-	var maxRevenue func(int, []int, bool) int
-	maxRevenue = func(length int, prices []int, useCache bool) int {
-		rCalls++
+	var revenue func(int, []int, bool) int
+	revenue = func(length int, prices []int, useCache bool) int {
+		fCalls++
 		if length == 0 {
 			return 0
 		}
@@ -36,7 +36,7 @@ func TestRodCutting(t *testing.T) {
 
 		r := 0
 		for i := 1; i <= length; i++ {
-			r = max(r, prices[i-1]+maxRevenue(length-i, prices, useCache))
+			r = max(r, prices[i-1]+revenue(length-i, prices, useCache))
 		}
 		if useCache {
 			cache[length] = r
@@ -44,13 +44,25 @@ func TestRodCutting(t *testing.T) {
 		return r
 	}
 
+	bottomUp := func(length int, prices []int) int {
+		D := make([]int, length+1) // DP: max revenue for length
+		for l := 1; l <= length; l++ {
+			for cutAt := 1; cutAt <= l; cutAt++ {
+				D[l] = max(D[l], prices[cutAt-1]+D[l-cutAt])
+			}
+		}
+		return D[length]
+	}
+
+	prices := []int{1, 5, 8, 9, 10, 17, 17, 20, 24, 30, 31, 33, 35, 37, 40}
 	for _, length := range []int{3, 5, 7, 9, 10, 15} {
+		log.Printf(" (%2d) ?= %2d", length, bottomUp(length, prices))
 		for _, useCache := range []bool{false, true} {
 			ts := time.Now()
-			revenue := maxRevenue(length, []int{1, 5, 8, 9, 10, 17, 17, 20, 24, 30, 31, 33, 35, 37, 40}, useCache)
+			revenue := revenue(length, prices, useCache)
 			delta := time.Since(ts)
-			log.Printf(" (%2d) ?= %2v | recursive: %5d   caching? %5t  %v", length, revenue, rCalls, useCache, delta)
-			rCalls = 0
+			log.Printf(" (%2d) ?= %2d | recursive: %5d   caching? %5t  %v", length, revenue, fCalls, useCache, delta)
+			fCalls = 0
 			clear(cache)
 		}
 	}
