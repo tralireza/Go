@@ -132,6 +132,7 @@ func TestMatrixChainMultiplication(t *testing.T) {
 	}
 
 	log.Print(" ?= ", bottomUp([][]int{{30, 35}, {35, 15}, {15, 5}, {5, 10}, {10, 20}, {20, 25}}))
+	log.Print(" ?= ", bottomUp([][]int{{5, 10}, {10, 3}, {3, 12}, {12, 5}, {5, 50}, {50, 6}}))
 	log.Print(" ?= ", bottomUp([][]int{{10, 100}, {100, 5}, {5, 50}}))
 }
 
