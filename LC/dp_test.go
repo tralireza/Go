@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"io"
 	"log"
+	"math"
 	"os"
 	"reflect"
 	"runtime"
@@ -83,6 +84,40 @@ func TestRodCutting(t *testing.T) {
 		}
 		log.Print("===")
 	}
+}
+
+// DP: Matrix-Chain Multiplication
+func TestMatrixChainMultiplication(t *testing.T) {
+	bottomUp := func(dimensions [][]int) int {
+		// D: M(i)...M(j) multiplication minimum cost
+		D, K := make([][]int, len(dimensions)), make([][]int, len(dimensions))
+		for i := range dimensions {
+			D[i] = make([]int, len(dimensions))
+			K[i] = make([]int, len(dimensions))
+		}
+
+		for length := 2; length <= len(D); length++ {
+			for start := 0; start <= len(D)-length; start++ {
+				end := start + length - 1
+				D[start][end] = math.MaxInt
+				for k := start; k < end; k++ {
+					kCost := D[start][k] + D[k+1][end] + dimensions[start][0]*dimensions[k][1]*dimensions[end][1]
+					if kCost < D[start][end] {
+						D[start][end] = kCost
+						K[start][end] = k
+					}
+				}
+			}
+		}
+
+		log.Print(D)
+		log.Print(K)
+
+		return D[0][len(dimensions)-1]
+	}
+
+	log.Print(" ?= ", bottomUp([][]int{{30, 35}, {35, 15}, {15, 5}, {5, 10}, {10, 20}, {20, 25}}))
+	log.Print(" ?= ", bottomUp([][]int{{10, 100}, {100, 5}, {5, 50}}))
 }
 
 // 714m Best Time to Buy & Sell with Fee
