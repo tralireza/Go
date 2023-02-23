@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"container/heap"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"math"
@@ -112,6 +113,20 @@ func TestMatrixChainMultiplication(t *testing.T) {
 
 		log.Print(D)
 		log.Print(K)
+
+		var draw func(s, e int)
+		draw = func(s, e int) {
+			if s == e {
+				fmt.Printf("A%d", s+1)
+			} else {
+				fmt.Print("(")
+				draw(s, K[s][e])
+				draw(K[s][e]+1, e)
+				fmt.Print(")")
+			}
+		}
+		draw(0, len(dimensions)-1)
+		fmt.Print("\n")
 
 		return D[0][len(dimensions)-1]
 	}
