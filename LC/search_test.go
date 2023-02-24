@@ -337,11 +337,11 @@ func Test752(t *testing.T) {
 			for range Q.Len() {
 				n := Q.Remove(Q.Front()).(string)
 
-				bs := []byte(n)
+				B := []byte(n)
 				for i := 0; i < 4; i++ {
 					for _, m := range []byte{1, 9} {
-						bs[i] = '0' + (bs[i]-'0'+m)%10
-						v := string(bs)
+						B[i] = '0' + (B[i]-'0'+m)%10
+						v := string(B)
 
 						if v == target {
 							log.Print(len(Visited))
@@ -352,7 +352,7 @@ func Test752(t *testing.T) {
 							Q.PushBack(v)
 						}
 
-						bs[i] = n[i]
+						B[i] = n[i]
 					}
 				}
 			}
