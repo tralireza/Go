@@ -344,6 +344,7 @@ func Test752(t *testing.T) {
 						v := string(bs)
 
 						if v == target {
+							log.Print(len(Visited))
 							return lvl
 						}
 						if _, ok := Visited[v]; !ok {
@@ -359,9 +360,11 @@ func Test752(t *testing.T) {
 			lvl++
 		}
 
+		log.Print(len(Visited))
 		return -1
 	}
 
 	log.Print("6 ?= ", openLock([]string{"0201", "0101", "0102", "1212", "2002"}, "0202"))
 	log.Print("-1 ?= ", openLock([]string{"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"}, "8888"))
+	log.Print("20 ?= ", openLock([]string{}, "5555"))
 }
