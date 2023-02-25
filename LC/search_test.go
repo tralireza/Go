@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -309,6 +310,61 @@ func Test419(t *testing.T) {
 	}
 
 	log.Print("2 ?= ", countBattleships([][]byte{{'X', '.', '.', 'X'}, {'.', '.', '.', 'X'}, {'.', '.', '.', 'X'}}))
+}
+
+// 140h Word Break II
+func Test140(t *testing.T) {
+	wordBreak := func(s string, wordDict []string) []string {
+		m := map[string]bool{}
+		for _, w := range wordDict {
+			m[w] = true
+		}
+
+		K := make([][]byte, len(s))
+		for i := range K {
+			K[i] = make([]byte, len(s))
+		}
+
+		D := make([]bool, len(s)+1)
+		D[0] = true
+
+		for l := 1; l <= len(s); l++ {
+			for start := 0; start < l; start++ {
+				if D[start] && m[s[start:l]] {
+					D[l] = true
+					K[start][l-1] = 1
+				}
+			}
+		}
+
+		for i, v := range K {
+			log.Printf("%2d %v", i, v)
+		}
+
+		W := []string{}
+
+		var draw func(int, []string)
+		draw = func(start int, ws []string) {
+			if start == len(s) {
+				W = append(W, strings.Join(ws, " "))
+				return
+			}
+
+			for end, v := range K[start] {
+				if v == 1 {
+					draw(end+1, append(ws, s[start:end+1]))
+				}
+			}
+		}
+		draw(0, []string{})
+
+		return W
+	}
+
+	log.Printf(" ?= %q", wordBreak("catsanddog", []string{"cat", "cats", "and", "sand", "dog"}))
+	log.Printf(" ?= %q", wordBreak("pineapplepenapple", []string{"apple", "pen", "applepen", "pine", "pineapple"}))
+	log.Printf(" ?= %q", wordBreak("catsandog", []string{"cat", "cats", "and", "sand", "dog"}))
+	log.Printf(" ?= %q", wordBreak("a", []string{"a"}))
 }
 
 // 752m Open Lock
