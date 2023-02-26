@@ -478,3 +478,31 @@ func Test114(t *testing.T) {
 	}
 	fmt.Print("\n")
 }
+
+// 101 Symmetric Tree
+func Test101(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	isSymmetric := func(root *TreeNode) bool {
+		var check func(l, r *TreeNode) bool
+		check = func(l, r *TreeNode) bool {
+			if l == nil && r == nil {
+				return true
+			}
+			if l == nil || r == nil {
+				return false
+			}
+			return l.Val == r.Val && check(l.Left, r.Right) && check(l.Right, r.Left)
+		}
+
+		return check(root.Left, root.Right)
+	}
+
+	type T = TreeNode
+
+	log.Print("true ?= ", isSymmetric(&T{1, &T{2, &T{Val: 3}, &T{Val: 4}}, &T{2, &T{Val: 4}, &T{Val: 3}}}))
+	log.Print("false ?= ", isSymmetric(&T{1, &T{2, nil, &T{Val: 3}}, &T{2, nil, &T{Val: 3}}}))
+}
