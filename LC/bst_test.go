@@ -529,4 +529,5 @@ func Test108(t *testing.T) {
 	}
 
 	log.Print(" ?= ", sortedArrayToBST([]int{-10, -3, 0, 5, 9}))
+	log.Print(" ?= ", sortedArrayToBST([]int{1, 3}))
 }
