@@ -506,3 +506,27 @@ func Test101(t *testing.T) {
 	log.Print("true ?= ", isSymmetric(&T{1, &T{2, &T{Val: 3}, &T{Val: 4}}, &T{2, &T{Val: 4}, &T{Val: 3}}}))
 	log.Print("false ?= ", isSymmetric(&T{1, &T{2, nil, &T{Val: 3}}, &T{2, nil, &T{Val: 3}}}))
 }
+
+// 108 Convert Sorted Array to Binary Search Tree
+func Test108(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	var sortedArrayToBST func([]int) *TreeNode
+	sortedArrayToBST = func(nums []int) *TreeNode {
+		if len(nums) == 0 {
+			return nil
+		}
+
+		m := len(nums) / 2
+		return &TreeNode{
+			Val:   nums[m],
+			Left:  sortedArrayToBST(nums[:m]),
+			Right: sortedArrayToBST(nums[m+1:]),
+		}
+	}
+
+	log.Print(" ?= ", sortedArrayToBST([]int{-10, -3, 0, 5, 9}))
+}
