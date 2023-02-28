@@ -531,3 +531,34 @@ func Test108(t *testing.T) {
 	log.Print(" ?= ", sortedArrayToBST([]int{-10, -3, 0, 5, 9}))
 	log.Print(" ?= ", sortedArrayToBST([]int{1, 3}))
 }
+
+// 226 Invert Binary Tree
+func Test226(t *testing.T) {
+	var invertTree func(*TreeNode) *TreeNode
+	invertTree = func(root *TreeNode) *TreeNode {
+		if root == nil {
+			return nil
+		}
+
+		root.Left, root.Right = invertTree(root.Right), invertTree(root.Left)
+		return root
+	}
+
+	type T = TreeNode
+	tree := &T{4, &T{2, &T{Val: 1}, &T{Val: 3}}, &T{7, &T{Val: 6}, &T{Val: 9}}}
+
+	var draw func(*TreeNode)
+	draw = func(n *TreeNode) {
+		if n == nil {
+			return
+		}
+		fmt.Print(n)
+		draw(n.Left)
+		draw(n.Right)
+	}
+
+	draw(tree)
+	fmt.Println()
+	draw(invertTree(tree))
+	fmt.Println()
+}
