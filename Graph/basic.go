@@ -21,8 +21,11 @@ type Graph interface {
 	Edges() [][2]*Vertex
 }
 
-func New(vertices byte, edges [][2]byte) *MyGraph {
-	g := &MyGraph{}
+func GDirected(vertices byte, edges [][2]byte) *MyGraph   { return New(vertices, edges, true) }
+func GUndirected(vertices byte, edges [][2]byte) *MyGraph { return New(vertices, edges, false) }
+func New(vertices byte, edges [][2]byte, isDirected bool) *MyGraph {
+	g := &MyGraph{isDirected: isDirected}
+
 	for v := byte(0); v < vertices; v++ {
 		g.gV = append(g.gV, &Vertex{V: v, Label: v})
 	}
@@ -33,20 +36,27 @@ func New(vertices byte, edges [][2]byte) *MyGraph {
 	}
 	for _, edge := range edges {
 		v, u := edge[0], edge[1]
-		M[v][u], M[u][v] = 1, 1
-		L[v], L[u] = append(L[v], u), append(L[u], v)
+		M[v][u] = 1
+		if !isDirected {
+			M[u][v] = 1
+		}
+		L[v] = append(L[v], u)
+		if !isDirected {
+			L[u] = append(L[u], v)
+		}
 	}
 	g.adjMatrix, g.adjList = M, L
 
 	return g
 }
 
-// Small Undirected Graph of [0..255] Vertices
+// Small Un/Directed Graph of [0..255] Vertices
 type MyGraph struct {
-	gV        []*Vertex
-	gE        [][2]*Vertex
-	adjMatrix [][]byte
-	adjList   [][]byte
+	gV         []*Vertex
+	gE         [][2]*Vertex
+	adjMatrix  [][]byte
+	adjList    [][]byte
+	isDirected bool
 }
 
 func (g *MyGraph) Vertices() []*Vertex { return g.gV }
