@@ -54,8 +54,15 @@ func (g *MyGraph) Edges() [][2]*Vertex { return g.gE }
 
 func (g MyGraph) String() string {
 	var sb strings.Builder
+	sb.WriteString("+ G(V,E) adjacency-list:\n")
 	for _, v := range g.gV {
-		sb.WriteString(fmt.Sprintf("(%v) -> %v\n", v.Label, g.adjList[v.V]))
+		sb.WriteString(fmt.Sprintf(" (%v) -> [", v.Label))
+		lbls := []string{}
+		for _, u := range g.adjList[v.V] {
+			lbls = append(lbls, fmt.Sprintf("(%v)", g.gV[u].Label))
+		}
+		sb.WriteString(strings.Join(lbls, " "))
+		sb.WriteString("]\n")
 	}
 	return sb.String()
 }
