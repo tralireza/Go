@@ -709,9 +709,9 @@ func Test1289(t *testing.T) {
 	optimized := func(grid [][]int) int {
 		prv, jPrv, prv2 := math.MaxInt, -1, math.MaxInt
 		for j, v := range grid[0] {
-			if v <= prv {
+			if v < prv {
 				prv, jPrv, prv2 = v, j, prv
-			} else if v <= prv2 {
+			} else if v < prv2 {
 				prv2 = v
 			}
 		}
@@ -728,9 +728,9 @@ func Test1289(t *testing.T) {
 					v += prv2
 				}
 
-				if v <= cur {
+				if v < cur {
 					cur, jCur, cur2 = v, j, cur
-				} else if v <= cur2 {
+				} else if v < cur2 {
 					cur2 = v
 				}
 			}
@@ -745,5 +745,6 @@ func Test1289(t *testing.T) {
 		log.Print("13 ?= ", f([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
 		log.Print("7 ?= ", f([][]int{{7}}))
 		log.Print("10 ?= ", f([][]int{{8, 4, 3, 7, 8}, {4, 5, 6, 5, 2}, {7, 8, 9, 3, 9}, {1, 5, 7, 1, 9}, {5, 7, 1, 3, 7}}))
+		log.Print("7 ?= ", f([][]int{{2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}}))
 	}
 }
