@@ -706,7 +706,42 @@ func Test1289(t *testing.T) {
 		return n
 	}
 
-	for _, f := range []func([][]int) int{minFallingPathSum, topDown} {
+	optimized := func(grid [][]int) int {
+		prv, jPrv, prv2 := math.MaxInt, -1, math.MaxInt
+		for j, v := range grid[0] {
+			if v <= prv {
+				prv, jPrv, prv2 = v, j, prv
+			} else if v <= prv2 {
+				prv2 = v
+			}
+		}
+
+		for i := 1; i < len(grid); i++ {
+			cur, jCur, cur2 := math.MaxInt, -1, math.MaxInt
+
+			for j := 0; j < len(grid[i]); j++ {
+				v := grid[i][j]
+
+				if j != jPrv {
+					v += prv
+				} else {
+					v += prv2
+				}
+
+				if v <= cur {
+					cur, jCur, cur2 = v, j, cur
+				} else if v <= cur2 {
+					cur2 = v
+				}
+			}
+
+			prv, jPrv, prv2 = cur, jCur, cur2
+		}
+
+		return prv
+	}
+
+	for _, f := range []func([][]int) int{minFallingPathSum, topDown, optimized} {
 		log.Print("13 ?= ", f([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
 		log.Print("7 ?= ", f([][]int{{7}}))
 		log.Print("10 ?= ", f([][]int{{8, 4, 3, 7, 8}, {4, 5, 6, 5, 2}, {7, 8, 9, 3, 9}, {1, 5, 7, 1, 9}, {5, 7, 1, 3, 7}}))
