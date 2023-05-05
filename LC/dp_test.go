@@ -640,3 +640,37 @@ func Test496(t *testing.T) {
 	log.Print("[7 9 9 7] ?= ", nextGreaterElement([]int{1, 3, 5, 2}, []int{6, 5, 4, 3, 9, 2, 1, 7}))
 	log.Print("[7 7 7 -1] ?= ", nextGreaterElement([]int{1, 3, 5, 7}, []int{6, 5, 4, 3, 1, 7}))
 }
+
+// 1289 Minimum Falling Path Sum II
+func Test1289(t *testing.T) {
+	minFallingPathSum := func(grid [][]int) int {
+		if len(grid) == 1 {
+			return grid[0][0]
+		}
+
+		Rows, Cols := len(grid), len(grid[0])
+		D := make([][]int, 2)
+		for i := range D {
+			D[i] = make([]int, Cols)
+		}
+
+		for r := range Rows {
+			copy(D[0], D[1])
+
+			for c := range Cols {
+				D[1][c] = math.MaxInt
+
+				for x := range Cols {
+					if x != c {
+						D[1][c] = min(D[1][c], D[0][x]+grid[r][c])
+					}
+				}
+			}
+		}
+
+		return slices.Min(D[1])
+	}
+
+	log.Print("13 ?= ", minFallingPathSum([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
+	log.Print("7 ?= ", minFallingPathSum([][]int{{7}}))
+}
