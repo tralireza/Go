@@ -671,6 +671,44 @@ func Test1289(t *testing.T) {
 		return slices.Min(D[1])
 	}
 
-	log.Print("13 ?= ", minFallingPathSum([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
-	log.Print("7 ?= ", minFallingPathSum([][]int{{7}}))
+	topDown := func(grid [][]int) int {
+		Rows, Cols := len(grid), len(grid[0])
+		rCalls, mHits := 0, 0
+
+		Mem := map[[2]int]int{}
+		var dfs func(r, c int) int
+		dfs = func(r, c int) int {
+			rCalls++
+			if r == Rows-1 {
+				return grid[r][c]
+			}
+
+			if v, ok := Mem[[2]int{r, c}]; ok {
+				mHits++
+				return v
+			}
+
+			v := math.MaxInt
+			for x := range Cols {
+				if x != c {
+					v = min(dfs(r+1, x), v)
+				}
+			}
+			Mem[[2]int{r, c}] = v + grid[r][c]
+			return v + grid[r][c]
+		}
+
+		n := math.MaxInt
+		for c := range Cols {
+			n = min(dfs(0, c), n)
+		}
+		log.Printf("rCalls: %d, Hits: %d", rCalls, mHits)
+		return n
+	}
+
+	for _, f := range []func([][]int) int{minFallingPathSum, topDown} {
+		log.Print("13 ?= ", f([][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}))
+		log.Print("7 ?= ", f([][]int{{7}}))
+		log.Print("10 ?= ", f([][]int{{8, 4, 3, 7, 8}, {4, 5, 6, 5, 2}, {7, 8, 9, 3, 9}, {1, 5, 7, 1, 9}, {5, 7, 1, 3, 7}}))
+	}
 }
