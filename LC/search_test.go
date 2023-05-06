@@ -372,8 +372,8 @@ func Test514(t *testing.T) {
 		R, K := len(ring), len(key)
 		Mem := map[[2]int]int{}
 
-		var try func(r, k int) int
-		try = func(r, k int) int {
+		var search func(r, k int) int
+		search = func(r, k int) int {
 			if k == K {
 				return 0
 			}
@@ -393,7 +393,7 @@ func Test514(t *testing.T) {
 				}
 				cw++
 			}
-			cw += try(i, k+1)
+			cw += search(i, k+1)
 
 			i = r
 			acw := 0
@@ -404,13 +404,13 @@ func Test514(t *testing.T) {
 				}
 				acw++
 			}
-			acw += try(i, k+1)
+			acw += search(i, k+1)
 
 			Mem[[2]int{r, k}] = min(cw, acw)
 			return min(cw, acw)
 		}
 
-		return K + try(0, 0)
+		return K + search(0, 0)
 	}
 
 	log.Print("4 ?= ", findRotateSteps("godding", "gd"))
