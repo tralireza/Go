@@ -365,3 +365,54 @@ func Test140(t *testing.T) {
 	log.Printf(" ?= %q", wordBreak("catsandog", []string{"cat", "cats", "and", "sand", "dog"}))
 	log.Printf(" ?= %q", wordBreak("a", []string{"a"}))
 }
+
+// 514h Freedom Trail
+func Test514(t *testing.T) {
+	findRotateSteps := func(ring string, key string) int {
+		R, K := len(ring), len(key)
+		Mem := map[[2]int]int{}
+
+		var try func(r, k int) int
+		try = func(r, k int) int {
+			if k == K {
+				return 0
+			}
+
+			if v, ok := Mem[[2]int{r, k}]; ok {
+				return v
+			}
+
+			var i int
+
+			i = r
+			cw := 0
+			for ring[i] != key[k] {
+				i++
+				if i == R {
+					i = 0
+				}
+				cw++
+			}
+			cw += try(i, k+1)
+
+			i = r
+			acw := 0
+			for ring[i] != key[k] {
+				i--
+				if i < 0 {
+					i = R - 1
+				}
+				acw++
+			}
+			acw += try(i, k+1)
+
+			Mem[[2]int{r, k}] = min(cw, acw)
+			return min(cw, acw)
+		}
+
+		return K + try(0, 0)
+	}
+
+	log.Print("4 ?= ", findRotateSteps("godding", "gd"))
+	log.Print("13 ?= ", findRotateSteps("godding", "godding"))
+}
