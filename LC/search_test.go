@@ -3,6 +3,7 @@ package lc
 import (
 	"fmt"
 	"log"
+	"math"
 	"slices"
 	"strings"
 	"testing"
@@ -413,6 +414,44 @@ func Test514(t *testing.T) {
 		return K + search(0, 0)
 	}
 
-	log.Print("4 ?= ", findRotateSteps("godding", "gd"))
-	log.Print("13 ?= ", findRotateSteps("godding", "godding"))
+	bottomUp := func(ring, key string) int {
+		R, K := len(ring), len(key)
+
+		D := make([][]int, K+1)
+		for k := range D {
+			D[k] = make([]int, R)
+		}
+
+		for k := K - 1; k >= 0; k-- {
+			for r := range R {
+				D[k][r] = math.MaxInt
+
+				for i := range R {
+					if ring[i] == key[k] {
+
+						cw := i - r
+						if cw < 0 {
+							cw *= -1
+						}
+						acw := R - cw
+						Si := min(cw, acw)
+
+						D[k][r] = min(D[k][r], D[k+1][i]+Si)
+					}
+				}
+			}
+
+		}
+
+		for k := range D {
+			log.Print(k, D[k])
+		}
+
+		return K + D[0][0]
+	}
+
+	for _, f := range []func(string, string) int{findRotateSteps, bottomUp} {
+		log.Print("4 ?= ", f("godding", "gd"))
+		log.Print("13 ?= ", f("godding", "godding"))
+	}
 }
