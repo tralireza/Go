@@ -443,10 +443,6 @@ func Test514(t *testing.T) {
 
 		}
 
-		for k := range D {
-			log.Print(k, D[k])
-		}
-
 		return K + D[0][0]
 	}
 
