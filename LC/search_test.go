@@ -477,7 +477,7 @@ func Test514(t *testing.T) {
 
 	for _, f := range []func(string, string) int{findRotateSteps, bottomUp, spaceOptimized} {
 		log.Print("4 ?= ", f("godding", "gd"))
-		log.Print("9 ?= ", f("godding", "dig"))
 		log.Print("13 ?= ", f("godding", "godding"))
+		log.Print("14 ?= ", f("godding", "dogdog"))
 	}
 }
