@@ -446,8 +446,38 @@ func Test514(t *testing.T) {
 		return K + D[0][0]
 	}
 
-	for _, f := range []func(string, string) int{findRotateSteps, bottomUp} {
+	spaceOptimized := func(ring string, key string) int {
+		R, K := len(ring), len(key)
+		D, P := make([]int, R), make([]int, R)
+
+		for k := K - 1; k >= 0; k-- {
+			copy(P, D)
+
+			for r := range R {
+				D[r] = math.MaxInt
+
+				for x := range R {
+					if ring[x] == key[k] {
+						cw := x - r
+						if cw < 0 {
+							cw *= -1
+						}
+						acw := R - cw
+
+						Si := min(cw, acw)
+						D[r] = min(D[r], Si+P[x])
+					}
+				}
+
+			}
+		}
+
+		return K + D[0]
+	}
+
+	for _, f := range []func(string, string) int{findRotateSteps, bottomUp, spaceOptimized} {
 		log.Print("4 ?= ", f("godding", "gd"))
+		log.Print("9 ?= ", f("godding", "dig"))
 		log.Print("13 ?= ", f("godding", "godding"))
 	}
 }
