@@ -383,32 +383,20 @@ func Test514(t *testing.T) {
 				return v
 			}
 
-			var i int
-
-			i = r
-			cw := 0
-			for ring[i] != key[k] {
-				i++
-				if i == R {
-					i = 0
+			minSteps := math.MaxInt
+			for x := range R {
+				steps := 0
+				if ring[x] == key[k] {
+					steps = x - r
+					if steps < 0 {
+						steps *= -1
+					}
+					minSteps = min(minSteps, search(x, k+1)+steps)
 				}
-				cw++
 			}
-			cw += search(i, k+1)
 
-			i = r
-			acw := 0
-			for ring[i] != key[k] {
-				i--
-				if i < 0 {
-					i = R - 1
-				}
-				acw++
-			}
-			acw += search(i, k+1)
-
-			Mem[[2]int{r, k}] = min(cw, acw)
-			return min(cw, acw)
+			Mem[[2]int{r, k}] = minSteps
+			return minSteps
 		}
 
 		return K + search(0, 0)
