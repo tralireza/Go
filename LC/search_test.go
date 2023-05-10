@@ -385,9 +385,8 @@ func Test514(t *testing.T) {
 
 			minSteps := math.MaxInt
 			for x := range R {
-				steps := 0
 				if ring[x] == key[k] {
-					steps = x - r
+					steps := x - r
 					if steps < 0 {
 						steps *= -1
 					}
