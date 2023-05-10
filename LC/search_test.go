@@ -391,7 +391,7 @@ func Test514(t *testing.T) {
 					if steps < 0 {
 						steps *= -1
 					}
-					minSteps = min(minSteps, search(x, k+1)+steps)
+					minSteps = min(minSteps, search(x, k+1)+min(steps, R-steps))
 				}
 			}
 
@@ -466,5 +466,7 @@ func Test514(t *testing.T) {
 		log.Print("4 ?= ", f("godding", "gd"))
 		log.Print("13 ?= ", f("godding", "godding"))
 		log.Print("14 ?= ", f("godding", "dogdog"))
+		log.Print("6 ?= ", f("abcde", "ade"))
+		log.Print("===")
 	}
 }
