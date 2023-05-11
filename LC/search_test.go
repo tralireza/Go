@@ -444,13 +444,12 @@ func Test514(t *testing.T) {
 
 				for x := range R {
 					if ring[x] == key[k] {
-						cw := x - r
-						if cw < 0 {
-							cw *= -1
+						steps := x - r
+						if steps < 0 {
+							steps *= -1
 						}
-						acw := R - cw
 
-						Si := min(cw, acw)
+						Si := min(steps, R-steps)
 						D[r] = min(D[r], Si+P[x])
 					}
 				}
