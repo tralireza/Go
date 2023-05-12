@@ -562,3 +562,28 @@ func Test226(t *testing.T) {
 	draw(invertTree(tree))
 	fmt.Println()
 }
+
+// 98m Validate Binary Search Tree
+func Test98(t *testing.T) {
+	isValidBST := func(root *TreeNode) bool {
+
+		var check func(n *TreeNode, mn, mx int) bool
+		check = func(n *TreeNode, mn, mx int) bool {
+			if n == nil {
+				return true
+			}
+			if n.Val <= mn || mx <= n.Val {
+				return false
+			}
+
+			return check(n.Left, mn, n.Val) && check(n.Right, n.Val, mx)
+		}
+
+		return check(root, math.MinInt, math.MaxInt)
+	}
+
+	type T = TreeNode
+	log.Print("true ?= ", isValidBST(&T{2, &T{Val: 1}, &T{Val: 3}}))
+	log.Print("false ?= ", isValidBST(&T{2, &T{Val: 2}, &T{Val: 2}}))
+	log.Print("false ?= ", isValidBST(&T{5, &T{Val: 1}, &T{6, &T{Val: 3}, &T{Val: 7}}}))
+}
