@@ -566,16 +566,15 @@ func Test226(t *testing.T) {
 // 98m Validate Binary Search Tree
 func Test98(t *testing.T) {
 	isValidBST := func(root *TreeNode) bool {
-
 		var check func(n *TreeNode, mn, mx int) bool
 		check = func(n *TreeNode, mn, mx int) bool {
 			if n == nil {
 				return true
 			}
+
 			if n.Val <= mn || mx <= n.Val {
 				return false
 			}
-
 			return check(n.Left, mn, n.Val) && check(n.Right, n.Val, mx)
 		}
 
