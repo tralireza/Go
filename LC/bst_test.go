@@ -586,3 +586,35 @@ func Test98(t *testing.T) {
 	log.Print("false ?= ", isValidBST(&T{2, &T{Val: 2}, &T{Val: 2}}))
 	log.Print("false ?= ", isValidBST(&T{5, &T{Val: 1}, &T{6, &T{Val: 3}, &T{Val: 7}}}))
 }
+
+// 102m Binary Tree Level Order Traversal
+func Test102(t *testing.T) {
+	levelOrder := func(root *TreeNode) [][]int {
+		lOrder := [][]int{}
+		Q, n := []*TreeNode{}, root
+
+		Q = append(Q, n)
+		for len(Q) > 0 {
+			log.Print(Q)
+
+			l := []int{}
+			for range len(Q) {
+				n, Q = Q[0], Q[1:]
+				l = append(l, n.Val)
+
+				if n.Left != nil {
+					Q = append(Q, n.Left)
+				}
+				if n.Right != nil {
+					Q = append(Q, n.Right)
+				}
+			}
+			lOrder = append(lOrder, l)
+		}
+
+		return lOrder
+	}
+
+	type T = TreeNode
+	log.Print("", levelOrder(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+}
