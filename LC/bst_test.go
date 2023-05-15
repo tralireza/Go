@@ -763,4 +763,5 @@ func Test230(t *testing.T) {
 
 	type T = TreeNode
 	log.Print("1 ?= ", kthSmallest(&T{3, &T{1, nil, &T{Val: 2}}, &T{Val: 4}}, 1))
+	log.Print("3 ?= ", kthSmallest(&T{5, &T{3, &T{2, &T{Val: 1}, nil}, &T{Val: 4}}, &T{Val: 6}}, 3))
 }
