@@ -743,20 +743,19 @@ func Test230(t *testing.T) {
 	kthSmallest := func(root *TreeNode, k int) int {
 		Q, n := []*TreeNode{}, root
 		for len(Q) > 0 || n != nil {
-			if n != nil {
+			for n != nil {
 				Q = append(Q, n)
 				n = n.Left
-			} else {
-				n, Q = Q[len(Q)-1], Q[:len(Q)-1]
-
-				// InOrer Visit
-				k--
-				if k == 0 {
-					return n.Val
-				}
-
-				n = n.Right
 			}
+			n, Q = Q[len(Q)-1], Q[:len(Q)-1]
+
+			// InOrer Visit
+			k--
+			if k == 0 {
+				return n.Val
+			}
+
+			n = n.Right
 		}
 		return -1
 	}
