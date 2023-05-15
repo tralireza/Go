@@ -642,6 +642,32 @@ func Test105(t *testing.T) {
 		return n
 	}
 
+	type T = TreeNode
+	r := &T{3, &T{9, nil, &T{Val: 1}}, &T{20, &T{Val: 15}, &T{Val: 7}}}
+
+	bfs := func(n *TreeNode) {
+		Q, P := []*TreeNode{n}, []*TreeNode{nil}
+		var p *TreeNode
+		for len(Q) > 0 {
+			n, Q = Q[0], Q[1:]
+			p, P = P[0], P[1:]
+			pVal := -1
+			if p != nil {
+				pVal = p.Val
+			}
+			fmt.Printf("[%d<%d]", pVal, n.Val)
+
+			if n.Left != nil {
+				Q, P = append(Q, n.Left), append(P, n)
+			}
+			if n.Right != nil {
+				Q, P = append(Q, n.Right), append(P, n)
+			}
+		}
+	}
+	bfs(r)
+	fmt.Print("\n")
+
 	var draw func(*TreeNode)
 	draw = func(n *TreeNode) {
 		if n.Left != nil {
