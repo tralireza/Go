@@ -760,7 +760,33 @@ func Test230(t *testing.T) {
 		return -1
 	}
 
+	inOrder := func(root *TreeNode, k int) int {
+		var kthSmallest int
+
+		var dfs func(*TreeNode)
+		dfs = func(n *TreeNode) {
+			if n == nil {
+				return
+			}
+
+			dfs(n.Left)
+
+			k--
+			if k == 0 {
+				kthSmallest = n.Val
+				return
+			}
+
+			dfs(n.Right)
+		}
+
+		dfs(root)
+		return kthSmallest
+	}
+
 	type T = TreeNode
-	log.Print("1 ?= ", kthSmallest(&T{3, &T{1, nil, &T{Val: 2}}, &T{Val: 4}}, 1))
-	log.Print("3 ?= ", kthSmallest(&T{5, &T{3, &T{2, &T{Val: 1}, nil}, &T{Val: 4}}, &T{Val: 6}}, 3))
+	for _, f := range []func(*TreeNode, int) int{kthSmallest, inOrder} {
+		log.Print("1 ?= ", f(&T{3, &T{1, nil, &T{Val: 2}}, &T{Val: 4}}, 1))
+		log.Print("3 ?= ", f(&T{5, &T{3, &T{2, &T{Val: 1}, nil}, &T{Val: 4}}, &T{Val: 6}}, 3))
+	}
 }
