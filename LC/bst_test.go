@@ -645,6 +645,23 @@ func Test105(t *testing.T) {
 	type T = TreeNode
 	r := &T{3, &T{9, nil, &T{Val: 1}}, &T{20, &T{Val: 15}, &T{Val: 7}}}
 
+	var dfs func(n, p *TreeNode)
+	dfs = func(n, p *TreeNode) {
+		if n == nil {
+			return
+		}
+		pVal := -1
+		if p != nil {
+			pVal = p.Val
+		}
+		fmt.Printf("[%d<%d]", pVal, n.Val)
+
+		dfs(n.Left, n)
+		dfs(n.Right, n)
+	}
+	dfs(r, nil)
+	fmt.Print("\n")
+
 	bfs := func(n *TreeNode) {
 		Q, P := []*TreeNode{n}, []*TreeNode{nil}
 		var p *TreeNode
