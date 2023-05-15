@@ -737,3 +737,30 @@ func Test199(t *testing.T) {
 	log.Print("[1 3] ?= ", rightSideView(&T{1, nil, &T{Val: 3}}))
 	log.Print("[1 3] ?= ", rightSideView(&T{1, &T{Val: 3}, nil}))
 }
+
+// 230m Kth Smallest Element in a BST
+func Test230(t *testing.T) {
+	kthSmallest := func(root *TreeNode, k int) int {
+		Q, n := []*TreeNode{}, root
+		for len(Q) > 0 || n != nil {
+			if n != nil {
+				Q = append(Q, n)
+				n = n.Left
+			} else {
+				n, Q = Q[len(Q)-1], Q[:len(Q)-1]
+
+				// InOrer Visit
+				k--
+				if k == 0 {
+					return n.Val
+				}
+
+				n = n.Right
+			}
+		}
+		return -1
+	}
+
+	type T = TreeNode
+	log.Print("1 ?= ", kthSmallest(&T{3, &T{1, nil, &T{Val: 2}}, &T{Val: 4}}, 1))
+}
