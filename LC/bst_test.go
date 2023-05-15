@@ -618,3 +618,45 @@ func Test102(t *testing.T) {
 	type T = TreeNode
 	log.Print("", levelOrder(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
 }
+
+// 105m Construct Binary Tree from Preorder and Inorder Traversal
+func Test105(t *testing.T) {
+	var buildTree func(preorder, inorder []int) *TreeNode
+	buildTree = func(preorder, inorder []int) *TreeNode {
+		log.Print(preorder, inorder)
+
+		if len(preorder) == 0 {
+			return nil
+		}
+
+		n := &TreeNode{Val: preorder[0]}
+		if len(preorder) == 1 {
+			return n
+		}
+
+		i := slices.Index(inorder, preorder[0])
+		n.Left = buildTree(preorder[1:i+1], inorder[:i])
+		n.Right = buildTree(preorder[i+1:], inorder[i+1:])
+
+		return n
+	}
+
+	var draw func(*TreeNode)
+	draw = func(n *TreeNode) {
+		if n.Left != nil {
+			draw(n.Left)
+		}
+		fmt.Print(n)
+		if n.Right != nil {
+			draw(n.Right)
+		}
+	}
+
+	rst1 := buildTree([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
+	draw(rst1)
+	fmt.Print("\n")
+
+	rst2 := buildTree([]int{1, 2}, []int{2, 1})
+	draw(rst2)
+	fmt.Print("\n")
+}
