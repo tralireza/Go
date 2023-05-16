@@ -735,4 +735,5 @@ func Test199(t *testing.T) {
 	type T = TreeNode
 	log.Print("[1 3 4] ?= ", rightSideView(&T{1, &T{2, nil, &T{Val: 6}}, &T{3, nil, &T{Val: 4}}}))
 	log.Print("[1 3] ?= ", rightSideView(&T{1, nil, &T{Val: 3}}))
+	log.Print("[1 3] ?= ", rightSideView(&T{1, &T{Val: 3}, nil}))
 }
