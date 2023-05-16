@@ -704,3 +704,35 @@ func Test105(t *testing.T) {
 	draw(rst2)
 	fmt.Print("\n")
 }
+
+// 199m Binary Tree Right Side View
+func Test199(t *testing.T) {
+	rightSideView := func(root *TreeNode) []int {
+		rsView := []int{}
+
+		Q, n := []*TreeNode{}, root
+		if root != nil {
+			Q = append(Q, n)
+		}
+		for len(Q) > 0 {
+			var v int
+			for range len(Q) {
+				n, Q = Q[0], Q[1:]
+				v = n.Val
+				if n.Left != nil {
+					Q = append(Q, n.Left)
+				}
+				if n.Right != nil {
+					Q = append(Q, n.Right)
+				}
+			}
+			rsView = append(rsView, v)
+		}
+
+		return rsView
+	}
+
+	type T = TreeNode
+	log.Print("[1 3 4] ?= ", rightSideView(&T{1, &T{2, nil, &T{Val: 6}}, &T{3, nil, &T{Val: 4}}}))
+	log.Print("[1 3] ?= ", rightSideView(&T{1, nil, &T{Val: 3}}))
+}
