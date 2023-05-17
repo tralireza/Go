@@ -765,19 +765,23 @@ func Test230(t *testing.T) {
 
 		var dfs func(*TreeNode)
 		dfs = func(n *TreeNode) {
-			if n == nil {
-				return
-			}
+			log.Print(n, k, kthSmallest)
 
-			dfs(n.Left)
+			if n.Left != nil {
+				dfs(n.Left)
+			}
 
 			k--
 			if k == 0 {
 				kthSmallest = n.Val
+			}
+			if k <= 0 {
 				return
 			}
 
-			dfs(n.Right)
+			if n.Right != nil {
+				dfs(n.Right)
+			}
 		}
 
 		dfs(root)
