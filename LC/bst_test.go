@@ -807,12 +807,11 @@ func Test236(t *testing.T) {
 
 	var draw func(*TreeNode, int)
 	draw = func(n *TreeNode, pVal int) {
-		if n == nil {
-			return
+		if n != nil {
+			fmt.Printf("{%d<%d}", pVal, n.Val)
+			draw(n.Left, n.Val)
+			draw(n.Right, n.Val)
 		}
-		fmt.Printf("{%d<%d}", pVal, n.Val)
-		draw(n.Left, n.Val)
-		draw(n.Right, n.Val)
 	}
 
 	draw(root, -1)
