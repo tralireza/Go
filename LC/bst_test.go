@@ -799,6 +799,8 @@ func Test230(t *testing.T) {
 func Test236(t *testing.T) {
 	var lowestCommonAncestor func(root, p, q *TreeNode) *TreeNode
 	lowestCommonAncestor = func(root, p, q *TreeNode) *TreeNode {
+		log.Print(root)
+
 		if root == nil || root == p || root == q {
 			return root
 		}
@@ -816,7 +818,8 @@ func Test236(t *testing.T) {
 	}
 
 	type T = TreeNode
-	N1, N5 := &T{1, &T{Val: 0}, &T{Val: 8}}, &T{5, &T{Val: 6}, &T{2, &T{Val: 7}, &T{Val: 4}}}
+	N4 := &T{Val: 4}
+	N1, N5 := &T{1, &T{Val: 0}, &T{Val: 8}}, &T{5, &T{Val: 6}, &T{2, &T{Val: 7}, N4}}
 	root := &T{3, N5, N1}
 
 	var draw func(*TreeNode, int)
@@ -832,4 +835,5 @@ func Test236(t *testing.T) {
 	fmt.Print("\n")
 
 	log.Print("3 ?= ", lowestCommonAncestor(root, N1, N5))
+	log.Print("5 ?= ", lowestCommonAncestor(root, N5, N4))
 }
