@@ -797,8 +797,22 @@ func Test230(t *testing.T) {
 
 // 236m Lowest Common Ancestor of a Binary Tree
 func Test236(t *testing.T) {
-	lowestCommonAncestor := func(root, p, q *TreeNode) *TreeNode {
-		return root
+	var lowestCommonAncestor func(root, p, q *TreeNode) *TreeNode
+	lowestCommonAncestor = func(root, p, q *TreeNode) *TreeNode {
+		if root == nil || root == p || root == q {
+			return root
+		}
+
+		l := lowestCommonAncestor(root.Left, p, q)
+		r := lowestCommonAncestor(root.Right, p, q)
+
+		if l != nil && r != nil {
+			return root
+		}
+		if l != nil {
+			return l
+		}
+		return r
 	}
 
 	type T = TreeNode
