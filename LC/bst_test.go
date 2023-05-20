@@ -837,3 +837,52 @@ func Test236(t *testing.T) {
 	log.Print("3 ?= ", lowestCommonAncestor('*', root, N1, N5))
 	log.Print("5 ?= ", lowestCommonAncestor('*', root, N5, N4))
 }
+
+// 437m Path Sum III
+func Test437(t *testing.T) {
+	pathSum := func(root *TreeNode, targetSum int) int {
+		pSum := 0
+		var walk func(*TreeNode, int, []int)
+		walk = func(n *TreeNode, curSum int, pVals []int) {
+			log.Printf("%v %d %v", n, curSum, pVals)
+
+			if n == nil {
+				return
+			}
+
+			v := curSum + n.Val
+			if v == targetSum {
+				pSum++
+			}
+			for _, pVal := range pVals {
+				v -= pVal
+				if v == targetSum {
+					pSum++
+				}
+			}
+
+			walk(n.Left, curSum+n.Val, append(pVals, n.Val))
+			walk(n.Right, curSum+n.Val, append(pVals, n.Val))
+		}
+
+		x := []int{}
+		walk(root, 0, x)
+		log.Print(x)
+		return pSum
+	}
+
+	var draw func(*TreeNode, int)
+	draw = func(n *TreeNode, pVal int) {
+		if n != nil {
+			fmt.Printf("[%d<%d]", pVal, n.Val)
+			draw(n.Left, n.Val)
+			draw(n.Right, n.Val)
+		}
+	}
+
+	type T = TreeNode
+	r := &T{10, &T{5, &T{3, &T{Val: 3}, &T{Val: -2}}, &T{2, nil, &T{Val: 1}}}, &T{-3, nil, &T{Val: 11}}}
+	draw(r, -1)
+	fmt.Print("\n")
+	log.Print("3 ?= ", pathSum(r, 8))
+}
