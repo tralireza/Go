@@ -751,10 +751,36 @@ func Test1289(t *testing.T) {
 
 // 5m Longest Palindromic Substring
 func Test5(t *testing.T) {
-	if slices.Index([]string{"bab", "aba"}, longestPalindrome("babad")) < 0 {
-		t.Fail()
+	centerXpand := func(s string) string {
+		expand := func(l, r int) int {
+			for l >= 0 && r < len(s) && s[l] == s[r] {
+				l--
+				r++
+			}
+			return r - l - 1
+		}
+
+		l, r := 0, 0
+		for i := 0; i < len(s); i++ {
+			lenO := expand(i, i)
+			if r-l+1 < lenO {
+				l, r = i-lenO/2, i+lenO/2
+			}
+			lenV := expand(i, i+1)
+			if r-l+1 < lenV {
+				l, r = i-lenV/2+1, i+lenV/2
+			}
+		}
+
+		return s[l : r+1]
 	}
-	if longestPalindrome("cbbd") != "bb" {
-		t.Fail()
+
+	for _, f := range []func(string) string{longestPalindrome, centerXpand} {
+		if slices.Index([]string{"bab", "aba"}, f("babad")) < 0 {
+			t.Fail()
+		}
+		if f("cbbd") != "bb" {
+			t.Fail()
+		}
 	}
 }
