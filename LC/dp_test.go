@@ -751,6 +751,7 @@ func Test1289(t *testing.T) {
 
 // 5m Longest Palindromic Substring
 func Test5(t *testing.T) {
+	// O(n2) time & O(n) space
 	centerXpand := func(s string) string {
 		expand := func(l, r int) int {
 			for l >= 0 && r < len(s) && s[l] == s[r] {
@@ -775,7 +776,39 @@ func Test5(t *testing.T) {
 		return s[l : r+1]
 	}
 
-	for _, f := range []func(string) string{longestPalindrome, centerXpand} {
+	// O(n) time!
+	Manacher := func(s string) string {
+		S := "|" + strings.Join(strings.Split(s, ""), "|") + "|"
+		Radius := make([]int, len(S))
+
+		center, radius := 0, 0
+		for i := range len(S) {
+			mirror := 2*center - i
+
+			if i < radius {
+				Radius[i] = min(radius-i, Radius[mirror])
+			}
+
+			for i+1+Radius[i] < len(S) &&
+				i-1-Radius[i] >= 0 &&
+				S[i+1+Radius[i]] == S[i-1-Radius[i]] {
+				Radius[i]++
+			}
+
+			if i+Radius[i] > radius {
+				center = i
+				radius = i + Radius[i]
+			}
+		}
+
+		radius = slices.Max(Radius)
+		center = slices.Index(Radius, radius)
+
+		start := (center - radius) / 2
+		return s[start : start+radius]
+	}
+
+	for _, f := range []func(string) string{longestPalindrome, centerXpand, Manacher} {
 		if slices.Index([]string{"bab", "aba"}, f("babad")) < 0 {
 			t.Fail()
 		}
