@@ -27,7 +27,7 @@ func longestPalindrome(s string) string {
 		}
 	}
 
-	log.Print(D)
+	log.Print("D: ", D)
 
 	return longest
 }
