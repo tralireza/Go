@@ -748,3 +748,13 @@ func Test1289(t *testing.T) {
 		log.Print("7 ?= ", f([][]int{{2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}, {2, 2, 1, 2, 2}}))
 	}
 }
+
+// 5m Longest Palindromic Substring
+func Test5(t *testing.T) {
+	if slices.Index([]string{"bab", "aba"}, longestPalindrome("babad")) < 0 {
+		t.Fail()
+	}
+	if longestPalindrome("cbbd") != "bb" {
+		t.Fail()
+	}
+}
