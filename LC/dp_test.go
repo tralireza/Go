@@ -815,5 +815,6 @@ func Test5(t *testing.T) {
 		if f("cbbd") != "bb" {
 			t.Fail()
 		}
+		log.Print(" ?= ", f(strings.ReplaceAll("was it a car or a cat i saw?", " ", "")))
 	}
 }
