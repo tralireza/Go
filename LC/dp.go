@@ -47,5 +47,7 @@ func minPathSum(grid [][]int) int {
 		}
 	}
 
+	log.Print(grid)
+
 	return grid[len(grid)-1][len(grid[0])-1]
 }
