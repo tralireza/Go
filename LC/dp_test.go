@@ -818,3 +818,13 @@ func Test5(t *testing.T) {
 		log.Print(" ?= ", f(strings.ReplaceAll("was it a car or a cat i saw?", " ", "")))
 	}
 }
+
+// 64m Minimum Path Sum
+func Test64(t *testing.T) {
+	if minPathSum([][]int{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}}) != 7 {
+		t.Fail()
+	}
+	if minPathSum([][]int{{1, 2, 3}, {4, 5, 6}}) != 12 {
+		t.Fail()
+	}
+}
