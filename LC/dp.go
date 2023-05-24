@@ -34,27 +34,18 @@ func longestPalindrome(s string) string {
 
 // 64m Minimum Path Sum
 func minPathSum(grid [][]int) int {
-	Rows, Cols := len(grid), len(grid[0])
-	D := make([][]int, Rows)
-	for r := range D {
-		D[r] = make([]int, Cols)
+	for c := range grid[0][1:] {
+		grid[0][c+1] += grid[0][c]
+	}
+	for r := range grid[1:] {
+		grid[r+1][0] += grid[r][0]
 	}
 
-	for r := 0; r < Rows; r++ {
-		for c := 0; c < Cols; c++ {
-			if r == 0 {
-				if c > 0 {
-					D[r][c] = D[r][c-1]
-				}
-				D[r][c] += grid[r][c]
-			} else if c == 0 {
-				D[r][c] = D[r-1][c] + grid[r][c]
-			} else {
-				D[r][c] = min(D[r][c-1], D[r-1][c]) + grid[r][c]
-			}
+	for r := range grid[1:] {
+		for c := range grid[r+1][1:] {
+			grid[r+1][c+1] = min(grid[r+1][c], grid[r][c+1]) + grid[r+1][c+1]
 		}
 	}
-	log.Print(D)
 
-	return D[Rows-1][Cols-1]
+	return grid[len(grid)-1][len(grid[0])-1]
 }
