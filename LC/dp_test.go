@@ -828,3 +828,26 @@ func Test64(t *testing.T) {
 		t.Fail()
 	}
 }
+
+// 118 Pascal's Triangle
+func Test118(t *testing.T) {
+	generate := func(numRows int) [][]int {
+		Tri := [][]int{}
+
+		for r := 0; r < numRows; r++ {
+			row := make([]int, r+1)
+			row[0], row[r] = 1, 1
+
+			for c := 1; c < r; c++ {
+				row[c] = Tri[r-1][c-1] + Tri[r-1][c]
+			}
+
+			Tri = append(Tri, row)
+		}
+
+		return Tri
+	}
+
+	log.Print(" ?= ", generate(5))
+	log.Print(" ?= ", generate(1))
+}
