@@ -56,17 +56,16 @@ func minPathSum(grid [][]int) int {
 
 // 152m Maximum Product Subarray
 func maxProduct(nums []int) int {
-	Max := nums[0]
-	lMax, lMin := Max, Max
-
+	Max, lMax := nums[0], nums[0]
+	lMin := nums[0]
 	for _, n := range nums[1:] {
 		if n < 0 {
 			lMax, lMin = lMin, lMax
 		}
 		lMax = max(lMax*n, n)
-		lMin = min(lMin*n, n)
-
 		Max = max(lMax, Max)
+
+		lMin = min(lMin*n, n)
 	}
 
 	return Max

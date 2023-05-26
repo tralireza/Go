@@ -855,8 +855,33 @@ func Test118(t *testing.T) {
 
 // 152m Maximum Product Subarray
 func Test152(t *testing.T) {
-	log.Print("6 ?= ", maxProduct([]int{2, 3, -2, 4}))
-	log.Print("24 ?= ", maxProduct([]int{-2, 3, -4}))
-	log.Print("0 ?= ", maxProduct([]int{-2, 0, -1}))
-	log.Print("1 ?= ", maxProduct([]int{-2, 1}))
+	// Kadane's: Maximum Sum:
+	// best, curr := -INF, 0
+	// for n <- range
+	//   curr = max(curr, n+curr)
+	//   best = max(best, curr)
+	Kadane := func(nums []int) int {
+		n := nums[0]
+		best, curr := n, n
+		currSign := n // *
+		for _, n := range nums[1:] {
+			if n < 0 {
+				curr, currSign = currSign, curr // *
+			}
+			curr = max(n, curr*n)
+			best = max(best, curr)
+
+			currSign = min(n, currSign*n) // *
+		}
+
+		return best
+	}
+
+	for _, f := range []func([]int) int{maxProduct, Kadane} {
+		log.Print("6 ?= ", f([]int{2, 3, -2, 4}))
+		log.Print("24 ?= ", f([]int{-2, 3, -4}))
+		log.Print("0 ?= ", f([]int{-2, 0, -1}))
+		log.Print("1 ?= ", f([]int{-2, 1}))
+		log.Print("===")
+	}
 }
