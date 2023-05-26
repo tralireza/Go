@@ -55,6 +55,7 @@ func minPathSum(grid [][]int) int {
 }
 
 // 152m Maximum Product Subarray
+// Kadane's Maximum Sum -> augmented for Product
 func maxProduct(nums []int) int {
 	Max, lMax := nums[0], nums[0]
 	lMin := nums[0]
