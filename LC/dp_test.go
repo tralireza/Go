@@ -848,6 +848,7 @@ func Test118(t *testing.T) {
 		return Tri
 	}
 
+	log.Print(" ?= ", generate(7))
 	log.Print(" ?= ", generate(5))
 	log.Print(" ?= ", generate(1))
 }
