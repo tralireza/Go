@@ -852,3 +852,10 @@ func Test118(t *testing.T) {
 	log.Print(" ?= ", generate(5))
 	log.Print(" ?= ", generate(1))
 }
+
+// 152m Maximum Product Subarray
+func Test152(t *testing.T) {
+	log.Print("6 ?= ", maxProduct([]int{2, 3, -2, 4}))
+	log.Print("0 ?= ", maxProduct([]int{-2, 0, -1}))
+	log.Print("1 ?= ", maxProduct([]int{-2, 1}))
+}

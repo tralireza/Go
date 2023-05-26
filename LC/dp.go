@@ -1,6 +1,9 @@
 package lc
 
-import "log"
+import (
+	"log"
+	"math"
+)
 
 // 5m Longest Palindromic Substring
 func longestPalindrome(s string) string {
@@ -50,4 +53,22 @@ func minPathSum(grid [][]int) int {
 	log.Print(grid)
 
 	return grid[len(grid)-1][len(grid[0])-1]
+}
+
+// 152m Maximum Product Subarray
+func maxProduct(nums []int) int {
+	x := math.MinInt
+	for r := 1; r <= len(nums); r++ {
+		for l := 0; l < r; l++ {
+			log.Print(l, r)
+			v := nums[l]
+			for x := l + 1; x < r; x++ {
+				v *= nums[x]
+			}
+			if v > x {
+				x = v
+			}
+		}
+	}
+	return x
 }
