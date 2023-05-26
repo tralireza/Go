@@ -2,7 +2,6 @@ package lc
 
 import (
 	"log"
-	"math"
 )
 
 // 5m Longest Palindromic Substring
@@ -57,22 +56,18 @@ func minPathSum(grid [][]int) int {
 
 // 152m Maximum Product Subarray
 func maxProduct(nums []int) int {
-	lMax, rMax := math.MinInt, math.MinInt
+	Max := nums[0]
+	lMax, lMin := Max, Max
 
-	for i := 0; i < len(nums); i++ {
-		for x, v := i, 1; x >= 0; x-- {
-			v *= nums[x]
-			if v > lMax {
-				lMax = v
-			}
+	for _, n := range nums[1:] {
+		if n < 0 {
+			lMax, lMin = lMin, lMax
 		}
-		for x, v := i, 1; x < len(nums); x++ {
-			v *= nums[x]
-			if v > rMax {
-				rMax = v
-			}
-		}
+		lMax = max(lMax*n, n)
+		lMin = min(lMin*n, n)
+
+		Max = max(lMax, Max)
 	}
 
-	return max(lMax, rMax)
+	return Max
 }
