@@ -85,7 +85,7 @@ func lengthOfLIS(nums []int) int {
 
 		l, r := 0, len(liSub)-1
 		for l < r {
-			m := l + (r-l)>>1
+			m := l + (r-l)>>1 // l <= m < r
 			if liSub[m] >= n {
 				r = m
 			} else {
