@@ -885,3 +885,32 @@ func Test152(t *testing.T) {
 		log.Print("===")
 	}
 }
+
+// 300m Longest Increasing Subsequence
+func Test300(t *testing.T) {
+	// LCS: Longest Common Subsequence
+	LCS := func(rStr, cStr string) string {
+		D := make([][]string, len(rStr)+1)
+		for r := range D {
+			D[r] = make([]string, len(cStr)+1)
+		}
+
+		for r := 1; r <= len(rStr); r++ {
+			for c := 1; c <= len(cStr); c++ {
+				if rStr[r-1] == cStr[c-1] {
+					D[r][c] = D[r-1][c-1] + string(rStr[r-1])
+				} else {
+					D[r][c] = D[r][c-1]
+					if len(D[r-1][c]) > len(D[r][c]) {
+						D[r][c] = D[r-1][c]
+					}
+				}
+			}
+		}
+
+		log.Print(D)
+		return D[len(rStr)][len(cStr)]
+	}
+
+	log.Print(LCS("GAC", "AGCAT"))
+}
