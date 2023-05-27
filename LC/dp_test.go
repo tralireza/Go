@@ -912,5 +912,45 @@ func Test300(t *testing.T) {
 		return D[len(rStr)][len(cStr)]
 	}
 
+	dp := func(nums []int) int {
+		sorted := make([]int, len(nums))
+		copy(sorted, nums)
+
+		slices.Sort(sorted)
+		l := 0
+		for r := range sorted {
+			if sorted[l] < sorted[r] {
+				l++
+				sorted[l] = sorted[r]
+			}
+		}
+		sorted = sorted[:l+1]
+
+		// LCS sorted & nums
+		D := make([][]int, len(sorted)+1)
+		for r := range D {
+			D[r] = make([]int, len(nums)+1)
+		}
+
+		for s := 1; s <= len(sorted); s++ {
+			for n := 1; n <= len(nums); n++ {
+				if sorted[s-1] == nums[n-1] {
+					D[s][n] = D[s-1][n-1] + 1
+				} else {
+					D[s][n] = max(D[s-1][n], D[s][n-1])
+				}
+			}
+		}
+
+		return D[len(sorted)][len(nums)]
+	}
+
+	for _, f := range []func([]int) int{dp} {
+		log.Print("4 ?= ", f([]int{10, 9, 2, 5, 3, 7, 101, 18}))
+		log.Print("4 ?= ", f([]int{0, 1, 0, 3, 2, 3}))
+		log.Print("3 ?= ", f([]int{10, 9, 2, 5, 3, 4}))
+		log.Print("6 ?= ", f([]int{3, 5, 6, 2, 5, 4, 19, 5, 6, 7, 12}))
+	}
+
 	log.Print(LCS("GAC", "AGCAT"))
 }
