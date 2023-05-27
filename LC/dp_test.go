@@ -889,7 +889,7 @@ func Test152(t *testing.T) {
 // 300m Longest Increasing Subsequence
 func Test300(t *testing.T) {
 	// LCS: Longest Common Subsequence
-	LCS := func(rStr, cStr string) string {
+	lcs := func(rStr, cStr string) string {
 		D := make([][]string, len(rStr)+1)
 		for r := range D {
 			D[r] = make([]string, len(cStr)+1)
@@ -912,7 +912,7 @@ func Test300(t *testing.T) {
 		return D[len(rStr)][len(cStr)]
 	}
 
-	dp := func(nums []int) int {
+	dpWithLCS := func(nums []int) int {
 		sorted := make([]int, len(nums))
 		copy(sorted, nums)
 
@@ -945,7 +945,25 @@ func Test300(t *testing.T) {
 		return D[len(sorted)][len(nums)]
 	}
 
-	for _, f := range []func([]int) int{dp, lengthOfLIS} {
+	dp := func(nums []int) int {
+		D := make([]int, len(nums))
+
+		D[0] = 1
+		for r := 1; r < len(nums); r++ {
+			prvMax := 0
+			for l := 0; l < r; l++ {
+				if nums[l] >= nums[r] {
+					continue
+				}
+				prvMax = max(D[l], prvMax)
+			}
+			D[r] = prvMax + 1
+		}
+
+		return slices.Max(D)
+	}
+
+	for _, f := range []func([]int) int{dpWithLCS, lengthOfLIS, dp} {
 		log.Print("4 ?= ", f([]int{10, 9, 2, 5, 3, 7, 101, 18}))
 		log.Print("4 ?= ", f([]int{0, 1, 0, 3, 2, 3}))
 		log.Print("3 ?= ", f([]int{10, 9, 2, 5, 3, 4}))
@@ -953,5 +971,5 @@ func Test300(t *testing.T) {
 		log.Print("===")
 	}
 
-	log.Printf("LCS (1 outof 3) [%q,%q] -> %q", "GAC", "AGCAT", LCS("GAC", "AGCAT"))
+	log.Printf("LCS (1 outof 3) [%q,%q] -> %q", "GAC", "AGCAT", lcs("GAC", "AGCAT"))
 }
