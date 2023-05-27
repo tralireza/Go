@@ -80,6 +80,7 @@ func lengthOfLIS(nums []int) int {
 	for _, n := range nums[1:] {
 		if n > liSub[len(liSub)-1] {
 			liSub = append(liSub, n)
+			continue
 		}
 
 		l, r := 0, len(liSub)-1
