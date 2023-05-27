@@ -71,3 +71,28 @@ func maxProduct(nums []int) int {
 
 	return Max
 }
+
+// 300m Longest Increasing Subsequence
+func lengthOfLIS(nums []int) int {
+	liSub := []int{}
+
+	liSub = append(liSub, nums[0])
+	for _, n := range nums[1:] {
+		if n > liSub[len(liSub)-1] {
+			liSub = append(liSub, n)
+		}
+
+		l, r := 0, len(liSub)-1
+		for l < r {
+			m := l + (r-l)>>1
+			if liSub[m] >= n {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		liSub[l] = n
+	}
+
+	return len(liSub)
+}

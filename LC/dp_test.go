@@ -945,12 +945,13 @@ func Test300(t *testing.T) {
 		return D[len(sorted)][len(nums)]
 	}
 
-	for _, f := range []func([]int) int{dp} {
+	for _, f := range []func([]int) int{dp, lengthOfLIS} {
 		log.Print("4 ?= ", f([]int{10, 9, 2, 5, 3, 7, 101, 18}))
 		log.Print("4 ?= ", f([]int{0, 1, 0, 3, 2, 3}))
 		log.Print("3 ?= ", f([]int{10, 9, 2, 5, 3, 4}))
 		log.Print("6 ?= ", f([]int{3, 5, 6, 2, 5, 4, 19, 5, 6, 7, 12}))
+		log.Print("===")
 	}
 
-	log.Print(LCS("GAC", "AGCAT"))
+	log.Printf("LCS (1 outof 3) [%q,%q] -> %q", "GAC", "AGCAT", LCS("GAC", "AGCAT"))
 }
