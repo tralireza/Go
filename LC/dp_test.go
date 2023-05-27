@@ -908,7 +908,7 @@ func Test300(t *testing.T) {
 			}
 		}
 
-		log.Print(D)
+		log.Printf("%q", D)
 		return D[len(rStr)][len(cStr)]
 	}
 
