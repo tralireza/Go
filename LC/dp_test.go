@@ -973,3 +973,41 @@ func Test300(t *testing.T) {
 
 	log.Printf("LCS (1 outof 3) [%q,%q] -> %q", "GAC", "AGCAT", lcs("GAC", "AGCAT"))
 }
+
+// 322m Coing Change
+func Test322(t *testing.T) {
+	bfs := func(coins []int, amount int) int {
+		Q, m := []int{}, 0
+		Vis := map[int]struct{}{}
+
+		Q = append(Q, m)
+		Vis[m] = struct{}{}
+		minCoins := 0
+		for len(Q) > 0 {
+			for range len(Q) {
+				m, Q = Q[0], Q[1:]
+				if m == amount {
+					return minCoins
+				}
+
+				for _, c := range coins {
+					n := m + c
+					if n <= amount {
+						if _, ok := Vis[n]; !ok {
+							Q = append(Q, n)
+						}
+					}
+				}
+			}
+			minCoins++
+		}
+
+		return -1
+	}
+
+	for _, f := range []func([]int, int) int{bfs} {
+		log.Print("3 ?= ", f([]int{1, 2, 5}, 11))
+		log.Print("-1 ?= ", f([]int{2}, 3))
+		log.Print("0 ?= ", f([]int{1}, 0))
+	}
+}
