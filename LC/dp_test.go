@@ -1005,7 +1005,7 @@ func Test322(t *testing.T) {
 		return -1
 	}
 
-	for _, f := range []func([]int, int) int{BFS} {
+	for _, f := range []func([]int, int) int{BFS, coinChange} {
 		log.Print("3 ?= ", f([]int{1, 2, 5}, 11))
 		log.Print("-1 ?= ", f([]int{2}, 3))
 		log.Print("0 ?= ", f([]int{1}, 0))

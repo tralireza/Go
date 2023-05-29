@@ -97,3 +97,25 @@ func lengthOfLIS(nums []int) int {
 
 	return len(liSub)
 }
+
+// 322m Coin Change
+func coinChange(coins []int, amount int) int {
+	D := make([]int, amount+1)
+
+	for m := 1; m <= amount; m++ {
+		D[m] = -1
+
+		for _, c := range coins {
+			n := m - c
+			if n >= 0 && D[n] >= 0 {
+				if D[m] == -1 {
+					D[m] = 1 + D[n]
+				} else {
+					D[m] = min(D[m], D[n]+1)
+				}
+			}
+		}
+	}
+
+	return D[amount]
+}
