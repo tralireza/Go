@@ -976,7 +976,7 @@ func Test300(t *testing.T) {
 
 // 322m Coing Change
 func Test322(t *testing.T) {
-	bfs := func(coins []int, amount int) int {
+	BFS := func(coins []int, amount int) int {
 		Q, m := []int{}, 0
 		Vis := map[int]struct{}{}
 
@@ -1005,7 +1005,7 @@ func Test322(t *testing.T) {
 		return -1
 	}
 
-	for _, f := range []func([]int, int) int{bfs} {
+	for _, f := range []func([]int, int) int{BFS} {
 		log.Print("3 ?= ", f([]int{1, 2, 5}, 11))
 		log.Print("-1 ?= ", f([]int{2}, 3))
 		log.Print("0 ?= ", f([]int{1}, 0))
