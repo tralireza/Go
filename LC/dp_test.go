@@ -1011,3 +1011,9 @@ func Test322(t *testing.T) {
 		log.Print("0 ?= ", f([]int{1}, 0))
 	}
 }
+
+// 1143m Longest Common Subsequence
+func Test1143(t *testing.T) {
+	log.Print("3 ?= ", longestCommonSubsequence("abcde", "ace"))
+	log.Print("0 ?= ", longestCommonSubsequence("abc", "de"))
+}

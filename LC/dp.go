@@ -116,3 +116,22 @@ func coinChange(coins []int, amount int) int {
 	}
 	return D[amount]
 }
+
+// 1143m Longest Common Subsequence
+func longestCommonSubsequence(text1 string, text2 string) int {
+	D := make([][]int, len(text1)+1)
+	for r := range D {
+		D[r] = make([]int, len(text2)+1)
+	}
+
+	for r := 1; r <= len(text1); r++ {
+		for c := 1; c <= len(text2); c++ {
+			if text1[r-1] == text2[c-1] {
+				D[r][c] = D[r-1][c-1] + 1
+			} else {
+				D[r][c] = max(D[r-1][c], D[r][c-1])
+			}
+		}
+	}
+	return D[len(text1)][len(text2)]
+}
