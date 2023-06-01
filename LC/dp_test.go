@@ -1021,7 +1021,7 @@ func Test1143(t *testing.T) {
 // 416m Partition Equal Subset Sum
 func Test416(t *testing.T) {
 	// only One of each item -> 1: Take / 0: Dont take
-	knapsack01 := func(W int, Val []int, Weight []int) int {
+	Knapsack01 := func(W int, Val, Weight []int) int {
 		N := len(Val) // = len(Weight)
 		D := make([][]int, N+1)
 		for i := range D {
@@ -1042,7 +1042,38 @@ func Test416(t *testing.T) {
 		return D[N][W]
 	}
 
+	rKnapsack01 := func(W int, Val, Weight []int) int {
+		Mem := map[[2]int]int{}
+		N := len(Val) // len(Weight)
+
+		rCalls := 0
+		var check func(i, w int) int
+		check = func(i, w int) int {
+			rCalls++
+			if i < 0 || w <= 0 {
+				return 0
+			}
+			if v, ok := Mem[[2]int{i, w}]; ok {
+				return v
+			}
+
+			v := check(i-1, w)
+			if Weight[i] <= w {
+				v = max(check(i-1, w-Weight[i])+Val[i], v)
+			}
+
+			Mem[[2]int{i, w}] = v
+			return v
+		}
+
+		v := check(N-1, W)
+		log.Print(rCalls, " -> ", Mem)
+		return v
+	}
+
 	itemWeights := []int{4, 3, 2, 1}
-	log.Print(knapsack01(6, []int{5, 4, 3, 2}, itemWeights))
-	log.Print(knapsack01(6, []int{1, 1, 1, 1}, itemWeights))
+	log.Print(Knapsack01(6, []int{5, 4, 3, 2}, itemWeights))
+	log.Print(Knapsack01(6, []int{1, 1, 1, 1}, itemWeights))
+	log.Print(rKnapsack01(6, []int{5, 4, 3, 2}, itemWeights))
+	log.Print(rKnapsack01(6, []int{1, 1, 1, 1}, itemWeights))
 }
