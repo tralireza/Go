@@ -1017,3 +1017,32 @@ func Test1143(t *testing.T) {
 	log.Print("3 ?= ", longestCommonSubsequence("abcde", "ace"))
 	log.Print("0 ?= ", longestCommonSubsequence("abc", "de"))
 }
+
+// 416m Partition Equal Subset Sum
+func Test416(t *testing.T) {
+	// only One of each item -> 1: Take / 0: Dont take
+	knapsack01 := func(W int, Val []int, Weight []int) int {
+		N := len(Val) // = len(Weight)
+		D := make([][]int, N+1)
+		for i := range D {
+			D[i] = make([]int, W+1)
+		}
+
+		for i := 1; i <= N; i++ {
+			for w := 1; w <= W; w++ {
+				if Weight[i-1] > w {
+					D[i][w] = D[i-1][w]
+				} else {
+					D[i][w] = max(D[i-1][w], D[i-1][w-Weight[i-1]]+Val[i-1])
+				}
+			}
+		}
+
+		log.Print(D)
+		return D[N][W]
+	}
+
+	itemWeights := []int{4, 3, 2, 1}
+	log.Print(knapsack01(6, []int{5, 4, 3, 2}, itemWeights))
+	log.Print(knapsack01(6, []int{1, 1, 1, 1}, itemWeights))
+}
