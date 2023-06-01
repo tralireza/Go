@@ -1061,19 +1061,18 @@ func Test416(t *testing.T) {
 			if Weight[i] <= w {
 				v = max(check(i-1, w-Weight[i])+Val[i], v)
 			}
-
 			Mem[[2]int{i, w}] = v
 			return v
 		}
 
 		v := check(N-1, W)
-		log.Print(rCalls, " -> ", Mem)
+		log.Print(rCalls, " -> #", len(Mem), " { ", Mem)
 		return v
 	}
 
-	itemWeights := []int{4, 3, 2, 1}
-	log.Print(Knapsack01(6, []int{5, 4, 3, 2}, itemWeights))
-	log.Print(Knapsack01(6, []int{1, 1, 1, 1}, itemWeights))
-	log.Print(rKnapsack01(6, []int{5, 4, 3, 2}, itemWeights))
-	log.Print(rKnapsack01(6, []int{1, 1, 1, 1}, itemWeights))
+	for _, f := range []func(int, []int, []int) int{Knapsack01, rKnapsack01} {
+		log.Print(f(6, []int{5, 4, 3, 2}, []int{4, 3, 2, 1}))
+		log.Print(f(6, []int{1, 1, 1, 1}, []int{4, 3, 2, 1}))
+		log.Print(f(67, []int{505, 352, 458, 220, 354, 414, 498, 545, 473, 543}, []int{23, 26, 20, 18, 32, 27, 29, 26, 30, 27}))
+	}
 }
