@@ -135,3 +135,42 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 	}
 	return D[len(text1)][len(text2)]
 }
+
+// 416m Partition Equal Subset Sum
+func canPartition(nums []int) bool {
+	// 1 <= len(nums) <= 200 & 1 <= nums[i] <= 100
+	frq, tSum := make([]int, 100+1), 0
+	for _, n := range nums {
+		tSum += n
+		frq[n]++
+	}
+
+	if tSum&1 == 1 {
+		return false
+	}
+
+	Val := []int{}
+	for _, n := range nums {
+		if n <= tSum/2 {
+			Val = append(Val, n)
+		}
+	}
+
+	N, W := len(Val), tSum/2
+	Knapsack01 := make([][]int, N+1)
+	for i := range Knapsack01 {
+		Knapsack01[i] = make([]int, W+1)
+	}
+
+	for i := 1; i <= N; i++ {
+		for w := 1; w <= W; w++ {
+			if Val[i-1] > w {
+				Knapsack01[i][w] = Knapsack01[i-1][w]
+			} else {
+				Knapsack01[i][w] = max(Knapsack01[i-1][w], Knapsack01[i-1][w-Val[i-1]]+Val[i-1])
+			}
+		}
+	}
+
+	return Knapsack01[N][W] == W
+}

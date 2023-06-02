@@ -1066,13 +1066,19 @@ func Test416(t *testing.T) {
 		}
 
 		v := check(N-1, W)
-		log.Print(rCalls, " -> #", len(Mem), " { ", Mem)
+		log.Print(rCalls, " : ", N*W, " -> #", len(Mem), " { ", Mem)
 		return v
 	}
 
 	for _, f := range []func(int, []int, []int) int{Knapsack01, rKnapsack01} {
-		log.Print(f(6, []int{5, 4, 3, 2}, []int{4, 3, 2, 1}))
-		log.Print(f(6, []int{1, 1, 1, 1}, []int{4, 3, 2, 1}))
-		log.Print(f(67, []int{505, 352, 458, 220, 354, 414, 498, 545, 473, 543}, []int{23, 26, 20, 18, 32, 27, 29, 26, 30, 27}))
+		log.Print("9 ?= ", f(6, []int{5, 4, 3, 2}, []int{4, 3, 2, 1}))
+		log.Print("3 ?= ", f(6, []int{1, 1, 1, 1}, []int{4, 3, 2, 1}))
+		log.Print("1270 ?= ", f(67, []int{505, 352, 458, 220, 354, 414, 498, 545, 473, 543}, []int{23, 26, 20, 18, 32, 27, 29, 26, 30, 27}))
 	}
+
+	log.Print("===")
+	log.Print("true ?= ", canPartition([]int{1, 5, 11, 5}))
+	log.Print("true ?= ", canPartition([]int{3, 3, 3, 4, 5}))
+	log.Print("false ?= ", canPartition([]int{1, 2, 3, 5}))
+	log.Print("false ?= ", canPartition([]int{1, 2, 5}))
 }
