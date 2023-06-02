@@ -174,3 +174,29 @@ func canPartition(nums []int) bool {
 
 	return Knapsack01[N][W] == W
 }
+
+// 72m Edit Distance
+func minDistance(word1 string, word2 string) int {
+	D := make([][]int, len(word1)+1)
+	for r := range D {
+		D[r] = make([]int, len(word2)+1)
+	}
+	for r := range D {
+		D[r][0] = r
+	}
+	for c := range D[0] {
+		D[0][c] = c
+	}
+
+	for r := 1; r <= len(word1); r++ {
+		for c := 1; c <= len(word2); c++ {
+			if word1[r-1] == word2[c-1] {
+				D[r][c] = D[r-1][c-1]
+			} else {
+				D[r][c] = 1 + min(D[r-1][c-1], D[r-1][c], D[r][c-1])
+			}
+		}
+	}
+
+	return D[len(word1)][len(word2)]
+}

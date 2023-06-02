@@ -438,12 +438,14 @@ func Test57(t *testing.T) {
 
 // 72m Edit Distance
 func Test72(t *testing.T) {
-	minDistance := func(word1 string, word2 string) int {
-		// dist[m][n] distinace of word1[0..m] and word2[0..n]
+	dp := func(word1 string, word2 string) int {
+		// dist[m][n] distance of word1[0..m] and word2[0..n]
 		// dist[0][n] = n, dist[m][0] = m
 		dist := make([][]int, len(word1)+1)
 		for i := range dist {
 			dist[i] = make([]int, len(word2)+1)
+		}
+		for i := range dist {
 			dist[i][0] = i
 		}
 		for j := 0; j <= len(word2); j++ {
@@ -452,11 +454,11 @@ func Test72(t *testing.T) {
 
 		for i := 1; i <= len(word1); i++ {
 			for j := 1; j <= len(word2); j++ {
-				d := 0
-				if word1[i-1] != word2[j-1] {
-					d++
+				if word1[i-1] == word2[j-1] {
+					dist[i][j] = dist[i-1][j-1]
+				} else {
+					dist[i][j] = 1 + min(dist[i][j-1], dist[i-1][j], dist[i-1][j-1])
 				}
-				dist[i][j] = min(dist[i][j-1]+1, dist[i-1][j]+1, dist[i-1][j-1]+d)
 			}
 		}
 
@@ -464,7 +466,11 @@ func Test72(t *testing.T) {
 	}
 
 	// O(n) space
-	minDistance2 := func(word1 string, word2 string) int {
+	optimizedSpace := func(word1 string, word2 string) int {
+		if len(word2) > len(word1) {
+			word1, word2 = word2, word1
+		}
+
 		dist := make([][]int, 2)
 		for i := range dist {
 			dist[i] = make([]int, len(word2)+1)
@@ -473,16 +479,16 @@ func Test72(t *testing.T) {
 			dist[0][j] = j
 		}
 
-		for i := 0; i < len(word1); i++ {
+		for i := 1; i <= len(word1); i++ {
 			copy(dist[1], dist[0])
-			left := i + 1
+
+			dist[0][0] = i
 			for j := 1; j <= len(word2); j++ {
-				d := 0
-				if word1[i] != word2[j-1] {
-					d++
+				if word1[i-1] == word2[j-1] {
+					dist[0][j] = dist[1][j-1]
+				} else {
+					dist[0][j] = 1 + min(dist[0][j-1], dist[1][j], dist[1][j-1])
 				}
-				dist[0][j] = min(left+1, dist[1][j]+1, dist[1][j-1]+d)
-				left = dist[0][j]
 			}
 		}
 		log.Print(dist)
@@ -490,10 +496,10 @@ func Test72(t *testing.T) {
 		return dist[0][len(word2)]
 	}
 
-	log.Print("3 ?= ", minDistance("horse", "ros"))
-	log.Print("1 ?= ", minDistance("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
-	log.Print("3 ?= ", minDistance2("horse", "ros"))
-	log.Print("1 ?= ", minDistance2("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
+	for _, f := range []func(string, string) int{dp, minDistance, optimizedSpace} {
+		log.Print("2 ?= ", f("horse", "rose"))
+		log.Print("1 ?= ", f("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
+	}
 }
 
 // 583m Delete Operation for Two Strings
