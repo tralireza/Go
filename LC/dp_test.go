@@ -490,8 +490,8 @@ func Test72(t *testing.T) {
 					dist[0][j] = 1 + min(dist[0][j-1], dist[1][j], dist[1][j-1])
 				}
 			}
+			log.Print(dist)
 		}
-		log.Print(dist)
 
 		return dist[0][len(word2)]
 	}
