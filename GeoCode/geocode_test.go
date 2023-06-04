@@ -2,10 +2,41 @@ package geocode
 
 import (
 	"log"
+	"net"
 	"os"
 	"testing"
 	"time"
 )
+
+func TestNets(t *testing.T) {
+	I := []net.IP{}
+
+	ifcs, err := net.Interfaces()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, ifc := range ifcs {
+		addrs, err := ifc.Addrs()
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+
+			if ip = ip.To4(); ip != nil {
+				I = append(I, ip)
+			}
+		}
+	}
+
+	log.Printf("+ IPs: %+v", I)
+}
 
 func TestReverseGeocode(t *testing.T) {
 	c := NewClient(time.Second, os.Getenv("GCMAP_API"))
