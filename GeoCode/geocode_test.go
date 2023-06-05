@@ -4,27 +4,33 @@ import (
 	"log"
 	"net"
 	"os"
+	"sync"
 	"testing"
 	"time"
 )
 
 func TestSync(t *testing.T) {
+	m := sync.Mutex{}
 	c := make(chan struct{}, 1000)
 	a := 0
+	ts := time.Now()
 	for i := 0; i < cap(c); i++ {
 		go func(i int) {
 			defer func() { c <- struct{}{} }()
+			m.Lock()
 			if i&1 == 0 {
 				a++
 			} else {
 				a--
 			}
+			m.Unlock()
 		}(i)
 	}
 	for i := 0; i < cap(c); i++ {
 		<-c
 	}
-	log.Print(a)
+	duration := time.Since(ts)
+	log.Printf("[%d]   %v", a, duration)
 }
 
 func TestNets(t *testing.T) {
