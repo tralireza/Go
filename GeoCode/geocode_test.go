@@ -8,6 +8,25 @@ import (
 	"time"
 )
 
+func TestSync(t *testing.T) {
+	c := make(chan struct{}, 1000)
+	a := 0
+	for i := 0; i < cap(c); i++ {
+		go func(i int) {
+			defer func() { c <- struct{}{} }()
+			if i&1 == 0 {
+				a++
+			} else {
+				a--
+			}
+		}(i)
+	}
+	for i := 0; i < cap(c); i++ {
+		<-c
+	}
+	log.Print(a)
+}
+
 func TestNets(t *testing.T) {
 	I := []net.IP{}
 
