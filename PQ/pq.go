@@ -43,6 +43,5 @@ func TotalCost(costs []int, k int, candidates int) int64 {
 		}
 		k--
 	}
-
 	return tcost
 }
