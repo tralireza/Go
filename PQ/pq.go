@@ -27,28 +27,8 @@ func TotalCost(costs []int, k int, candidates int) int64 {
 	log.Printf("(%d,%d) %v %v", l, r, L, R)
 
 	tcost := int64(0)
-	for ; k > 0 && L.Len() > 0 && R.Len() > 0; k-- {
-		c := min(L.IntSlice[0], R.IntSlice[0])
-		tcost += int64(c)
-		if L.IntSlice[0] <= R.IntSlice[0] {
-			heap.Pop(&L)
-			if l <= r {
-				heap.Push(&L, costs[l])
-				l++
-			}
-		} else {
-			heap.Pop(&R)
-			if l <= r {
-				heap.Push(&R, costs[r])
-				r--
-			}
-		}
-
-		log.Printf("(%d,%d) %v %v", l, r, L, R)
-	}
-
-	for ; k > 0; k-- {
-		if L.Len() > 0 {
+	for k > 0 {
+		if R.Len() == 0 || L.Len() > 0 && L.IntSlice[0] <= R.IntSlice[0] {
 			tcost += int64(heap.Pop(&L).(int))
 			if l <= r {
 				heap.Push(&L, costs[l])
@@ -61,8 +41,7 @@ func TotalCost(costs []int, k int, candidates int) int64 {
 				r--
 			}
 		}
-
-		log.Printf("(%d,%d) %v %v", l, r, L, R)
+		k--
 	}
 
 	return tcost
