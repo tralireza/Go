@@ -17,5 +17,8 @@ func Test2462(t *testing.T) {
 		if r := TotalCost(costs, k, candidates); r != tcost {
 			t.Fatalf("Wront totalCost! must be %d != %d", r, tcost)
 		}
+		if r := TotalCost1(costs, k, candidates); r != tcost {
+			t.Fatalf("Wront totalCost! must be %d != %d", r, tcost)
+		}
 	}
 }

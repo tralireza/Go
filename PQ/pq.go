@@ -6,6 +6,53 @@ import (
 	"sort"
 )
 
+type SHe struct{ Cost, Side int }
+type SHeap []SHe
+
+func (h SHeap) Len() int { return len(h) }
+func (h SHeap) Less(i, j int) bool {
+	if h[i].Cost == h[j].Cost {
+		return h[i].Side < h[j].Side
+	}
+	return h[i].Cost < h[j].Cost
+}
+func (h SHeap) Swap(i int, j int) { h[i], h[j] = h[j], h[i] }
+func (h *SHeap) Push(x any)       { *h = append(*h, x.(SHe)) }
+func (h *SHeap) Pop() any {
+	v := (*h)[len(*h)-1]
+	*h = (*h)[:len(*h)-1]
+	return v
+}
+
+func TotalCost1(costs []int, k int, candidates int) int64 {
+	H := &SHeap{}
+	l, r := 0, len(costs)-1
+	for ; l < candidates; l++ {
+		heap.Push(H, SHe{costs[l], 0})
+	}
+	for ; r >= max(len(costs)-candidates, candidates); r-- {
+		heap.Push(H, SHe{costs[r], 1})
+	}
+	log.Print(H)
+
+	tcost := int64(0)
+	for k > 0 {
+		e := heap.Pop(H).(SHe)
+		tcost += int64(e.Cost)
+		if l <= r {
+			if e.Side == 0 {
+				heap.Push(H, SHe{costs[l], e.Side})
+				l++
+			} else {
+				heap.Push(H, SHe{costs[r], e.Side})
+				r--
+			}
+		}
+		k--
+	}
+	return tcost
+}
+
 type IHeap struct{ sort.IntSlice }
 
 func (h *IHeap) Push(v any) { h.IntSlice = append(h.IntSlice, v.(int)) }
