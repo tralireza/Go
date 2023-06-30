@@ -40,7 +40,7 @@ func minLength(s string) int {
 }
 
 func Test1750(t *testing.T) {
-	for _, s := range []string{"aabccabba", "a"} {
+	for _, s := range []string{"aabccabba", "a", "aab", "aaabcccbacaabcbbba", "bb", "aaaca", "bbacabbb"} {
 		log.Printf("%q -> %d", s, minLength(s))
 	}
 }
