@@ -25,6 +25,13 @@ func (h *SHeap) Pop() any {
 }
 
 func TotalCost1(costs []int, k int, candidates int) int64 {
+	max := func(a, b int) int {
+		if b > a {
+			return b
+		}
+		return a
+	}
+
 	H := &SHeap{}
 	l, r := 0, len(costs)-1
 	for ; l < candidates; l++ {
@@ -63,6 +70,12 @@ func (h *IHeap) Pop() any {
 }
 
 func TotalCost(costs []int, k int, candidates int) int64 {
+	max := func(a, b int) int {
+		if b > a {
+			return b
+		}
+		return a
+	}
 	L, R := IHeap{}, IHeap{}
 	l, r := 0, len(costs)-1
 	for ; l < candidates; l++ {
