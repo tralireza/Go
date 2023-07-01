@@ -25,17 +25,15 @@ func Test2462(t *testing.T) {
 
 func minLength(s string) int {
 	l, r := 0, len(s)-1
-
 	for l < r && s[l] == s[r] {
-		c := s[l]
-		for l <= r && c == s[l] {
+		chr := s[l]
+		for l <= r && chr == s[l] {
 			l++
 		}
-		for l < r && c == s[r] {
+		for l < r && chr == s[r] {
 			r--
 		}
 	}
-
 	return r - l + 1
 }
 
