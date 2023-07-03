@@ -14,14 +14,10 @@ type mWrite struct {
 }
 
 func NewMWriter(wtrs ...io.Writer) *mWrite {
-	v := mWrite{}
-	v.cond = sync.NewCond(&v)
-	v.wtrs = append(v.wtrs, wtrs...)
-	return &v
-}
-
-func (o *mWrite) Run() {
-	for _, wtr := range o.wtrs {
+	o := mWrite{}
+	o.cond = sync.NewCond(&o)
+	o.wtrs = append(o.wtrs, wtrs...)
+	for _, w := range o.wtrs {
 		go func(w io.Writer) {
 			for {
 				o.Lock()
@@ -30,8 +26,9 @@ func (o *mWrite) Run() {
 				o.Unlock()
 				log.Printf("W: write complete! %d %v", n, err)
 			}
-		}(wtr)
+		}(w)
 	}
+	return &o
 }
 
 func (o *mWrite) Read(data []byte) {

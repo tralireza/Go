@@ -14,10 +14,10 @@ func TestCond(t *testing.T) {
 		wtrs = append(wtrs, &bytes.Buffer{})
 	}
 	o := NewMWriter(wtrs...)
-	o.Run()
 	time.Sleep(time.Second)
 	o.Read([]byte("Buffer data()"))
 
+	time.Sleep(time.Second)
 	for _, w := range wtrs {
 		log.Printf("%q", w)
 	}
