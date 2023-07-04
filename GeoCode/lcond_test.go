@@ -2,6 +2,7 @@ package geocode
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"log"
 	"testing"
@@ -15,10 +16,12 @@ func TestCond(t *testing.T) {
 	}
 	o := NewMWriter(wtrs...)
 	time.Sleep(time.Second)
-	o.Read([]byte("Buffer data()"))
 
-	time.Sleep(time.Second)
-	for _, w := range wtrs {
-		log.Printf("%q", w)
+	for i := 0; i < 3; i++ {
+		o.Read([]byte(fmt.Sprintf("Buffer data(%d)|", i)))
+		time.Sleep(time.Second)
+		for _, w := range wtrs {
+			log.Printf("%q", w)
+		}
 	}
 }
