@@ -37,7 +37,7 @@ func TestCtxCancel(t *testing.T) {
 		select {
 		case <-ctx.Done():
 			tkr.Stop()
-			log.Print("-> Context done!")
+			log.Printf("-> Context: %v", ctx.Err())
 			return
 		case <-tkr.C:
 			log.Print(time.Since(ts))
