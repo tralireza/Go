@@ -44,3 +44,21 @@ func TestCtxCancel(t *testing.T) {
 		}
 	}
 }
+
+func TestCtxDeadline(t *testing.T) {
+	ctx, _ := context.WithDeadline(context.Background(), time.Now().Add(time.Second))
+	lateCtx, _ := context.WithDeadline(ctx, time.Now().Add(time.Minute))
+
+	tkr := time.NewTicker(175 * time.Millisecond)
+	ts := time.Now()
+	for {
+		select {
+		case <-lateCtx.Done():
+			tkr.Stop()
+			log.Printf("-> Context: %v", lateCtx.Err())
+			return
+		case <-tkr.C:
+			log.Print(time.Since(ts))
+		}
+	}
+}
