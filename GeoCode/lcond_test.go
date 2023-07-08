@@ -62,3 +62,19 @@ func TestCtxDeadline(t *testing.T) {
 		}
 	}
 }
+
+func TestCtxTimeout(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Second))
+	time.AfterFunc(5*time.Second, cancel)
+
+	ts := time.Now()
+	for {
+		select {
+		case <-time.After(125 * time.Millisecond):
+			log.Print(time.Since(ts))
+		case <-ctx.Done():
+			log.Printf("-> Context: %v (%v)", ctx.Err(), time.Since(ts).Round(time.Second))
+			return
+		}
+	}
+}
