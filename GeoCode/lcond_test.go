@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"sync"
 	"testing"
 	"time"
 )
@@ -77,4 +78,28 @@ func TestCtxTimeout(t *testing.T) {
 			return
 		}
 	}
+}
+
+func TestCtxWithValue(t *testing.T) {
+	type Key struct{}
+	ctx, cancel := context.WithCancel(context.Background())
+
+	n := 3
+	var wg sync.WaitGroup
+	wg.Add(n)
+
+	for n > 0 {
+		go func(ctx context.Context) {
+			v := ctx.Value(Key{})
+			log.Printf("Ctx: --Val-> %v", v)
+			wg.Done()
+			<-ctx.Done()
+			log.Printf("Ctx: %d ->  %v", v, ctx.Err())
+		}(context.WithValue(ctx, Key{}, n))
+		n--
+	}
+
+	wg.Wait()
+	cancel()
+	time.Sleep(time.Millisecond)
 }
