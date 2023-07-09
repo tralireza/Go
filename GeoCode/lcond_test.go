@@ -135,9 +135,9 @@ func TestHttpRqTimeout(t *testing.T) {
 func TestMultiRqCancel(t *testing.T) {
 	go func() {
 		http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-			n := rand.Intn(10)
+			n, ts := rand.Intn(10), time.Now()
 			time.Sleep(time.Duration(n) * time.Second)
-			fmt.Fprintf(w, "%d (s)", n)
+			fmt.Fprintf(w, "Response: %d %v", n, time.Since(ts))
 		})
 		http.ListenAndServe(":45123", nil)
 	}()
@@ -147,9 +147,9 @@ func TestMultiRqCancel(t *testing.T) {
 
 	once, wg := sync.Once{}, sync.WaitGroup{}
 	rc := make(chan *http.Response)
-	wg.Add(4)
-	ts := time.Now()
-	for i := 0; i < 4; i++ {
+	n, ts := 8, time.Now()
+	wg.Add(n)
+	for n > 0 {
 		go func(i int) {
 			defer wg.Done()
 
@@ -164,13 +164,17 @@ func TestMultiRqCancel(t *testing.T) {
 			}
 
 			once.Do(func() { rc <- rsp })
-		}(i)
+		}(n)
+		n--
 	}
 
 	rsp := <-rc
-	log.Printf("%v (%v)", rsp.Status, time.Since(ts))
+	content, _ := io.ReadAll(rsp.Body)
+	log.Printf("%v %q (%v)", rsp.Status, content, time.Since(ts))
 	rsp.Body.Close()
 
+	log.Print("Canceling...")
 	cancel()
+
 	wg.Wait()
 }
