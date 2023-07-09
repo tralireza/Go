@@ -81,7 +81,7 @@ func TestCtxTimeout(t *testing.T) {
 }
 
 func TestCtxWithValue(t *testing.T) {
-	type Key struct{}
+	type key struct{}
 	ctx, cancel := context.WithCancel(context.Background())
 
 	n := 3
@@ -90,12 +90,12 @@ func TestCtxWithValue(t *testing.T) {
 
 	for n > 0 {
 		go func(ctx context.Context) {
-			v := ctx.Value(Key{})
+			v := ctx.Value(key{})
 			log.Printf("Ctx: --Val-> %v", v)
 			wg.Done()
 			<-ctx.Done()
 			log.Printf("Ctx: %d ->  %v", v, ctx.Err())
-		}(context.WithValue(ctx, Key{}, n))
+		}(context.WithValue(ctx, key{}, n))
 		n--
 	}
 
