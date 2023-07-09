@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"sync"
 	"testing"
 	"time"
@@ -102,4 +103,27 @@ func TestCtxWithValue(t *testing.T) {
 	wg.Wait()
 	cancel()
 	time.Sleep(time.Millisecond)
+}
+
+func TestHttpRqTimeout(t *testing.T) {
+	go func() {
+		http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) { time.Sleep(3 * time.Second) })
+		if err := http.ListenAndServe(":34531", nil); err != nil {
+			log.Fatal(err)
+		}
+	}()
+	time.Sleep(time.Millisecond)
+
+	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	rq, err := http.NewRequestWithContext(ctx, "GET", "http://127.0.0.1:34531/", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ts := time.Now()
+	rsp, err := http.DefaultClient.Do(rq)
+	if err != nil {
+		log.Fatalf("%v (Timeout 1s) -> %v", time.Since(ts), err)
+	}
+	defer rsp.Body.Close()
 }
