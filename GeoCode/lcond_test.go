@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"sync"
 	"testing"
@@ -128,4 +129,48 @@ func TestHttpRqTimeout(t *testing.T) {
 		log.Fatalf("%v (Timeout 1s) -> %v", time.Since(ts), err)
 	}
 	defer rsp.Body.Close()
+}
+
+// Cancels slow replica Requests
+func TestMultiRqCancel(t *testing.T) {
+	go func() {
+		http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+			n := rand.Intn(10)
+			time.Sleep(time.Duration(n) * time.Second)
+			fmt.Fprintf(w, "%d (s)", n)
+		})
+		http.ListenAndServe(":45123", nil)
+	}()
+	time.Sleep(time.Millisecond)
+
+	ctx, cancel := context.WithCancel(context.Background())
+
+	once, wg := sync.Once{}, sync.WaitGroup{}
+	rc := make(chan *http.Response)
+	wg.Add(4)
+	ts := time.Now()
+	for i := 0; i < 4; i++ {
+		go func(i int) {
+			defer wg.Done()
+
+			rq, err := http.NewRequestWithContext(ctx, "GET", "http://127.0.0.1:45123", nil)
+			if err != nil {
+				log.Printf("%v", err)
+			}
+
+			rsp, err := http.DefaultClient.Do(rq)
+			if err != nil {
+				log.Printf("%d. %v", i, err)
+			}
+
+			once.Do(func() { rc <- rsp })
+		}(i)
+	}
+
+	rsp := <-rc
+	log.Printf("%v (%v)", rsp.Status, time.Since(ts))
+	rsp.Body.Close()
+
+	cancel()
+	wg.Wait()
 }
