@@ -112,6 +112,8 @@ func TestHttpRqTimeout(t *testing.T) {
 			log.Fatal(err)
 		}
 	}()
+
+	log.Printf("%v", time.Duration(1))
 	time.Sleep(time.Millisecond)
 
 	ctx, _ := context.WithTimeout(context.Background(), time.Second)
