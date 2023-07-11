@@ -32,6 +32,8 @@ func MaxScore(nums1, nums2 []int, k int) int64 {
 		heap.Push(&H, l.s)
 		lSum += int64(l.s)
 
+		log.Print(H)
+
 		if H.Len() > k {
 			lSum -= int64(heap.Pop(&H).(int))
 		}
