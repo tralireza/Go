@@ -123,9 +123,10 @@ func TestGLog(t *testing.T) {
 	log.Print(rsp.StatusCode, " ", rsp.Status)
 }
 
+// Well, don't use templates!
 func TestTemplate(t *testing.T) {
 	type TData struct{ Qs, Ans string }
-	tpl, err := template.New("1st").Parse(`<div><p>Q: {{.Qs}}</p><p>A: {{.Ans}}</p></div>`)
+	tpl, err := template.New("1st").Parse(`<p>Q: {{.Qs}}</p><p>A: {{.Ans}}</p>`)
 	if err != nil {
 		t.Fatal(err)
 	}
