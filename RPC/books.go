@@ -74,6 +74,11 @@ func (o *LibrarySvc) Add(b Book, index *int) error {
 	return nil
 }
 
+func (o *LibrarySvc) Count(dummyVal int, count *int) error {
+	*count = len(o.Library.B)
+	return nil
+}
+
 func RunRPCServer() {
 	if err := rpc.Register(&LibrarySvc{}); err != nil {
 		log.Fatal(err)
