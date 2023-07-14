@@ -9,7 +9,7 @@ import (
 
 func init() {
 	log.SetFlags(0)
-	log.Print("lrcp >")
+	log.Print("> rpc")
 }
 
 type Server struct{}
@@ -22,6 +22,7 @@ func (o *Server) Reply(rq int, rp *time.Time) error {
 
 func Client(q int) error {
 	cnn, err := rpc.Dial("tcp", ":19999")
+
 	if err != nil {
 		log.Print(err)
 		return err
