@@ -272,7 +272,7 @@ func (q QueryWriter) Write(p []byte) (int, error) {
 	for _, lb := range bytes.Split(p, []byte{'\n'}) {
 		if i := bytes.Index(lb, q.q); i >= 0 {
 			for _, b := range [][]byte{lb[0:i],
-				[]byte(fmt.Sprintf("\x1b[%dm", q.hlCode)), q.q, []byte("\x1b[39m"),
+				[]byte(fmt.Sprintf("\x1b[%dm", q.hlCode)), q.q, []byte("\x1b[0m"),
 				lb[i+len(q.q):]} {
 				n, err := q.Writer.Write(b)
 				if err != nil {
