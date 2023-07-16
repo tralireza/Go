@@ -144,7 +144,6 @@ func TestMultiRqCancel(t *testing.T) {
 	time.Sleep(time.Millisecond)
 
 	ctx, cancel := context.WithCancel(context.Background())
-
 	once, wg := sync.Once{}, sync.WaitGroup{}
 	rc := make(chan *http.Response)
 	n, ts := 8, time.Now()
