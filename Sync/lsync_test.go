@@ -21,6 +21,7 @@ func Squarer(inc <-chan int) <-chan int {
 	return c
 }
 
+// Demux from channels into one
 func FanIn(cs ...<-chan int) <-chan int {
 	outc := make(chan int)
 	wg := sync.WaitGroup{}
@@ -50,8 +51,16 @@ func TestFanIn(t *testing.T) {
 		}
 	}()
 
+	fanOut := func(factor int, inc <-chan int) (cs []<-chan int) {
+		for factor > 0 {
+			cs = append(cs, Squarer(inc))
+			factor--
+		}
+		return cs
+	}
+
 	ts := time.Now()
-	for i := range FanIn(Squarer(c), Squarer(c), Squarer(c)) {
+	for i := range FanIn(fanOut(5, c)...) {
 		fmt.Print(i, ",")
 	}
 	log.Printf("\nExec Time: %v", time.Since(ts))
