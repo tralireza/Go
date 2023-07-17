@@ -2,6 +2,7 @@ package lsync
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"sync"
 	"testing"
@@ -49,8 +50,9 @@ func TestFanIn(t *testing.T) {
 		return outc
 	}
 
-	for i := range FanIn(Squarer(c), Squarer(c)) {
+	ts := time.Now()
+	for i := range FanIn(Squarer(c), Squarer(c), Squarer(c)) {
 		fmt.Print(i, ",")
 	}
-	fmt.Println()
+	log.Printf("\nExec Time: %v", time.Since(ts))
 }
