@@ -21,6 +21,20 @@ func Squarer(inc <-chan int) <-chan int {
 	return c
 }
 
+func Worker(inc <-chan int) <-chan int {
+	worker := func(i int) int { return i * i }
+
+	c := make(chan int)
+	go func() {
+		defer close(c)
+		for i := range inc {
+			time.Sleep(time.Millisecond * time.Duration(rand.Intn(250)))
+			c <- worker(i)
+		}
+	}()
+	return c
+}
+
 // Demux from channels into one
 func FanIn(cs ...<-chan int) <-chan int {
 	outc := make(chan int)
@@ -53,7 +67,7 @@ func TestFanIn(t *testing.T) {
 
 	fanOut := func(factor int, inc <-chan int) (cs []<-chan int) {
 		for factor > 0 {
-			cs = append(cs, Squarer(inc))
+			cs = append(cs, Worker(inc))
 			factor--
 		}
 		return cs
