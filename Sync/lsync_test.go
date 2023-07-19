@@ -59,7 +59,7 @@ func TestFanIn(t *testing.T) {
 	c := make(chan int)
 	go func() {
 		defer close(c)
-		for i := 0; i < 32; i++ {
+		for i := 1; i <= 32; i++ {
 			time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
 			c <- i
 		}
@@ -78,4 +78,43 @@ func TestFanIn(t *testing.T) {
 		fmt.Print(i, ",")
 	}
 	log.Printf("\nExec Time: %v", time.Since(ts))
+}
+
+// N*M Producers & Consumers
+func TestProdCons(t *testing.T) {
+	c := make(chan struct{})
+
+	N, M := 7, 9
+	pWg, cWg := sync.WaitGroup{}, sync.WaitGroup{}
+	pWg.Add(N)
+	cWg.Add(M)
+
+	for i := 0; i < N; i++ {
+		go func() {
+			defer pWg.Done()
+			tasks := rand.Intn(32)
+			for tasks > 0 {
+				c <- struct{}{}
+				tasks--
+			}
+		}()
+	}
+
+	go func() {
+		pWg.Wait()
+		log.Print("No more work, closing chan.")
+		close(c)
+	}()
+
+	for i := 0; i < M; i++ {
+		go func() {
+			defer cWg.Done()
+			for range c {
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
+			}
+		}()
+	}
+
+	cWg.Wait()
+	log.Print("All done!")
 }
