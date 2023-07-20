@@ -91,8 +91,11 @@ func TestProdCons(t *testing.T) {
 
 	for i := 0; i < N; i++ {
 		go func() {
-			defer pWg.Done()
 			tasks := rand.Intn(32)
+			defer func(i int) {
+				pWg.Done()
+				log.Printf("P: %2d tasks", i)
+			}(tasks)
 			for tasks > 0 {
 				c <- struct{}{}
 				tasks--
@@ -102,14 +105,19 @@ func TestProdCons(t *testing.T) {
 
 	go func() {
 		pWg.Wait()
-		log.Print("No more work, closing chan.")
+		log.Print("No more Producers: closing chan.")
 		close(c)
 	}()
 
 	for i := 0; i < M; i++ {
 		go func() {
-			defer cWg.Done()
+			w := 0
+			defer func() {
+				cWg.Done()
+				log.Printf("C: %2d tasks complete", w)
+			}()
 			for range c {
+				w++
 				time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
 			}
 		}()
