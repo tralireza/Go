@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -89,14 +90,23 @@ func TestProdCons(t *testing.T) {
 	pWg.Add(N)
 	cWg.Add(M)
 
+	var works, completes atomic.Int32
+	go func() {
+		for {
+			fmt.Printf("\r%v tasks | %v completes", works.Load(), completes.Load())
+			time.Sleep(time.Millisecond * 50)
+		}
+	}()
+
 	for i := 0; i < N; i++ {
 		go func() {
 			tasks := rand.Intn(32)
 			defer func(i int) {
 				pWg.Done()
-				log.Printf("P: %2d tasks", i)
 			}(tasks)
 			for tasks > 0 {
+				works.Add(1)
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
 				c <- struct{}{}
 				tasks--
 			}
@@ -105,7 +115,6 @@ func TestProdCons(t *testing.T) {
 
 	go func() {
 		pWg.Wait()
-		log.Print("No more Producers: closing chan.")
 		close(c)
 	}()
 
@@ -114,15 +123,15 @@ func TestProdCons(t *testing.T) {
 			w := 0
 			defer func() {
 				cWg.Done()
-				log.Printf("C: %2d tasks complete", w)
 			}()
 			for range c {
 				w++
+				completes.Add(1)
 				time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
 			}
 		}()
 	}
 
 	cWg.Wait()
-	log.Print("All done!")
+	log.Printf("\n+ %v:%v done.", works.Load(), completes.Load())
 }
