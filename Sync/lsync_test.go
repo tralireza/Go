@@ -93,7 +93,7 @@ func TestProdCons(t *testing.T) {
 	var works, completes atomic.Int32
 	go func() {
 		for {
-			fmt.Printf("\r%v tasks | %v completes", works.Load(), completes.Load())
+			fmt.Printf("\r%3d : %3d", works.Load(), completes.Load())
 			time.Sleep(time.Millisecond * 50)
 		}
 	}()
@@ -133,5 +133,6 @@ func TestProdCons(t *testing.T) {
 	}
 
 	cWg.Wait()
-	log.Printf("\n+ %v:%v done.", works.Load(), completes.Load())
+	time.Sleep(time.Millisecond * 50)
+	log.Printf("\n+ %v out of %v done.", completes.Load(), works.Load())
 }
