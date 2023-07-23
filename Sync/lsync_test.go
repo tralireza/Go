@@ -93,14 +93,15 @@ func TestProdCons(t *testing.T) {
 	var works, completes atomic.Int32
 	go func() {
 		for {
-			fmt.Printf("\r%3d : %3d", works.Load(), completes.Load())
+			w, c := works.Load(), completes.Load()
+			fmt.Printf("\r%3d : %3d  (%d)", w, c, w-c)
 			time.Sleep(time.Millisecond * 50)
 		}
 	}()
 
 	for i := 0; i < N; i++ {
 		go func() {
-			tasks := rand.Intn(32)
+			tasks := rand.Intn(64)
 			defer func(i int) {
 				pWg.Done()
 			}(tasks)
