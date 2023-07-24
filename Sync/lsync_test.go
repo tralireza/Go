@@ -107,7 +107,7 @@ func TestProdCons(t *testing.T) {
 			}(tasks)
 			for tasks > 0 {
 				works.Add(1)
-				time.Sleep(time.Millisecond * time.Duration(rand.Intn(75)))
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(55)))
 				c <- struct{}{}
 				tasks--
 			}
@@ -136,4 +136,19 @@ func TestProdCons(t *testing.T) {
 	cWg.Wait()
 	time.Sleep(time.Millisecond * 50)
 	log.Printf("\n+ %v out of %v done.", completes.Load(), works.Load())
+}
+
+func TestLeakyBucket(t *testing.T) {
+	o := NewLeakyBucket(13, time.Duration(time.Second))
+	for {
+		q := o.Get(3)
+		log.Printf("Got: %d", q)
+		if q == 0 {
+			log.Print("Bucket overflowing!")
+			break
+		}
+	}
+
+	time.Sleep(time.Second + 25*time.Millisecond)
+	log.Printf("Bucket ready! Got: %d", o.Get(7))
 }
