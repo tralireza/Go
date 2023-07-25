@@ -143,6 +143,7 @@ func TestLeakyBucket(t *testing.T) {
 	for {
 		q := o.Get(3)
 		log.Printf("Got: %d", q)
+		time.Sleep(time.Millisecond * 150)
 		if q == 0 {
 			log.Print("Bucket overflowing!")
 			break

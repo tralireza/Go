@@ -2,7 +2,7 @@ package lsync
 
 import (
 	"log"
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -11,29 +11,31 @@ func init() {
 }
 
 type LeakyBucket struct {
-	capacity, status int
-	mx               sync.Mutex
+	capacity, status uint32
 }
 
-func (o *LeakyBucket) Get(quota int) int {
-	defer o.mx.Unlock()
-	o.mx.Lock()
-	v := o.status - quota
-	if v < 0 {
-		quota += v
+func (o *LeakyBucket) Get(quota uint32) uint32 {
+	for {
+		v := atomic.LoadUint32(&o.status)
+		if v == 0 {
+			return 0
+		}
+
+		if quota > v {
+			quota = v
+		}
+		if atomic.CompareAndSwapUint32(&o.status, v, v-quota) {
+			return quota
+		}
 	}
-	o.status -= quota
-	return quota
 }
 
-func NewLeakyBucket(capacity int, rate time.Duration) *LeakyBucket {
+func NewLeakyBucket(capacity uint32, rate time.Duration) *LeakyBucket {
 	o := LeakyBucket{capacity: capacity, status: capacity}
 	go func() {
 		for {
 			time.Sleep(rate)
-			o.mx.Lock()
-			o.status = o.capacity
-			o.mx.Unlock()
+			atomic.StoreUint32(&o.status, o.capacity)
 		}
 	}()
 	return &o
