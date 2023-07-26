@@ -139,7 +139,7 @@ func TestProdCons(t *testing.T) {
 }
 
 func TestLeakyBucket(t *testing.T) {
-	o := NewLeakyBucket(13, time.Duration(time.Second))
+	o := NewLeakyBucket(7, time.Duration(time.Second))
 	for {
 		q := o.Get(3)
 		log.Printf("Got: %d", q)
@@ -150,6 +150,6 @@ func TestLeakyBucket(t *testing.T) {
 		}
 	}
 
-	time.Sleep(time.Second + 25*time.Millisecond)
+	time.Sleep(time.Second + time.Millisecond)
 	log.Printf("Bucket ready! Got: %d", o.Get(7))
 }

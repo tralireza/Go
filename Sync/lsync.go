@@ -32,10 +32,12 @@ func (o *LeakyBucket) Get(quota uint32) uint32 {
 
 func NewLeakyBucket(capacity uint32, rate time.Duration) *LeakyBucket {
 	o := LeakyBucket{capacity: capacity, status: capacity}
+	tkr := time.NewTicker(rate)
 	go func() {
 		for {
-			time.Sleep(rate)
-			atomic.StoreUint32(&o.status, o.capacity)
+			for range tkr.C {
+				atomic.StoreUint32(&o.status, o.capacity)
+			}
 		}
 	}()
 	return &o
