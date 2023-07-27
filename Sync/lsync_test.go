@@ -1,6 +1,7 @@
 package lsync
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -139,7 +140,8 @@ func TestProdCons(t *testing.T) {
 }
 
 func TestLeakyBucket(t *testing.T) {
-	o := NewLeakyBucket(7, time.Duration(time.Second))
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
+	o := NewLeakyBucket(ctx, 7, time.Duration(time.Second))
 	for {
 		q := o.Get(3)
 		log.Printf("Got: %d", q)

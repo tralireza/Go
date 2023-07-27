@@ -1,6 +1,7 @@
 package lsync
 
 import (
+	"context"
 	"log"
 	"sync/atomic"
 	"time"
@@ -30,13 +31,17 @@ func (o *LeakyBucket) Get(quota uint32) uint32 {
 	}
 }
 
-func NewLeakyBucket(capacity uint32, rate time.Duration) *LeakyBucket {
+func NewLeakyBucket(ctx context.Context, capacity uint32, rate time.Duration) *LeakyBucket {
 	o := LeakyBucket{capacity: capacity, status: capacity}
 	tkr := time.NewTicker(rate)
 	go func() {
 		for {
-			for range tkr.C {
+			select {
+			case <-tkr.C:
 				atomic.StoreUint32(&o.status, o.capacity)
+			case <-ctx.Done():
+				tkr.Stop()
+				return
 			}
 		}
 	}()
