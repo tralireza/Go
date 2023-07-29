@@ -155,3 +155,73 @@ func TestLeakyBucket(t *testing.T) {
 	time.Sleep(time.Second + time.Millisecond)
 	log.Printf("Bucket ready! Got: %d", o.Get(7))
 }
+
+type SqMsg struct {
+	Val interface{}
+	c   chan struct{}
+}
+
+func (o *SqMsg) Wait() {
+	<-o.c
+}
+func (o *SqMsg) Done() {
+	o.c <- struct{}{}
+}
+
+func TestSequence(t *testing.T) {
+	Send := func(n int) <-chan SqMsg {
+		c := make(chan SqMsg)
+		go func() {
+			defer close(c)
+			for i := 0; ; i++ {
+				time.Sleep(time.Duration(rand.Intn(250)) * time.Millisecond)
+				m := SqMsg{fmt.Sprintf("|SqMsg|%d| %d", n, i), make(chan struct{})}
+				c <- m
+				m.Wait()
+			}
+		}()
+		return c
+	}
+
+	FanIn := func(cs ...<-chan SqMsg) <-chan SqMsg {
+		outc := make(chan SqMsg)
+		wg := sync.WaitGroup{}
+		wg.Add(len(cs))
+
+		for _, c := range cs {
+			go func(c <-chan SqMsg) {
+				defer wg.Done()
+				for v := range c {
+					outc <- v
+				}
+			}(c)
+		}
+
+		go func() {
+			wg.Wait()
+			close(outc)
+		}()
+
+		return outc
+	}
+
+	cs := []<-chan SqMsg{}
+	for i := 0; i < 5; i++ {
+		cs = append(cs, Send(i))
+	}
+
+	r, V := 0, make([]SqMsg, len(cs))
+	for v := range FanIn(cs...) {
+		log.Print(v.Val)
+		V[r] = v
+		r++
+		if r == len(V) {
+			log.Printf("^^^ Round complete ^^^")
+			time.Sleep(450 * time.Millisecond)
+			for _, v := range V {
+				v.Done()
+			}
+			r = 0
+		}
+	}
+}
