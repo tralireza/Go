@@ -13,8 +13,9 @@ func TestReflect(t *testing.T) {
 
 	var i interface{}
 	i = new(int)
-	log.Printf("interface{} = new(int): %v, %v, %v", reflect.TypeOf(i), reflect.TypeOf(i).Kind(), reflect.ValueOf(i).Elem())
+	log.Printf("interface{} = new(int) -> %v, %v, %v", reflect.TypeOf(i), reflect.TypeOf(i).Kind(), reflect.ValueOf(i).Elem())
 
 	i = new(struct{ a, b int })
-	log.Printf("interface{} = new(struct{}): %v, %v, %v", reflect.TypeOf(i), reflect.TypeOf(i).Kind(), reflect.ValueOf(i).Elem())
+	log.Printf("interface{} = new(struct{}) -> %v, %v, %v", reflect.TypeOf(i), reflect.TypeOf(i).Kind(), reflect.ValueOf(i).Elem())
+	log.Printf("%v %v", reflect.ValueOf(i), reflect.ValueOf(i).Interface())
 }
