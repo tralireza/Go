@@ -17,5 +17,15 @@ func TestReflect(t *testing.T) {
 
 	i = new(struct{ a, b int })
 	log.Printf("interface{} = new(struct{}) -> %v, %v, %v", reflect.TypeOf(i), reflect.TypeOf(i).Kind(), reflect.ValueOf(i).Elem())
-	log.Printf("%v %v", reflect.ValueOf(i), reflect.ValueOf(i).Interface())
+	log.Printf("%v | %+v", reflect.ValueOf(i).Type(), reflect.ValueOf(i).Interface())
+
+	log.Printf("CanSet: %v", reflect.ValueOf(i).CanSet())
+	go func() {
+		defer func() {
+			log.Print("[panic] -> ", recover())
+		}()
+		reflect.ValueOf(i).SetInt(1)
+	}()
+
+	log.Print("+")
 }
