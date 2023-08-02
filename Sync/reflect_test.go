@@ -7,9 +7,11 @@ import (
 )
 
 func TestReflect(t *testing.T) {
-	n := 42
-	v, p := reflect.ValueOf(n), reflect.ValueOf(&n)
-	log.Printf("%T %[1]v %v | %T %[3]v %v", v, v.Kind(), p, p.Kind())
+	func() {
+		n := 42
+		v, p := reflect.ValueOf(n), reflect.ValueOf(&n)
+		log.Printf("%T %[1]v %v | %T %[3]v %v", v, v.Kind(), p, p.Kind())
+	}()
 
 	var i interface{}
 	i = new(int)
@@ -27,5 +29,7 @@ func TestReflect(t *testing.T) {
 		reflect.ValueOf(i).SetInt(1)
 	}()
 
-	log.Print("+")
+	i = new(int)
+	var e reflect.Value = reflect.ValueOf(&i).Elem()
+	log.Printf("CanSet of (%v) -> ValueOf(): %v | ValueOf().Elem(): %v", reflect.TypeOf(&i), reflect.ValueOf(&i).CanSet(), e.CanSet())
 }
