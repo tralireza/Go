@@ -29,7 +29,10 @@ func TestReflect(t *testing.T) {
 		reflect.ValueOf(i).SetInt(1)
 	}()
 
-	i = new(int)
-	var e reflect.Value = reflect.ValueOf(&i).Elem()
-	log.Printf("CanSet of (%v) -> ValueOf(): %v | ValueOf().Elem(): %v", reflect.TypeOf(&i), reflect.ValueOf(&i).CanSet(), e.CanSet())
+	a := int64(0)
+	var e reflect.Value = reflect.ValueOf(&a).Elem()
+	log.Printf("CanSet of (%v) -> ValueOf(): %v | ValueOf().Elem(): %v", reflect.TypeOf(&a), reflect.ValueOf(&a).CanSet(), e.CanSet())
+
+	e.SetInt(42)
+	log.Printf("SetInt: %v", a)
 }
