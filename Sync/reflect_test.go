@@ -64,3 +64,15 @@ func TestRefFieldTags(t *testing.T) {
 		log.Printf(":Tag:  %v | %v | %v", f.Tag.Get("json"), f.Tag.Get("xml"), f.Tag.Get("tst"))
 	}
 }
+
+func TestRefMap(t *testing.T) {
+	m := map[string]int{"a": 0, "b": 1, "c": 2, "z": 25}
+	v := reflect.ValueOf(m)
+	r := reflect.TypeOf(m)
+
+	log.Printf("%v, Kind: %v, %v, %v", m, v.Kind(), v, r)
+	for _, k := range v.MapKeys() {
+		log.Print(k, v.MapIndex(k))
+	}
+
+}
