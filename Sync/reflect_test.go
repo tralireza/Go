@@ -3,6 +3,7 @@ package lsync
 import (
 	"log"
 	"reflect"
+	"sync"
 	"testing"
 )
 
@@ -22,17 +23,23 @@ func TestReflect(t *testing.T) {
 	log.Printf("%v | %+v", reflect.ValueOf(i).Type(), reflect.ValueOf(i).Interface())
 
 	log.Printf("CanSet: %v", reflect.ValueOf(i).CanSet())
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
 		defer func() {
+			wg.Done()
 			log.Print("[panic] -> ", recover())
 		}()
 		reflect.ValueOf(i).SetInt(1)
 	}()
+	wg.Wait()
 
-	a := int64(0)
-	var e reflect.Value = reflect.ValueOf(&a).Elem()
-	log.Printf("CanSet of (%v) -> ValueOf(): %v | ValueOf().Elem(): %v", reflect.TypeOf(&a), reflect.ValueOf(&a).CanSet(), e.CanSet())
+	func() {
+		i := int64(0)
+		var e reflect.Value = reflect.ValueOf(&i).Elem()
+		log.Printf("CanSet of (%v) -> ValueOf(): %v | ValueOf().Elem(): %v", reflect.TypeOf(&i), reflect.ValueOf(&i).CanSet(), e.CanSet())
 
-	e.SetInt(42)
-	log.Printf("SetInt: %v", a)
+		e.SetInt(42)
+		log.Printf("SetInt: %v", i)
+	}()
 }
