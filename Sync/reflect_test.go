@@ -76,6 +76,8 @@ func TestRefMap(t *testing.T) {
 		log.Print(k, v.MapIndex(k))
 	}
 
+	v.SetMapIndex(reflect.ValueOf("y"), reflect.ValueOf(24))
+
 	itr := v.MapRange()
 	log.Printf("%T -> %[1]v", itr)
 	for itr.Next() {
