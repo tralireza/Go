@@ -48,7 +48,7 @@ func TestReflect(t *testing.T) {
 }
 
 type RefPerson struct {
-	Name string `json:"name" xml:"-"`
+	Name string `json:"name" xml:"-" tst:"name,qfr1,qfr2"`
 	Year int    `json:"year,omitempty" xml:"-"`
 }
 
@@ -59,5 +59,8 @@ func TestRefFieldTags(t *testing.T) {
 	log.Printf("%+v %v", v, r)
 	for i := 0; i < r.NumField(); i++ {
 		log.Printf("- %v: %v", r.Field(i).Name, v.Field(i))
+
+		f := r.Field(i)
+		log.Printf(":Tag:  %v | %v | %v", f.Tag.Get("json"), f.Tag.Get("xml"), f.Tag.Get("tst"))
 	}
 }
