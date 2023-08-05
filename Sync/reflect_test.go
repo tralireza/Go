@@ -71,8 +71,14 @@ func TestRefMap(t *testing.T) {
 	r := reflect.TypeOf(m)
 
 	log.Printf("%v, Kind: %v, %v, %v", m, v.Kind(), v, r)
+
 	for _, k := range v.MapKeys() {
 		log.Print(k, v.MapIndex(k))
 	}
 
+	itr := v.MapRange()
+	log.Printf("%T -> %[1]v", itr)
+	for itr.Next() {
+		log.Print(itr.Key(), itr.Value())
+	}
 }
