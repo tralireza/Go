@@ -42,4 +42,22 @@ func TestReflect(t *testing.T) {
 		e.SetInt(42)
 		log.Printf("SetInt: %v", i)
 	}()
+
+	r := reflect.TypeOf(int64(24))
+	log.Printf("%T %[1]v %T %[2]v", r, reflect.New(r))
+}
+
+type RefPerson struct {
+	Name string `json:"name" xml:"-"`
+	Year int    `json:"year,omitempty" xml:"-"`
+}
+
+func TestRefFieldTags(t *testing.T) {
+	v := reflect.ValueOf(RefPerson{"Mr Reflection", 2006})
+	r := v.Type()
+
+	log.Printf("%+v %v", v, r)
+	for i := 0; i < r.NumField(); i++ {
+		log.Printf("- %v: %v", r.Field(i).Name, v.Field(i))
+	}
 }
