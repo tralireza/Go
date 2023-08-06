@@ -115,3 +115,20 @@ func TestCustomSortString(t *testing.T) {
 
 	log.Print("abcd -> ", customSortString("bcafg", "abcd"))
 }
+
+// BinSearch template
+/*
+  func Cond(int) bool
+  func BinSearch() int {
+    l, r := 0, len(Space)
+    for l < r {
+      m := l + (r-l)>>1
+      if Cond(m) {
+        r = m
+      } else {
+        l = m+1
+      }
+    }
+    return l
+  }
+*/
