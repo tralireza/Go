@@ -84,3 +84,34 @@ func TestRefMap(t *testing.T) {
 		log.Print(itr.Key(), itr.Value())
 	}
 }
+
+// 791
+func TestCustomSortString(t *testing.T) {
+	customSortString := func(order string, s string) string {
+		m := map[byte]int{}
+		for _, r := range s {
+			m[byte(r)]++
+		}
+		log.Print(m)
+
+		k, bs := 0, make([]byte, len(s))
+		for _, r := range order {
+			for f := m[byte(r)]; f > 0; f-- {
+				bs[k] = byte(r)
+				k++
+			}
+			m[byte(r)] = 0
+		}
+		log.Print(m)
+
+		for b, f := range m {
+			for ; f > 0; f-- {
+				bs[k] = b
+				k++
+			}
+		}
+		return string(bs)
+	}
+
+	log.Print("abcd -> ", customSortString("bcafg", "abcd"))
+}
