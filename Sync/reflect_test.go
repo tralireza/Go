@@ -132,3 +132,24 @@ func TestCustomSortString(t *testing.T) {
     return l
   }
 */
+
+// 69: 4->2, 10->3, ... (x > 1)
+func TestIntSqrt(t *testing.T) {
+	// k^2 <= x -> k is int sqrt of x
+	intSqrt := func(x int) int {
+		l, r := 1, x
+		for l < r {
+			m := l + (r-l)>>1
+			if m*m <= x {
+				l = m + 1
+			} else {
+				r = m
+			}
+		}
+		return l - 1
+	}
+
+	for _, x := range []int{4, 8, 10, 35, 81, 83, 3448230483} {
+		log.Print(x, " -> ", intSqrt(x))
+	}
+}
