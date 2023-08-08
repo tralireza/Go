@@ -2,9 +2,11 @@ package lsync
 
 import (
 	"log"
+	"math"
 	"reflect"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestReflect(t *testing.T) {
@@ -152,4 +154,24 @@ func TestIntSqrt(t *testing.T) {
 	for _, x := range []int{4, 8, 10, 35, 81, 83, 3448230483} {
 		log.Print(x, " -> ", intSqrt(x))
 	}
+}
+
+// 278
+func Test278(t *testing.T) {
+	isBad := func(n int) bool { return n > 7 }
+	firstBadVersion := func(x int) int {
+		l, r := 1, x
+		for l < r {
+			m := l + (r-l)>>1
+			if isBad(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	ts := time.Now()
+	log.Print(firstBadVersion(math.MaxInt), time.Since(ts))
 }
