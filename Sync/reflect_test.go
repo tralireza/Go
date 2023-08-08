@@ -140,10 +140,10 @@ func TestIntSqrt(t *testing.T) {
 		l, r := 1, x
 		for l < r {
 			m := l + (r-l)>>1
-			if m*m <= x {
-				l = m + 1
-			} else {
+			if m*m > x {
 				r = m
+			} else {
+				l = m + 1
 			}
 		}
 		return l - 1
