@@ -175,3 +175,23 @@ func Test278(t *testing.T) {
 	ts := time.Now()
 	log.Print(firstBadVersion(math.MaxInt), time.Since(ts))
 }
+
+// 35: search insert position
+func Test35(t *testing.T) {
+	searchInsert := func(nums []int, x int) int {
+		l, r := 0, len(nums)
+		for l < r {
+			m := l + (r-l)>>1
+			if nums[m] >= x {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	for _, n := range []int{0, 1, 2, 5, 6, 7} {
+		log.Print(n, " -> ", searchInsert([]int{1, 3, 5, 6}, n))
+	}
+}
