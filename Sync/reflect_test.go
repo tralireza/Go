@@ -191,7 +191,7 @@ func Test35(t *testing.T) {
 		return l
 	}
 
-	nums := []int{1, 3, 5, 6}
+	nums := []int{1, 3, 3, 3, 5, 5, 6}
 	log.Print(nums)
 	for _, n := range []int{0, 1, 2, 5, 6, 7} {
 		log.Print(n, " -> ", searchInsert(nums, n))
