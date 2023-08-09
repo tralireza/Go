@@ -182,7 +182,7 @@ func Test35(t *testing.T) {
 		l, r := 0, len(nums)
 		for l < r {
 			m := l + (r-l)>>1
-			if nums[m] > x {
+			if nums[m] >= x {
 				r = m
 			} else {
 				l = m + 1
