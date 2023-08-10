@@ -203,16 +203,18 @@ func Test35(t *testing.T) {
 func Test1011(t *testing.T) {
 	shipWithinDays := func(weights []int, days int) int {
 		canShip := func(capacity int) bool {
-			d, c := days, capacity
-			for i := 0; i < len(weights) && d > 0; i++ {
-				if c >= weights[i] {
-					c -= weights[i]
-				} else {
-					c = capacity
-					d--
+			d, c := 1, 0
+			for _, w := range weights {
+				c += w
+				if c > capacity {
+					c = w
+					d++
+					if d > days {
+						return false
+					}
 				}
 			}
-			return d > 0
+			return true
 		}
 
 		xCap := 0
