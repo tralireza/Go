@@ -4,6 +4,7 @@ import (
 	"log"
 	"math"
 	"reflect"
+	"slices"
 	"sync"
 	"testing"
 	"time"
@@ -196,4 +197,39 @@ func Test35(t *testing.T) {
 	for _, n := range []int{0, 1, 2, 5, 6, 7} {
 		log.Print(n, " -> ", searchInsert(nums, n))
 	}
+}
+
+// 1011m -> minimum ship capacity
+func Test1011(t *testing.T) {
+	shipWithinDays := func(weights []int, days int) int {
+		canShip := func(capacity int) bool {
+			d, c := days, capacity
+			for i := 0; i < len(weights) && d > 0; i++ {
+				if c >= weights[i] {
+					c -= weights[i]
+				} else {
+					c = capacity
+					d--
+				}
+			}
+			return d > 0
+		}
+
+		xCap := 0
+		for _, w := range weights {
+			xCap += w
+		}
+		l, r := slices.Max(weights), xCap
+		for l < r {
+			m := l + (r-l)>>1
+			if canShip(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("Minimum Ship Capacity -> ", shipWithinDays([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 5))
 }
