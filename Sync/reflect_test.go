@@ -233,5 +233,8 @@ func Test1011(t *testing.T) {
 		return l
 	}
 
-	log.Print("Minimum Ship Capacity -> ", shipWithinDays([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 5))
+	ws := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for _, days := range []int{5, 7} {
+		log.Print("Minimum Ship Capacity -> ", shipWithinDays(ws, days))
+	}
 }
