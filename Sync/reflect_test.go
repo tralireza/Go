@@ -221,6 +221,7 @@ func Test1011(t *testing.T) {
 		for _, w := range weights {
 			xCap += w
 		}
+
 		l, r := slices.Max(weights), xCap
 		for l < r {
 			m := l + (r-l)>>1
@@ -237,4 +238,47 @@ func Test1011(t *testing.T) {
 	for _, days := range []int{5, 7} {
 		log.Print("Minimum Ship Capacity -> ", shipWithinDays(ws, days))
 	}
+}
+
+// 410h Split Array Largest Sum
+/*
+[7 2 5 10 8] -2-> [7 2 5] [10 8] : 18
+*/
+func Test410(t *testing.T) {
+	splitArray := func(nums []int, m int) int {
+		sm := 0
+		for _, n := range nums {
+			sm += n
+		}
+
+		isValid := func(aSum int) bool {
+			lSum, count := 0, 1
+			for _, n := range nums {
+				lSum += n
+				if lSum > aSum {
+					count++
+					lSum = n
+					if count > m {
+						return false
+					}
+				}
+			}
+			return true
+		}
+
+		l, r := slices.Max(nums), sm
+		for l < r {
+			m := l + (r-l)>>1
+			log.Printf("%2d %2d %2d", l, m, r)
+
+			if isValid(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Printf("18 -> %t", splitArray([]int{7, 2, 5, 10, 8}, 2) == 18)
 }
