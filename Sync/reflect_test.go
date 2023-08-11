@@ -282,3 +282,35 @@ func Test410(t *testing.T) {
 
 	log.Printf("18 -> %t", splitArray([]int{7, 2, 5, 10, 8}, 2) == 18)
 }
+
+// 875 Koko Eating Bananas
+func Test875(t *testing.T) {
+	minEatingSpeed := func(piles []int, hours int) int {
+		fastEnough := func(speed int) bool {
+			h := 0
+			for _, p := range piles {
+				h += (p + speed - 1) / speed
+				if h > hours {
+					return false
+				}
+			}
+			return true
+		}
+
+		l, r := 1, slices.Max(piles)*len(piles)/hours
+		for l < r {
+			m := l + (r-l)>>1
+			log.Printf("%2d %2d %2d", l, m, r)
+
+			if fastEnough(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("+ 4 -> ", minEatingSpeed([]int{3, 6, 7, 11}, 8))
+	log.Print("+ 23 -> ", minEatingSpeed([]int{30, 11, 23, 4, 20}, 6))
+}
