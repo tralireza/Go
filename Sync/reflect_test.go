@@ -289,7 +289,7 @@ func Test875(t *testing.T) {
 		fastEnough := func(speed int) bool {
 			h := 0
 			for _, p := range piles {
-				h += (p + speed - 1) / speed
+				h += (p-1)/speed + 1
 				if h > hours {
 					return false
 				}
