@@ -297,7 +297,7 @@ func Test875(t *testing.T) {
 			return true
 		}
 
-		l, r := 1, slices.Max(piles)*len(piles)/hours
+		l, r := 1, slices.Max(piles)
 		for l < r {
 			m := l + (r-l+1)>>1
 			log.Printf("%2d %2d %2d", l, m, r)
