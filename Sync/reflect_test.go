@@ -299,13 +299,13 @@ func Test875(t *testing.T) {
 
 		l, r := 1, slices.Max(piles)
 		for l < r {
-			m := l + (r-l+1)>>1
+			m := l + (r-l)>>1
 			log.Printf("%2d %2d %2d", l, m, r)
 
 			if fastEnough(m) {
-				r = m - 1
+				r = m
 			} else {
-				l = m
+				l = m + 1
 			}
 		}
 		return l
@@ -313,4 +313,5 @@ func Test875(t *testing.T) {
 
 	log.Print("+ 4 -> ", minEatingSpeed([]int{3, 6, 7, 11}, 8))
 	log.Print("+ 23 -> ", minEatingSpeed([]int{30, 11, 23, 4, 20}, 6))
+	log.Print("+ 30 -> ", minEatingSpeed([]int{30}, 1))
 }
