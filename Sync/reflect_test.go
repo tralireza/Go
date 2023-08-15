@@ -299,7 +299,7 @@ func Test875(t *testing.T) {
 
 		l, r := 1, slices.Max(piles)
 		for l < r {
-			m := l + (r-l)>>1
+			m := l + +(r-l)>>1
 			log.Printf("%2d %2d %2d", l, m, r)
 
 			if fastEnough(m) {
@@ -314,4 +314,32 @@ func Test875(t *testing.T) {
 	log.Print("+ 4 -> ", minEatingSpeed([]int{3, 6, 7, 11}, 8))
 	log.Print("+ 23 -> ", minEatingSpeed([]int{30, 11, 23, 4, 20}, 6))
 	log.Print("+ 30 -> ", minEatingSpeed([]int{30}, 1))
+}
+
+// 1482m
+func Test1482(t *testing.T) {
+	minDays := func(bloomDay []int, m int, k int) int {
+		if len(bloomDay) < m*k {
+			return -1
+		}
+
+		flowers := func(day int) bool {
+			return true
+		}
+
+		l, r := slices.Min(bloomDay), slices.Max(bloomDay)
+		for l < r {
+			m := l + (r-l)>>1
+			if flowers(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("3 -> ", minDays([]int{1, 10, 3, 10, 2}, 3, 1))
+	log.Print("-1 -> ", minDays([]int{1, 10, 3, 10, 2}, 3, 2))
+	log.Print("12 -> ", minDays([]int{7, 7, 7, 7, 12, 7, 7}, 2, 3))
 }
