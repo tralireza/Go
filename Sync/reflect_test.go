@@ -323,7 +323,7 @@ func Test1482(t *testing.T) {
 			return -1
 		}
 
-		flowers := func(day int) bool {
+		flowers := func(day int) int {
 			b, fadj := 0, 0
 			for _, d := range bloomDay {
 				if d <= day {
@@ -333,16 +333,16 @@ func Test1482(t *testing.T) {
 					fadj = 0
 				}
 			}
-			return b >= m
+			return b
 		}
 
 		l, r := slices.Min(bloomDay), slices.Max(bloomDay)
 		for l < r {
-			m := l + (r-l)>>1
-			if flowers(m) {
-				r = m
+			md := l + (r-l)>>1
+			if flowers(md) >= m {
+				r = md
 			} else {
-				l = m + 1
+				l = md + 1
 			}
 		}
 		return l
