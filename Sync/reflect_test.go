@@ -324,16 +324,13 @@ func Test1482(t *testing.T) {
 		}
 
 		flowers := func(day int) bool {
-			b, adj := 0, 0
+			b, fadj := 0, 0
 			for _, d := range bloomDay {
 				if d <= day {
-					adj++
-					if adj == k {
-						b++
-						adj = 0
-					}
+					b += (fadj + 1) / k
+					fadj = (fadj + 1) % k
 				} else {
-					adj = 0
+					fadj = 0
 				}
 			}
 			return b >= m
