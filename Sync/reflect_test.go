@@ -348,7 +348,29 @@ func Test1482(t *testing.T) {
 		return l
 	}
 
-	log.Print("3 -> ", minDays([]int{1, 10, 3, 10, 2}, 3, 1))
-	log.Print("-1 -> ", minDays([]int{1, 10, 3, 10, 2}, 3, 2))
-	log.Print("12 -> ", minDays([]int{7, 7, 7, 7, 12, 7, 7}, 2, 3))
+	log.Print("3 =? ", minDays([]int{1, 10, 3, 10, 2}, 3, 1))
+	log.Print("-1 =? ", minDays([]int{1, 10, 3, 10, 2}, 3, 2))
+	log.Print("12 =? ", minDays([]int{7, 7, 7, 7, 12, 7, 7}, 2, 3))
+}
+
+// 668h
+func Test668(t *testing.T) {
+	findKthNumber := func(m int, n int, k int) int {
+		isKth := func(v int) bool {
+			return false
+		}
+
+		l, r := 1, m*n
+		for l < r {
+			m := l + (r-l)>>1
+			if isKth(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("3 =? ", findKthNumber(3, 3, 5))
 }
