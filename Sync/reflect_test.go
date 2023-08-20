@@ -356,14 +356,19 @@ func Test1482(t *testing.T) {
 // 668h
 func Test668(t *testing.T) {
 	findKthNumber := func(m int, n int, k int) int {
-		isKth := func(v int) bool {
-			return false
+		kth := func(v int) bool {
+			x := 0
+			for i := 1; i <= m; i++ {
+				x += min(n, v/i)
+			}
+			log.Print(x, v)
+			return x >= k
 		}
 
 		l, r := 1, m*n
 		for l < r {
 			m := l + (r-l)>>1
-			if isKth(m) {
+			if kth(m) {
 				r = m
 			} else {
 				l = m + 1
@@ -373,4 +378,6 @@ func Test668(t *testing.T) {
 	}
 
 	log.Print("3 =? ", findKthNumber(3, 3, 5))
+	//log.Print("6 =? ", findKthNumber(2, 3, 6))
+	//log.Print("? =? ", findKthNumber(102, 394, 19299))
 }
