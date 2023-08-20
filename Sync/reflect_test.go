@@ -366,17 +366,17 @@ func Test668(t *testing.T) {
 
 		l, r := 1, m*n
 		for l < r {
-			m := l + (r-l)>>1
+			m := l + (r-l+1)>>1 // right mid
 			if kth(m) >= k {
-				r = m
+				r = m - 1
 			} else {
-				l = m + 1
+				l = m
 			}
 		}
-		return l
+		return l + 1
 	}
 
 	log.Print("3 =? ", findKthNumber(3, 3, 5))
 	log.Print("6 =? ", findKthNumber(2, 3, 6))
-	log.Print("? =? ", findKthNumber(102, 394, 19299))
+	log.Print("7152 =? ", findKthNumber(102, 394, 19299))
 }
