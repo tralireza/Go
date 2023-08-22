@@ -380,3 +380,31 @@ func Test668(t *testing.T) {
 	log.Print("6 =? ", findKthNumber(2, 3, 6))
 	log.Print("7152 =? ", findKthNumber(102, 394, 19299))
 }
+
+// 1171m
+func Test1171(t *testing.T) {
+	type ListNode struct {
+		Val  int
+		Next *ListNode
+	}
+
+	removeZeroSumSublists := func(head *ListNode) *ListNode {
+		dummy := &ListNode{0, head}
+		m := map[int]*ListNode{}
+
+		for s, n := 0, dummy; n != nil; n = n.Next {
+			s += n.Val
+			m[s] = n
+		}
+
+		for s, n := 0, dummy; n != nil; n = n.Next {
+			s += n.Val
+			n.Next = m[s].Next
+		}
+
+		return dummy.Next
+	}
+
+	type N = ListNode
+	log.Print(removeZeroSumSublists(&N{1, &N{2, &N{3, &N{-2, &N{-1, &N{3, nil}}}}}}))
+}
