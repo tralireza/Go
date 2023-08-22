@@ -1,6 +1,7 @@
 package lsync
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"reflect"
@@ -405,6 +406,19 @@ func Test1171(t *testing.T) {
 		return dummy.Next
 	}
 
+	draw := func(n *ListNode) {
+		for ; n != nil; n = n.Next {
+			c, l := 'X', "\n"
+			if n.Next != nil {
+				c, l = '+', "-> "
+			}
+			fmt.Printf("{%d %c}%s", n.Val, c, l)
+		}
+	}
+
 	type N = ListNode
-	log.Print(removeZeroSumSublists(&N{1, &N{2, &N{3, &N{-2, &N{-1, &N{3, nil}}}}}}))
+	l := &N{1, &N{2, &N{3, &N{-2, &N{-1, &N{3, &N{-3, &N{3, nil}}}}}}}}
+	draw(l)
+	r := removeZeroSumSublists(l)
+	draw(r)
 }
