@@ -417,7 +417,7 @@ func Test1171(t *testing.T) {
 	}
 
 	type N = ListNode
-	l := &N{1, &N{2, &N{3, &N{-2, &N{-1, &N{3, &N{-3, &N{3, nil}}}}}}}}
+	l := &N{0, &N{1, &N{2, &N{3, &N{0, &N{-2, &N{-1, &N{3, &N{-3, &N{3, &N{0, nil}}}}}}}}}}}
 	draw(l)
 	r := removeZeroSumSublists(l)
 	draw(r)
