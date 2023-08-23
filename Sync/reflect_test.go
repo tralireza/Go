@@ -408,9 +408,9 @@ func Test1171(t *testing.T) {
 
 	draw := func(n *ListNode) {
 		for ; n != nil; n = n.Next {
-			c, l := 'X', "\n"
-			if n.Next != nil {
-				c, l = '+', "-> "
+			c, l := '+', "-> "
+			if n.Next == nil {
+				c, l = 'X', "\n"
 			}
 			fmt.Printf("{%d %c}%s", n.Val, c, l)
 		}
