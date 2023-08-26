@@ -422,3 +422,25 @@ func Test1171(t *testing.T) {
 	r := removeZeroSumSublists(l)
 	draw(r)
 }
+
+// 719h
+func Test719(t *testing.T) {
+	smallestDistancePair := func(nums []int, k int) int {
+		distance := func(v int) bool {
+			return false
+		}
+
+		l, r := 0, slices.Max(nums)
+		for l < r {
+			m := l + (r-l)>>1 // left mid
+			if distance(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("5 ?= ", smallestDistancePair([]int{1, 6, 1}, 3))
+}
