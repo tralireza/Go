@@ -428,7 +428,7 @@ func Test719(t *testing.T) {
 	smallestDistancePair := func(nums []int, k int) int {
 		slices.Sort(nums)
 
-		distance := func(v int) bool {
+		distances := func(v int) int {
 			c, l, r := 0, 0, 0
 			for l < len(nums) || r < len(nums) {
 				for r < len(nums) && nums[r]-nums[l] <= v {
@@ -437,13 +437,13 @@ func Test719(t *testing.T) {
 				c += r - l - 1
 				l++
 			}
-			return c >= k
+			return c
 		}
 
 		l, r := 0, nums[len(nums)-1]-nums[0]
 		for l < r {
 			m := l + (r-l)>>1 // left mid
-			if distance(m) {
+			if distances(m) >= k {
 				r = m
 			} else {
 				l = m + 1
@@ -453,4 +453,5 @@ func Test719(t *testing.T) {
 	}
 
 	log.Print("5 ?= ", smallestDistancePair([]int{1, 6, 1}, 3))
+	log.Print("0 ?= ", smallestDistancePair([]int{1, 1, 1}, 2))
 }
