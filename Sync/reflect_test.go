@@ -455,3 +455,28 @@ func Test719(t *testing.T) {
 	log.Print("5 ?= ", smallestDistancePair([]int{1, 6, 1}, 3))
 	log.Print("0 ?= ", smallestDistancePair([]int{1, 1, 1}, 2))
 }
+
+// 2485
+func Test2485(t *testing.T) {
+	pivotInteger := func(n int) int {
+		pfxSum := make([]int, n+1)
+		for i := 1; i <= n; i++ {
+			pfxSum[i] = i + pfxSum[i-1]
+		}
+
+		for i := 1; i <= n; i++ {
+			if pfxSum[i] == pfxSum[n]-pfxSum[i-1] {
+				return i
+			}
+		}
+		return -1
+	}
+
+	// 1+2+3+4+5+6 = 6+7+8
+	log.Print("6 ?= ", pivotInteger(8))
+
+	// 1 = 1
+	log.Print("1 ?= ", pivotInteger(1))
+
+	log.Print("-1 ?= ", pivotInteger(4))
+}
