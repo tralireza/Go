@@ -514,4 +514,24 @@ func Test1201(t *testing.T) {
 	}
 
 	log.Print("4 ?= ", findUglyNumbers(3, 2, 3, 5))
+	log.Print("10 ?= ", findUglyNumbers(5, 2, 11, 13))
+}
+
+// GCD
+func GCD(a, b int) int {
+	if b > a {
+		a, b = b, a
+	}
+	for b > 0 {
+		a, b = b, a%b
+	}
+	return a
+}
+
+func TestGCD(t *testing.T) {
+	d := []int{1, 3, 6}
+	for i, p := range [][]int{{7, 9}, {9, 15}, {12, 18}} {
+		a, b := p[0], p[1]
+		log.Printf("gcd(%d, %d) = %d ? %d", a, b, GCD(a, b), d[i])
+	}
 }
