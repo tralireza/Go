@@ -484,11 +484,24 @@ func Test2485(t *testing.T) {
 // 1201m
 func Test1201(t *testing.T) {
 	findUglyNumbers := func(n int, a, b, c int) int {
+		gcd := func(a, b int) int {
+			if b > a {
+				a, b = b, a
+			}
+			for b > 0 {
+				a, b = b, a%b
+			}
+			return a
+		}
+		ab, ac, bc := a*b/gcd(a, b), a*c/gcd(a, c), b*c/gcd(b, c)
+		abc := ab * c / gcd(a, b*c)
+
 		nth := func(v int) bool {
-			return true
+			count := v/a + v/b + v/c - v/ab - v/ac - v/bc + v/abc
+			return count >= n
 		}
 
-		l, r := 0, 0
+		l, r := 1, 2*1000_000_000
 		for l < r {
 			m := l + (r-l)>>1
 			if nth(m) {
