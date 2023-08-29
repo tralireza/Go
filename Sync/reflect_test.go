@@ -480,3 +480,25 @@ func Test2485(t *testing.T) {
 
 	log.Print("-1 ?= ", pivotInteger(4))
 }
+
+// 1201m
+func Test1201(t *testing.T) {
+	findUglyNumbers := func(n int, a, b, c int) int {
+		nth := func(v int) bool {
+			return true
+		}
+
+		l, r := 0, 0
+		for l < r {
+			m := l + (r-l)>>1
+			if nth(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("4 ?= ", findUglyNumbers(3, 2, 3, 5))
+}
