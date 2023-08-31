@@ -535,3 +535,11 @@ func TestGCD(t *testing.T) {
 		log.Printf("gcd(%d, %d) = %d ? %d", a, b, GCD(a, b), d[i])
 	}
 }
+
+func TestReflectSlice(t *testing.T) {
+	s := []int{2, 3, 5, 7}
+	v := reflect.ValueOf(s)
+	for i := 0; i < v.Len(); i++ {
+		log.Printf("%d -> %v", i, v.Index(i))
+	}
+}
