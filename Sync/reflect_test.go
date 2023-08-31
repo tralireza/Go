@@ -548,8 +548,8 @@ func TestReflectSlice(t *testing.T) {
 	for i := 0; i < v.Len(); i++ {
 		v.Index(i).SetInt(int64(v.Index(i).Interface().(int) * 2))
 	}
-	log.Print(v)
+	log.Printf("%v", v)
 
 	v2 := reflect.Append(v, reflect.ValueOf(7))
-	log.Print(v.CanSet(), v, v2)
+	log.Print(v.CanSet(), v, v2.CanSet(), v2)
 }
