@@ -537,7 +537,7 @@ func TestGCD(t *testing.T) {
 }
 
 func TestReflectSlice(t *testing.T) {
-	s := []int64{2, 3, 5, 7}
+	s := []int{2, 3, 5}
 	log.Print(s)
 
 	v := reflect.ValueOf(s)
@@ -546,7 +546,10 @@ func TestReflectSlice(t *testing.T) {
 	}
 
 	for i := 0; i < v.Len(); i++ {
-		v.Index(i).SetInt(v.Index(i).Interface().(int64) * 2)
+		v.Index(i).SetInt(int64(v.Index(i).Interface().(int) * 2))
 	}
 	log.Print(v)
+
+	v2 := reflect.Append(v, reflect.ValueOf(7))
+	log.Print(v.CanSet(), v, v2)
 }
