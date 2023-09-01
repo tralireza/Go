@@ -5,6 +5,7 @@ import (
 	"log"
 	"math"
 	"reflect"
+	"runtime"
 	"slices"
 	"sync"
 	"testing"
@@ -552,4 +553,28 @@ func TestReflectSlice(t *testing.T) {
 
 	v2 := reflect.Append(v, reflect.ValueOf(7))
 	log.Print(v.CanSet(), v, v2.CanSet(), v2)
+}
+
+func Foo()                                {}
+func Bar(a, b int)                        {}
+func Baz(a int, s string) (int, error)    { return 0, nil }
+func Quz(a int, s ...string) (int, error) { return 0, nil }
+
+func TestReflectFunc(t *testing.T) {
+	for _, f := range []interface{}{Foo, Bar, Baz, Quz} {
+		t := reflect.TypeOf(f)
+		name := runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
+
+		in := make([]reflect.Type, t.NumIn())
+		for i := range in {
+			in[i] = t.In(i)
+		}
+
+		out := make([]reflect.Type, t.NumOut())
+		for i := range out {
+			out[i] = t.Out(i)
+		}
+
+		log.Printf("%s (%v) -> (%v)   Variadic: %t", name, in, out, t.IsVariadic())
+	}
 }
