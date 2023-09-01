@@ -555,12 +555,13 @@ func TestReflectSlice(t *testing.T) {
 	log.Print(v.CanSet(), v, v2.CanSet(), v2)
 }
 
-func Foo()                                {}
-func Bar(a, b int)                        {}
-func Baz(a int, s string) (int, error)    { return 0, nil }
-func Quz(a int, s ...string) (int, error) { return 0, nil }
+func Foo()                             {}
+func Bar(a, b int)                     {}
+func Baz(a int, s string) (int, error) { return 0, nil }
 
 func TestReflectFunc(t *testing.T) {
+	Quz := func(a int, s ...string) (int, error) { return 0, nil }
+
 	for _, f := range []interface{}{Foo, Bar, Baz, Quz} {
 		t := reflect.TypeOf(f)
 		name := runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
@@ -576,5 +577,28 @@ func TestReflectFunc(t *testing.T) {
 		}
 
 		log.Printf("%s (%v) -> (%v)   Variadic: %t", name, in, out, t.IsVariadic())
+	}
+
+	for _, f := range []interface{}{Foo, Bar, Baz, Quz} {
+		v, t := reflect.ValueOf(f), reflect.TypeOf(f)
+		in := make([]reflect.Value, t.NumIn())
+		for i := range t.NumIn() {
+			switch a := t.In(i); a.Kind() {
+			case reflect.Int:
+				in[i] = reflect.ValueOf(7)
+			case reflect.String:
+				in[i] = reflect.ValueOf("Seven")
+			case reflect.Slice:
+				switch a.Elem().Kind() {
+				case reflect.Int:
+					in[i] = reflect.ValueOf(2)
+				case reflect.String:
+					in[i] = reflect.ValueOf("Two")
+				}
+			}
+		}
+
+		out := v.Call(in)
+		log.Printf("%v -> %v", in, out)
 	}
 }
