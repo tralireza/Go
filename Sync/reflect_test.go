@@ -581,6 +581,7 @@ func TestReflectFunc(t *testing.T) {
 
 	for _, f := range []interface{}{Foo, Bar, Baz, Quz} {
 		v, t := reflect.ValueOf(f), reflect.TypeOf(f)
+
 		in := make([]reflect.Value, t.NumIn())
 		for i := range t.NumIn() {
 			switch a := t.In(i); a.Kind() {
@@ -594,6 +595,9 @@ func TestReflectFunc(t *testing.T) {
 					in[i] = reflect.ValueOf(2)
 				case reflect.String:
 					in[i] = reflect.ValueOf("Two")
+					if i == t.NumIn()-1 && t.IsVariadic() {
+						in = append(in, reflect.ValueOf("Three"))
+					}
 				}
 			}
 		}
