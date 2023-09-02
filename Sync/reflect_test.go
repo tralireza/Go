@@ -606,3 +606,8 @@ func TestReflectFunc(t *testing.T) {
 		log.Printf("%v -> %v", in, out)
 	}
 }
+
+func TestReflectChan(t *testing.T) {
+	v := reflect.MakeChan(reflect.ChanOf(reflect.BothDir, reflect.TypeOf(0)), 0)
+	log.Printf("%T", v.Interface())
+}
