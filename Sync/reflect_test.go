@@ -610,4 +610,19 @@ func TestReflectFunc(t *testing.T) {
 func TestReflectChan(t *testing.T) {
 	v := reflect.MakeChan(reflect.ChanOf(reflect.BothDir, reflect.TypeOf(0)), 0)
 	log.Printf("%T", v.Interface())
+
+	go func() {
+		defer v.Close()
+		for i := 0; i < 5; i++ {
+			v.Send(reflect.ValueOf(i))
+		}
+	}()
+
+	for {
+		if e, ok := v.Recv(); ok {
+			log.Printf("%T -> %v | %v", e, e, e.Interface())
+		} else {
+			break
+		}
+	}
 }
