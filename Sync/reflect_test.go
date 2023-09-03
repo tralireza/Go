@@ -625,4 +625,25 @@ func TestReflectChan(t *testing.T) {
 			break
 		}
 	}
+
+	func() {
+		v := reflect.MakeChan(reflect.ChanOf(reflect.BothDir, reflect.TypeOf(0)), 1)
+		log.Printf("%T", v.Interface())
+
+		cases := []reflect.SelectCase{
+			{reflect.SelectSend, v, reflect.ValueOf(7)},
+			{Dir: reflect.SelectRecv, Chan: v},
+			{Dir: reflect.SelectDefault},
+		}
+
+		i, recv, send := reflect.Select(cases)
+		log.Print("Select: ", i, recv, send)
+		v.Close()
+
+		i, recv, recvd := reflect.Select(cases[i+1:])
+		log.Print("Select: ", i, recv, recvd)
+
+		i, recv, closed := reflect.Select(cases[i+1:])
+		log.Print("Select: ", i, recv, closed)
+	}()
 }
