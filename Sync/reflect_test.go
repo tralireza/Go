@@ -640,10 +640,10 @@ func TestReflectChan(t *testing.T) {
 		log.Print("Select: ", i, recv, send)
 		v.Close()
 
-		i, recv, recvd := reflect.Select(cases[i+1:])
+		i, recv, recvd := reflect.Select(cases[1:])
 		log.Print("Select: ", i, recv, recvd)
 
-		i, recv, closed := reflect.Select(cases[i+1:])
+		i, recv, closed := reflect.Select(cases[1:])
 		log.Print("Select: ", i, recv, closed)
 	}()
 }
