@@ -1,6 +1,7 @@
 package lsync
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math"
@@ -646,4 +647,42 @@ func TestReflectChan(t *testing.T) {
 		i, recv, closed := reflect.Select(cases[1:])
 		log.Print("Select: ", i, recv, closed)
 	}()
+}
+
+func TestReflectPerf(t *testing.T) {
+	tstCase := func(f1, f2 func(int)) {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		go func() {
+			for i := 0; ; i++ {
+				select {
+				default:
+					f1(i)
+				case <-ctx.Done():
+					return
+				}
+			}
+		}()
+
+		go func() {
+			for i := 0; ; i++ {
+				select {
+				default:
+					f2(i)
+				case <-ctx.Done():
+					return
+				}
+			}
+		}()
+
+		<-ctx.Done()
+	}
+
+	m1, m2 := map[int]struct{}{}, map[int]struct{}{}
+	m := reflect.ValueOf(m2)
+	tstCase(func(i int) { m1[i] = struct{}{} }, func(i int) {
+		m.SetMapIndex(reflect.ValueOf(i), reflect.ValueOf(struct{}{}))
+	})
+	log.Printf("%d %d -> Diff: %d", len(m1), len(m2), len(m1)-len(m2))
 }
