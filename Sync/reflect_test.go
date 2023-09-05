@@ -685,4 +685,15 @@ func TestReflectPerf(t *testing.T) {
 		m.SetMapIndex(reflect.ValueOf(i), reflect.ValueOf(struct{}{}))
 	})
 	log.Printf("%d %d -> Diff: %d", len(m1), len(m2), len(m1)-len(m2))
+
+	type S struct {
+		F int
+	}
+	var s1, s2 S
+	s := reflect.ValueOf(&s2).Elem()
+	tstCase(func(i int) { s1.F = i }, func(i int) {
+		f := s.Field(0)
+		f.SetInt(int64(i))
+	})
+	log.Printf("%d %d -> Diff: %d", s1.F, s2.F, s1.F-s2.F)
 }
