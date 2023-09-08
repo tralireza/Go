@@ -697,3 +697,25 @@ func TestReflectPerf(t *testing.T) {
 	})
 	log.Printf("%d %d -> Diff: %d", s1.F, s2.F, s1.F-s2.F)
 }
+
+// 1283m
+func Test1283(t *testing.T) {
+	smallestDivisor := func(nums []int, threshold int) int {
+		dSums := func(v int) bool {
+			return true
+		}
+
+		l, r := 0, 0
+		for l < r {
+			m := l + (r-l)>>1
+			if dSums(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l
+	}
+
+	log.Print("5 ?= ", smallestDivisor([]int{1, 2, 5, 9}, 6))
+}
