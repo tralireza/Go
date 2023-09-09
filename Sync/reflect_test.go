@@ -702,10 +702,17 @@ func TestReflectPerf(t *testing.T) {
 func Test1283(t *testing.T) {
 	smallestDivisor := func(nums []int, threshold int) int {
 		dSums := func(v int) bool {
+			vSum := 0
+			for _, n := range nums {
+				vSum += (n + v - 1) / v
+				if vSum > threshold {
+					return false
+				}
+			}
 			return true
 		}
 
-		l, r := 0, 0
+		l, r := 1, slices.Max(nums)
 		for l < r {
 			m := l + (r-l)>>1
 			if dSums(m) {
