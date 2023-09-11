@@ -37,6 +37,26 @@ func Test1248(t *testing.T) {
 		return x
 	}
 
+	numberOfSubarrays2 := func(nums []int, k int) int {
+		atMost := func(k int) int {
+			x := 0
+			l, r := 0, 0
+			for r < len(nums) {
+				k -= nums[r] & 1
+				for k < 0 {
+					k += nums[l] & 1
+					l++
+				}
+				x += r - l + 1
+				r++
+			}
+			return x
+		}
+
+		return atMost(k) - atMost(k-1)
+	}
+
 	// 3 odd numbers in subarray: [1 7 3] [1 7 3 4] [7 3 4 5]
 	log.Print("3 ?= ", numberOfSubarrays([]int{1, 7, 3, 4, 5}, 3))
+	log.Print("3 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 3))
 }
