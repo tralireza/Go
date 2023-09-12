@@ -43,7 +43,7 @@ func Test1248(t *testing.T) {
 			l, r := 0, 0
 			for r < len(nums) {
 				k -= nums[r] & 1
-				for k < 0 {
+				for k < 0 && l <= r {
 					k += nums[l] & 1
 					l++
 				}
@@ -58,5 +58,8 @@ func Test1248(t *testing.T) {
 
 	// 3 odd numbers in subarray: [1 7 3] [1 7 3 4] [7 3 4 5]
 	log.Print("3 ?= ", numberOfSubarrays([]int{1, 7, 3, 4, 5}, 3))
+
 	log.Print("3 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 3))
+	log.Print("6 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 1))
+	log.Print("1 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 0))
 }
