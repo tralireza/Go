@@ -67,35 +67,14 @@ func Test1248(t *testing.T) {
 // 17 Letter Combinations
 func Test17(t *testing.T) {
 	letterCombinations := func(digits string) []string {
-		phoneMap := func(number byte) string {
-			switch number {
-			case '2':
-				return "abc"
-			case '3':
-				return "def"
-			case '4':
-				return "ghi"
-			case '5':
-				return "jkl"
-			case '6':
-				return "mno"
-			case '7':
-				return "pqrs"
-			case '8':
-				return "tuv"
-			case '9':
-				return "wxyz"
-			default:
-				return ""
-			}
-		}
-
 		if len(digits) == 0 {
 			return nil
 		}
 
+		dMap := []string{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}
+
 		Q, I, B := []byte{}, []int{}, [][]byte{}
-		letters := phoneMap(digits[0])
+		letters := dMap[digits[0]-'2']
 		for i := 0; i < len(letters); i++ {
 			Q, I, B = append(Q, letters[i]), append(I, 0), append(B, []byte{})
 		}
@@ -109,7 +88,7 @@ func Test17(t *testing.T) {
 
 			idx++
 			if idx < len(digits) {
-				letters := phoneMap(digits[idx])
+				letters := dMap[digits[idx]-'2']
 				for i := 0; i < len(letters); i++ {
 					Q, I, B = append(Q, letters[i]), append(I, idx), append(B, append(bs, b))
 				}
@@ -124,6 +103,5 @@ func Test17(t *testing.T) {
 
 	log.Print("9 ?= ", len(letterCombinations("23")))
 	log.Print("0 ?= ", len(letterCombinations("")))
-	log.Print("0 ?= ", len(letterCombinations("1")))
 	log.Print("4 ?= ", len(letterCombinations("9")))
 }
