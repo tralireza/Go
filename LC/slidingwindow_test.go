@@ -85,7 +85,6 @@ func Test17(t *testing.T) {
 		}
 
 		cs := []string{}
-
 		for len(Q) > 0 {
 			log.Print(Q)
 
@@ -102,7 +101,6 @@ func Test17(t *testing.T) {
 				cs = append(cs, string(append(e.combination, e.letter)))
 			}
 		}
-
 		log.Print(cs)
 		return cs
 	}
@@ -110,4 +108,5 @@ func Test17(t *testing.T) {
 	log.Print("9 ?= ", len(letterCombinations("23")))
 	log.Print("0 ?= ", len(letterCombinations("")))
 	log.Print("4 ?= ", len(letterCombinations("9")))
+	log.Print("36 ?= ", len(letterCombinations("273")))
 }
