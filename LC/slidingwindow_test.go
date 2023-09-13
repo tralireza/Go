@@ -63,3 +63,67 @@ func Test1248(t *testing.T) {
 	log.Print("6 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 1))
 	log.Print("1 ?= ", numberOfSubarrays2([]int{1, 7, 3, 4, 5}, 0))
 }
+
+// 17 Letter Combinations
+func Test17(t *testing.T) {
+	letterCombinations := func(digits string) []string {
+		phoneMap := func(number byte) string {
+			switch number {
+			case '2':
+				return "abc"
+			case '3':
+				return "def"
+			case '4':
+				return "ghi"
+			case '5':
+				return "jkl"
+			case '6':
+				return "mno"
+			case '7':
+				return "pqrs"
+			case '8':
+				return "tuv"
+			case '9':
+				return "wxyz"
+			default:
+				return ""
+			}
+		}
+
+		if len(digits) == 0 {
+			return nil
+		}
+
+		Q, I, B := []byte{}, []int{}, [][]byte{}
+		letters := phoneMap(digits[0])
+		for i := 0; i < len(letters); i++ {
+			Q, I, B = append(Q, letters[i]), append(I, 0), append(B, []byte{})
+		}
+
+		cs := []string{}
+
+		for len(Q) > 0 {
+			log.Print(Q, I, B)
+			b, idx, bs := Q[len(Q)-1], I[len(I)-1], B[len(B)-1]
+			Q, I, B = Q[:len(Q)-1], I[:len(I)-1], B[:len(B)-1]
+
+			idx++
+			if idx < len(digits) {
+				letters := phoneMap(digits[idx])
+				for i := 0; i < len(letters); i++ {
+					Q, I, B = append(Q, letters[i]), append(I, idx), append(B, append(bs, b))
+				}
+			} else {
+				cs = append(cs, string(append(bs, b)))
+			}
+		}
+
+		log.Print(cs)
+		return cs
+	}
+
+	log.Print("9 ?= ", len(letterCombinations("23")))
+	log.Print("0 ?= ", len(letterCombinations("")))
+	log.Print("0 ?= ", len(letterCombinations("1")))
+	log.Print("4 ?= ", len(letterCombinations("9")))
+}
