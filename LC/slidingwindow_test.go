@@ -72,28 +72,34 @@ func Test17(t *testing.T) {
 		}
 
 		dMap := []string{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}
+		type Qe struct {
+			letter      byte
+			idx         int
+			combination []byte
+		}
 
-		Q, I, B := []byte{}, []int{}, [][]byte{}
+		Q := []Qe{}
 		letters := dMap[digits[0]-'2']
 		for i := 0; i < len(letters); i++ {
-			Q, I, B = append(Q, letters[i]), append(I, 0), append(B, []byte{})
+			Q = append(Q, Qe{letters[i], 0, []byte{}})
 		}
 
 		cs := []string{}
 
 		for len(Q) > 0 {
-			log.Print(Q, I, B)
-			b, idx, bs := Q[len(Q)-1], I[len(I)-1], B[len(B)-1]
-			Q, I, B = Q[:len(Q)-1], I[:len(I)-1], B[:len(B)-1]
+			log.Print(Q)
 
-			idx++
-			if idx < len(digits) {
-				letters := dMap[digits[idx]-'2']
+			e := Q[len(Q)-1]
+			Q = Q[:len(Q)-1]
+
+			e.idx++
+			if e.idx < len(digits) {
+				letters := dMap[digits[e.idx]-'2']
 				for i := 0; i < len(letters); i++ {
-					Q, I, B = append(Q, letters[i]), append(I, idx), append(B, append(bs, b))
+					Q = append(Q, Qe{letters[i], e.idx, append(e.combination, e.letter)})
 				}
 			} else {
-				cs = append(cs, string(append(bs, b)))
+				cs = append(cs, string(append(e.combination, e.letter)))
 			}
 		}
 
