@@ -110,3 +110,30 @@ func Test17(t *testing.T) {
 	log.Print("4 ?= ", len(letterCombinations("9")))
 	log.Print("36 ?= ", len(letterCombinations("273")))
 }
+
+// 216m
+func Test216(t *testing.T) {
+	combinationSum3 := func(k int, n int) [][]int {
+		cs := [][]int{}
+
+		var dfs func(int, int, []int, int)
+		dfs = func(k int, start int, pcs []int, n int) {
+			if k == 0 {
+				if n == 0 {
+					cs = append(cs, pcs)
+				}
+				return
+			}
+			for i := start; i <= 9; i++ {
+				dfs(k-1, i+1, append([]int{i}, pcs...), n-i)
+			}
+		}
+
+		dfs(k, 1, []int{}, n)
+		return cs
+	}
+
+	log.Printf("%v", combinationSum3(3, 7))
+	log.Printf("%v", combinationSum3(3, 9))
+	log.Printf("%v", combinationSum3(4, 24))
+}
