@@ -33,8 +33,7 @@ func Test714(t *testing.T) {
 func Test121(t *testing.T) {
 	maxProfix := func(prices []int) int {
 		// Kadane's
-		best := 0 // -Infinity
-		cur := 0
+		best, cur := 0, 0
 		for i := 0; i < len(prices); i++ {
 			diff := 0
 			if i > 0 {
