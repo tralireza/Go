@@ -2,7 +2,6 @@ package lc
 
 import (
 	"log"
-	"math"
 	"testing"
 )
 
@@ -16,20 +15,23 @@ func Test714(t *testing.T) {
 		// [day][transactions][action]
 		profit := make([][2][2]int, len(prices))
 
-		profit[0][0][1] = math.MinInt
-
+		profit[0][1][1] = -prices[0] - fee
 		for i := 1; i < len(prices); i++ {
-			log.Print("-> ", profit)
+			log.Print(i, profit)
+			profit[i][1][0] = max(profit[i-1][1][0], profit[i-1][1][1]+prices[i])     // Sell or Rset
+			profit[i][1][1] = max(profit[i-1][1][1], profit[i-1][1][0]-prices[i]-fee) // Buy or Rest
 		}
+		log.Print("> ", profit)
 
 		// last day [n-1]-- of using transaction allowed -[1]- with no stock left (ie sell) --[0]
 		return profit[len(prices)-1][1][0]
 	}
 
 	log.Print("8 ?= ", maxProfit([]int{1, 3, 2, 8, 4, 9}, 2))
+	log.Print("6 ?= ", maxProfit([]int{1, 3, 7, 5, 10, 3}, 3))
 }
 
-// 121e Best Time to Buy & Sell: Kadane's algorithm
+// 121 Best Time to Buy & Sell: Kadane's algorithm
 func Test121(t *testing.T) {
 	maxProfix := func(prices []int) int {
 		// Kadane's
