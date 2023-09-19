@@ -27,8 +27,23 @@ func Test714(t *testing.T) {
 		return profit[len(prices)-1][1][0]
 	}
 
+	maxProfitO1 := func(prices []int, fee int) int {
+		var wStock, woStock int // with & without Stock
+		for i := range prices {
+			if i == 0 {
+				wStock = -prices[0] - fee
+			} else {
+				wStock, woStock = max(wStock, woStock-prices[i]-fee), max(woStock, wStock+prices[i])
+			}
+		}
+		return woStock
+	}
+
 	log.Print("8 ?= ", maxProfit([]int{1, 3, 2, 8, 4, 9}, 2))
 	log.Print("6 ?= ", maxProfit([]int{1, 3, 7, 5, 10, 3}, 3))
+
+	log.Print("8 ?= ", maxProfitO1([]int{1, 3, 2, 8, 4, 9}, 2))
+	log.Print("6 ?= ", maxProfitO1([]int{1, 3, 7, 5, 10, 3}, 3))
 }
 
 // 121 Best Time to Buy & Sell: Kadane's algorithm
