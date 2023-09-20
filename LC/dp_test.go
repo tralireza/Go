@@ -1,7 +1,10 @@
 package lc
 
 import (
+	"io"
 	"log"
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -65,4 +68,8 @@ func Test121(t *testing.T) {
 
 	log.Print("5 ?= ", maxProfix([]int{7, 1, 5, 3, 6, 4}))
 	log.Print("0 ?= ", maxProfix([]int{7, 6, 4, 3, 1}))
+}
+
+func TestString(t *testing.T) {
+	log.Print(io.Copy(os.Stdout, strings.NewReader("Stdin->Stdout io.Copy n,err: ")))
 }
