@@ -1,6 +1,8 @@
 package lc
 
 import (
+	"bytes"
+	"encoding/csv"
 	"io"
 	"log"
 	"os"
@@ -72,4 +74,22 @@ func Test121(t *testing.T) {
 
 func TestString(t *testing.T) {
 	log.Print(io.Copy(os.Stdout, strings.NewReader("Stdin->Stdout io.Copy n,err: ")))
+
+	r := csv.NewReader(bytes.NewBufferString(`# headers
+movie title;director;year released
+# data
+Star Wars: Episode VIII;Rian Johnson;2017`))
+	r.Comma = ';'
+	r.Comment = '#'
+
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Print(record)
+	}
 }
