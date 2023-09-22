@@ -76,7 +76,7 @@ func TestString(t *testing.T) {
 	log.Print(io.Copy(os.Stdout, strings.NewReader("Stdin->Stdout io.Copy n,err: ")))
 
 	r := csv.NewReader(bytes.NewBufferString(`# headers
-movie title;director;year released
+movie title;director;"year; released"
 # data
 Star Wars: Episode VIII;Rian Johnson;2017`))
 	r.Comma = ';'
