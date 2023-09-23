@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -75,19 +76,40 @@ func Test121(t *testing.T) {
 func TestString(t *testing.T) {
 	log.Print(io.Copy(os.Stdout, strings.NewReader("Stdin->Stdout io.Copy n,err: ")))
 
-	r := csv.NewReader(bytes.NewBufferString(`# headers
-movie title;director;"year; released"
-# data
-Star Wars: Episode VIII;Rian Johnson;2017`))
-	r.Comma = ';'
-	r.Comment = '#'
+	type Movie struct {
+		Title        string
+		Director     string
+		YearReleased int
+	}
+
+	movies := []Movie{
+		{"Star Wars: Episode VIII", "Rian Johnson", 2107},
+		{"-", "-", 0},
+	}
+
+	bfr := bytes.Buffer{}
+	func() {
+		cw := csv.NewWriter(&bfr)
+		cw.Write([]string{"Move Title", "Director", "Year Released"})
+		for _, m := range movies {
+			if err := cw.Write([]string{m.Title, m.Director, strconv.Itoa(m.YearReleased)}); err != nil {
+				t.Fatal(err)
+			}
+		}
+		cw.Flush()
+		log.Print(bfr.String())
+	}()
+
+	cr := csv.NewReader(&bfr)
+	cr.Comma = ','
+	cr.Comment = '#'
 
 	for {
-		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
+		record, err := cr.Read()
 		if err != nil {
+			if err == io.EOF {
+				break
+			}
 			log.Fatal(err)
 		}
 		log.Print(record)
