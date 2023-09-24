@@ -120,7 +120,19 @@ func TestString(t *testing.T) {
 func Test309(t *testing.T) {
 	maxProfit := func(prices []int) int {
 		profit := make([][2]int, len(prices))
-
+		for i, p := range prices {
+			switch i {
+			case 0:
+				profit[i][1] = -p
+			case 1:
+				profit[i][0] = max(profit[i-1][0], profit[i-1][1]+p)
+				profit[i][1] = max(profit[i-1][1], profit[i-1][0]-p) // no Cooldown (no Sell yet)
+			default:
+				profit[i][0] = max(profit[i-1][0], profit[i-1][1]+p)
+				profit[i][1] = max(profit[i-1][1], profit[i-2][0]-p) // 1 day Cooldown after Sell
+			}
+		}
+		log.Print(profit)
 		return profit[len(prices)-1][0]
 	}
 
