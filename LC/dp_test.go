@@ -115,3 +115,15 @@ func TestString(t *testing.T) {
 		log.Print(record)
 	}
 }
+
+// 309m Best Time to Buy&Sell with Cooldown
+func Test309(t *testing.T) {
+	maxProfit := func(prices []int) int {
+		profit := make([][2]int, len(prices))
+
+		return profit[len(prices)-1][0]
+	}
+
+	log.Print("3 ?= ", maxProfit([]int{1, 2, 3, 0, 2}))
+	log.Print("3 ?= ", maxProfit([]int{1, 2, 4}))
+}
