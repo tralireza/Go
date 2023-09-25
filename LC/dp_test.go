@@ -77,9 +77,9 @@ func TestString(t *testing.T) {
 	log.Print(io.Copy(os.Stdout, strings.NewReader("Stdin->Stdout io.Copy n,err: ")))
 
 	type Movie struct {
-		Title        string
-		Director     string
-		YearReleased int
+		Title        string `json:"title"`
+		Director     string `json:"director"`
+		YearReleased int    `json:"year_released"`
 	}
 
 	movies := []Movie{
