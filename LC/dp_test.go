@@ -79,7 +79,7 @@ func TestString(t *testing.T) {
 	type Movie struct {
 		Title        string `json:"title"`
 		Director     string `json:"director"`
-		YearReleased int    `json:"year_released"`
+		YearReleased int    `json:"year_released,omitempty"`
 	}
 
 	movies := []Movie{
@@ -138,4 +138,16 @@ func Test309(t *testing.T) {
 
 	log.Print("3 ?= ", maxProfit([]int{1, 2, 3, 0, 2}))
 	log.Print("3 ?= ", maxProfit([]int{1, 2, 4}))
+}
+
+// 123h Best Time to Buy & Sell with Only k=2 Transactions
+func Test123(t *testing.T) {
+	maxProfit := func(prices []int) int {
+		profit := make([][2][2]int, len(prices))
+
+		return profit[len(prices)-1][1][0]
+	}
+
+	log.Print("6 ?= ", maxProfit([]int{3, 3, 5, 0, 0, 3, 1, 4}))
+	log.Print("4 ?= ", maxProfit([]int{1, 2, 3, 4, 5}))
 }
