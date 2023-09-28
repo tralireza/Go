@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -158,11 +157,15 @@ func Test3079(t *testing.T) {
 	sumOfEncryptedInts := func(nums []int) int {
 		x := 0
 		for _, n := range nums {
-			bs := []byte(strconv.Itoa(n))
-			s := string(bytes.Repeat([]byte{slices.Max(bs)}, len(bs)))
-			if v, err := strconv.Atoi(s); err == nil {
-				x += v
+			d, i := 0, 0
+			for ; n > 0; i++ {
+				d = max(d, n%10)
+				n /= 10
 			}
+			for ; i > 0; i-- {
+				n = 10*n + d
+			}
+			x += n
 		}
 		return x
 	}
