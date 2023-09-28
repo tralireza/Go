@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -150,4 +151,22 @@ func Test123(t *testing.T) {
 
 	log.Print("6 ?= ", maxProfit([]int{3, 3, 5, 0, 0, 3, 1, 4}))
 	log.Print("4 ?= ", maxProfit([]int{1, 2, 3, 4, 5}))
+}
+
+// Sum of Encrypted Integers
+func Test3079(t *testing.T) {
+	sumOfEncryptedInts := func(nums []int) int {
+		x := 0
+		for _, n := range nums {
+			bs := []byte(strconv.Itoa(n))
+			s := string(bytes.Repeat([]byte{slices.Max(bs)}, len(bs)))
+			if v, err := strconv.Atoi(s); err == nil {
+				x += v
+			}
+		}
+		return x
+	}
+
+	log.Print("6 ?= ", sumOfEncryptedInts([]int{1, 2, 3}))
+	log.Print("66 ?= ", sumOfEncryptedInts([]int{10, 21, 31}))
 }
