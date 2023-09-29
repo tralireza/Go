@@ -165,6 +165,7 @@ func Test3079(t *testing.T) {
 			for ; i > 0; i-- {
 				n = 10*n + d
 			}
+
 			x += n
 		}
 		return x
@@ -172,4 +173,33 @@ func Test3079(t *testing.T) {
 
 	log.Print("6 ?= ", sumOfEncryptedInts([]int{1, 2, 3}))
 	log.Print("66 ?= ", sumOfEncryptedInts([]int{10, 21, 31}))
+}
+
+// 3080
+type Qe struct{ num, idx int }
+type Q []Qe
+
+func (q Q) Less(i int, j int) bool {
+	if q[i].num == q[j].num {
+		return q[i].idx < q[j].idx
+	}
+	return q[i].num < q[j].idx
+}
+func (q Q) Len() int          { return len(q) }
+func (q Q) Swap(i int, j int) { q[i], q[j] = q[j], q[i] }
+func (q *Q) Push(x any)       { *q = append(*q, x.(Qe)) }
+func (q *Q) Pop() any {
+	v := (*q)[len(*q)-1]
+	*q = (*q)[:len(*q)-1]
+	return v
+}
+
+func Test3080(t *testing.T) {
+	unmarkedSumArray := func(nums []int, queries [][]int) []int64 {
+		xs := []int64{}
+
+		return xs
+	}
+
+	log.Print("[8,3,0] ?= ", unmarkedSumArray([]int{1, 2, 2, 1, 2, 3, 1}, [][]int{{1, 2}, {3, 3}, {4, 2}}))
 }
