@@ -2,6 +2,7 @@ package lc
 
 import (
 	"bytes"
+	"container/heap"
 	"encoding/csv"
 	"io"
 	"log"
@@ -176,14 +177,14 @@ func Test3079(t *testing.T) {
 }
 
 // 3080
-type Qe struct{ num, idx int }
+type Qe struct{ n, i int }
 type Q []Qe
 
 func (q Q) Less(i int, j int) bool {
-	if q[i].num == q[j].num {
-		return q[i].idx < q[j].idx
+	if q[i].n == q[j].n {
+		return q[i].i < q[j].i
 	}
-	return q[i].num < q[j].idx
+	return q[i].n < q[j].n
 }
 func (q Q) Len() int          { return len(q) }
 func (q Q) Swap(i int, j int) { q[i], q[j] = q[j], q[i] }
@@ -196,10 +197,33 @@ func (q *Q) Pop() any {
 
 func Test3080(t *testing.T) {
 	unmarkedSumArray := func(nums []int, queries [][]int) []int64 {
-		xs := []int64{}
+		q, lsum := &Q{}, int64(0)
+		for i, n := range nums {
+			heap.Push(q, Qe{n, i})
+			lsum += int64(n)
+		}
+		log.Print(q)
 
+		mkd := make([]bool, len(nums))
+		xs := []int64{}
+		for _, qry := range queries {
+			i, k := qry[0], qry[1]
+			if !mkd[i] {
+				mkd[i] = true
+				lsum -= int64(nums[i])
+			}
+			for k > 0 && q.Len() > 0 {
+				e := heap.Pop(q).(Qe)
+				if !mkd[e.i] {
+					mkd[e.i] = true
+					lsum -= int64(e.n)
+					k--
+				}
+			}
+			xs = append(xs, lsum)
+		}
 		return xs
 	}
 
-	log.Print("[8,3,0] ?= ", unmarkedSumArray([]int{1, 2, 2, 1, 2, 3, 1}, [][]int{{1, 2}, {3, 3}, {4, 2}}))
+	log.Print("[8 3 0] ?= ", unmarkedSumArray([]int{1, 2, 2, 1, 2, 3, 1}, [][]int{{1, 2}, {3, 3}, {4, 2}}))
 }
