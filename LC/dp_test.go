@@ -180,15 +180,10 @@ func Test3079(t *testing.T) {
 type Qe struct{ n, i int }
 type Q []Qe
 
-func (q Q) Less(i int, j int) bool {
-	if q[i].n == q[j].n {
-		return q[i].i < q[j].i
-	}
-	return q[i].n < q[j].n
-}
-func (q Q) Len() int          { return len(q) }
-func (q Q) Swap(i int, j int) { q[i], q[j] = q[j], q[i] }
-func (q *Q) Push(x any)       { *q = append(*q, x.(Qe)) }
+func (q Q) Len() int           { return len(q) }
+func (q Q) Less(i, j int) bool { return q[i].n < q[j].n || q[i].n == q[j].n && q[i].i < q[j].i }
+func (q Q) Swap(i, j int)      { q[i], q[j] = q[j], q[i] }
+func (q *Q) Push(x any)        { *q = append(*q, x.(Qe)) }
 func (q *Q) Pop() any {
 	v := (*q)[len(*q)-1]
 	*q = (*q)[:len(*q)-1]
@@ -206,6 +201,7 @@ func Test3080(t *testing.T) {
 
 		mkd := make([]bool, len(nums))
 		xs := []int64{}
+
 		for _, qry := range queries {
 			i, k := qry[0], qry[1]
 			if !mkd[i] {
@@ -222,6 +218,7 @@ func Test3080(t *testing.T) {
 			}
 			xs = append(xs, lsum)
 		}
+
 		return xs
 	}
 
