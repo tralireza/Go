@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"io"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -144,13 +145,24 @@ func Test309(t *testing.T) {
 // 123h Best Time to Buy & Sell with Only k=2 Transactions
 func Test123(t *testing.T) {
 	maxProfit := func(prices []int) int {
-		profit := make([][2][2]int, len(prices))
+		profit := make([][2 + 1][2]int, len(prices))
 
-		return profit[len(prices)-1][1][0]
+		profit[0][1][1] = math.MinInt32
+		profit[0][2][1] = -prices[0]
+		for i := 1; i < len(prices); i++ {
+			for k := 2; k > 0; k-- {
+				profit[i][k][0] = max(profit[i-1][k][0], profit[i-1][k][1]+prices[i])
+				profit[i][k][1] = max(profit[i-1][k][1], profit[i-1][k-1][0]-prices[i])
+			}
+		}
+		//log.Print(profit)
+
+		return profit[len(prices)-1][2][0]
 	}
 
 	log.Print("6 ?= ", maxProfit([]int{3, 3, 5, 0, 0, 3, 1, 4}))
 	log.Print("4 ?= ", maxProfit([]int{1, 2, 3, 4, 5}))
+	log.Print("0 ?= ", maxProfit([]int{7, 6, 4, 3, 1}))
 }
 
 // Sum of Encrypted Integers
