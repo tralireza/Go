@@ -148,8 +148,8 @@ func Test123(t *testing.T) {
 
 		profit[0][1][1] = -prices[0]
 		profit[0][2][1] = -prices[0]
-		for i := 1; i < len(prices); i++ {
-			for k := 1; k <= 2; k++ {
+		for k := 1; k <= 2; k++ {
+			for i := 1; i < len(prices); i++ {
 				profit[i][k][0] = max(profit[i-1][k][0], profit[i-1][k][1]+prices[i])
 				profit[i][k][1] = max(profit[i-1][k][1], profit[i-1][k-1][0]-prices[i])
 			}
