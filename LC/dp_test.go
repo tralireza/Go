@@ -148,8 +148,8 @@ func Test123(t *testing.T) {
 
 		profit[0][1][1] = -prices[0]
 		profit[0][2][1] = -prices[0]
-		for k := 1; k <= 2; k++ {
-			for i := 1; i < len(prices); i++ {
+		for i := 1; i < len(prices); i++ {
+			for k := 1; k <= 2; k++ {
 				profit[i][k][0] = max(profit[i-1][k][0], profit[i-1][k][1]+prices[i])
 				profit[i][k][1] = max(profit[i-1][k][1], profit[i-1][k-1][0]-prices[i])
 			}
@@ -163,6 +163,30 @@ func Test123(t *testing.T) {
 	log.Print("4 ?= ", maxProfit([]int{1, 2, 3, 4, 5}))
 	log.Print("0 ?= ", maxProfit([]int{7, 6, 4, 3, 1}))
 	log.Print("13 ?= ", maxProfit([]int{1, 2, 4, 2, 5, 7, 2, 4, 9, 0}))
+}
+
+// 188h Best Time to Buy & Sell with at most K Transactions
+func Test188(t *testing.T) {
+	maxProfit := func(k int, prices []int) int {
+		profit := make([][][2]int, len(prices))
+		for i := range profit {
+			profit[i] = make([][2]int, k+1)
+		}
+
+		for k := k; k > 0; k-- {
+			profit[0][k][1] = -prices[0]
+		}
+
+		for i := 1; i < len(prices); i++ {
+			for k := k; k > 0; k-- {
+			}
+		}
+		log.Print(profit)
+
+		return profit[len(prices)-1][k][0]
+	}
+
+	log.Print("13 ?= ", maxProfit(2, []int{1, 2, 4, 2, 5, 7, 2, 4, 9, 0}))
 }
 
 // Sum of Encrypted Integers
