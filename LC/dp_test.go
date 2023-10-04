@@ -260,3 +260,24 @@ func Test3080(t *testing.T) {
 
 	log.Print("[8 3 0] ?= ", unmarkedSumArray([]int{1, 2, 2, 1, 2, 3, 1}, [][]int{{1, 2}, {3, 3}, {4, 2}}))
 }
+
+// 57m Insert Interval
+func Test57(t *testing.T) {
+	insert := func(intervals [][]int, newInterval []int) [][]int {
+		log.Print(intervals, " | ", newInterval)
+		l, r := 0, len(intervals)-1
+		for l < r {
+			m := l + (r-l)>>1
+			if intervals[m][0] >= newInterval[0] {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		log.Print(l)
+
+		return nil
+	}
+
+	log.Print("[[1 5] [6 9]] ?= ", insert([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
+}
