@@ -264,8 +264,7 @@ func Test3080(t *testing.T) {
 // 57m Insert Interval
 func Test57(t *testing.T) {
 	insert := func(intervals [][]int, newInterval []int) [][]int {
-		log.Print(intervals, " | ", newInterval)
-		l, r := 0, len(intervals)-1
+		l, r := 0, len(intervals)
 		for l < r {
 			m := l + (r-l)>>1
 			if intervals[m][0] >= newInterval[0] {
@@ -274,10 +273,23 @@ func Test57(t *testing.T) {
 				l = m + 1
 			}
 		}
-		log.Print(l)
 
-		return nil
+		intervals = append(intervals[:l], append([][]int{newInterval}, intervals[l:]...)...)
+		log.Print(l, newInterval, " -> ", intervals)
+
+		rs := [][]int{}
+		for _, v := range intervals {
+			if len(rs) == 0 || rs[len(rs)-1][1] < v[0] {
+				rs = append(rs, v)
+			} else {
+				rs[len(rs)-1][1] = max(rs[len(rs)-1][1], v[1])
+			}
+		}
+		return rs
 	}
 
-	log.Print("[[1 5] [6 9]] ?= ", insert([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
+	log.Print("?= ", insert([][]int{{1, 3}, {6, 9}}, []int{1, 6}))
+	log.Print("?= ", insert([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
+	log.Print("?= ", insert([][]int{{1, 3}, {4, 5}, {6, 9}}, []int{4, 7}))
+	log.Print("?= ", insert([][]int{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, []int{4, 8}))
 }
