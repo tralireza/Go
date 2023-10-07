@@ -288,8 +288,27 @@ func Test57(t *testing.T) {
 		return rs
 	}
 
+	insert2 := func(intervals [][]int, newInterval []int) [][]int {
+		rs, n := [][]int{}, newInterval
+		for i, v := range intervals {
+			if n[1] < v[0] {
+				rs = append(rs, n)
+				return append(rs, intervals[i:]...)
+			} else if n[0] > v[1] {
+				rs = append(rs, v)
+			} else {
+				n[0], n[1] = min(n[0], v[0]), max(n[1], v[1])
+			}
+		}
+		return append(rs, n)
+	}
+
 	log.Print("?= ", insert([][]int{{1, 3}, {6, 9}}, []int{1, 6}))
-	log.Print("?= ", insert([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
 	log.Print("?= ", insert([][]int{{1, 3}, {4, 5}, {6, 9}}, []int{4, 7}))
+
+	log.Print("?= ", insert([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
+	log.Print("?= ", insert2([][]int{{1, 3}, {6, 9}}, []int{2, 5}))
+
 	log.Print("?= ", insert([][]int{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, []int{4, 8}))
+	log.Print("?= ", insert2([][]int{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, []int{4, 8}))
 }
