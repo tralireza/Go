@@ -179,6 +179,8 @@ func Test188(t *testing.T) {
 
 		for i := 1; i < len(prices); i++ {
 			for k := k; k > 0; k-- {
+				profit[i][k][0] = max(profit[i-1][k][0], profit[i-1][k][1]+prices[i])
+				profit[i][k][1] = max(profit[i-1][k][1], profit[i-1][k-1][0]-prices[i])
 			}
 		}
 		log.Print(profit)
@@ -187,6 +189,7 @@ func Test188(t *testing.T) {
 	}
 
 	log.Print("13 ?= ", maxProfit(2, []int{1, 2, 4, 2, 5, 7, 2, 4, 9, 0}))
+	log.Print("7 ?= ", maxProfit(2, []int{3, 2, 6, 5, 0, 3}))
 }
 
 // Sum of Encrypted Integers
