@@ -188,7 +188,7 @@ func Test188(t *testing.T) {
 		return profit[len(prices)-1][k][0]
 	}
 
-	log.Print("13 ?= ", maxProfit(2, []int{1, 2, 4, 2, 5, 7, 2, 4, 9, 0}))
+	log.Print("15 ?= ", maxProfit(3, []int{1, 2, 4, 2, 5, 7, 2, 4, 9, 0}))
 	log.Print("7 ?= ", maxProfit(2, []int{3, 2, 6, 5, 0, 3}))
 }
 
@@ -314,4 +314,36 @@ func Test57(t *testing.T) {
 
 	log.Print("?= ", insert([][]int{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, []int{4, 8}))
 	log.Print("?= ", insert2([][]int{{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}}, []int{4, 8}))
+}
+
+// 72m Edit Distance
+func Test72(t *testing.T) {
+	minDistance := func(word1 string, word2 string) int {
+		// dist[m][n] distinace of word1[0..m] and word2[0..n]
+		// dist[0][n] = n, dist[m][0] = m
+		dist := make([][]int, len(word1)+1)
+		for i := range dist {
+			dist[i] = make([]int, len(word2)+1)
+			dist[i][0] = i
+		}
+		for j := 0; j <= len(word2); j++ {
+			dist[0][j] = j
+		}
+		log.Print(dist)
+
+		for i := 1; i <= len(word1); i++ {
+			for j := 1; j <= len(word2); j++ {
+				d := 0
+				if word1[i-1] != word2[j-1] {
+					d += 1
+				}
+				dist[i][j] = min(dist[i-1][j]+1, dist[i][j-1]+1, dist[i-1][j-1]+d)
+			}
+		}
+		log.Print(dist)
+
+		return dist[len(word1)][len(word2)]
+	}
+
+	log.Print("3 ?= ", minDistance("horse", "ros"))
 }
