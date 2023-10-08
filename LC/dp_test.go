@@ -340,10 +340,14 @@ func Test72(t *testing.T) {
 				dist[i][j] = min(dist[i-1][j]+1, dist[i][j-1]+1, dist[i-1][j-1]+d)
 			}
 		}
-		log.Print(dist)
+
+		for i := range dist {
+			log.Print(dist[i])
+		}
 
 		return dist[len(word1)][len(word2)]
 	}
 
 	log.Print("3 ?= ", minDistance("horse", "ros"))
+	log.Print("1 ?= ", minDistance("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
 }
