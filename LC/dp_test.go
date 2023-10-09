@@ -329,25 +329,50 @@ func Test72(t *testing.T) {
 		for j := 0; j <= len(word2); j++ {
 			dist[0][j] = j
 		}
-		log.Print(dist)
 
 		for i := 1; i <= len(word1); i++ {
 			for j := 1; j <= len(word2); j++ {
 				d := 0
 				if word1[i-1] != word2[j-1] {
-					d += 1
+					d++
 				}
-				dist[i][j] = min(dist[i-1][j]+1, dist[i][j-1]+1, dist[i-1][j-1]+d)
+				dist[i][j] = min(dist[i][j-1]+1, dist[i-1][j]+1, dist[i-1][j-1]+d)
 			}
-		}
-
-		for i := range dist {
-			log.Print(dist[i])
 		}
 
 		return dist[len(word1)][len(word2)]
 	}
 
+	// O(n) space
+	minDistance2 := func(word1 string, word2 string) int {
+		dist := make([][]int, 2)
+		for i := range dist {
+			dist[i] = make([]int, len(word2)+1)
+		}
+		for j := range dist[0] {
+			dist[0][j] = j
+		}
+		log.Print(dist)
+
+		for i := 0; i < len(word1); i++ {
+			copy(dist[1], dist[0])
+			left := i + 1
+			for j := 1; j <= len(word2); j++ {
+				d := 0
+				if word1[i] != word2[j-1] {
+					d++
+				}
+				dist[0][j] = min(left+1, dist[1][j]+1, dist[1][j-1]+d)
+				left = dist[0][j]
+			}
+		}
+		log.Print(dist)
+
+		return dist[0][len(word2)]
+	}
+
 	log.Print("3 ?= ", minDistance("horse", "ros"))
 	log.Print("1 ?= ", minDistance("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
+	log.Print("3 ?= ", minDistance2("horse", "ros"))
+	log.Print("1 ?= ", minDistance2("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
 }
