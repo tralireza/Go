@@ -352,7 +352,6 @@ func Test72(t *testing.T) {
 		for j := range dist[0] {
 			dist[0][j] = j
 		}
-		log.Print(dist)
 
 		for i := 0; i < len(word1); i++ {
 			copy(dist[1], dist[0])
@@ -375,4 +374,35 @@ func Test72(t *testing.T) {
 	log.Print("1 ?= ", minDistance("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
 	log.Print("3 ?= ", minDistance2("horse", "ros"))
 	log.Print("1 ?= ", minDistance2("AGTCTTAGTCCAG", "AGTCTAGTCCAG"))
+}
+
+// 583m Delete Operation for Two Strings
+func Test583(t *testing.T) {
+	minDistance := func(word1 string, word2 string) int {
+		dist := make([][]int, len(word1)+1)
+		for i := range dist {
+			dist[i] = make([]int, len(word2)+1)
+			dist[i][0] = i
+		}
+		for j := range dist[0] {
+			dist[0][j] = j
+		}
+
+		for i := 1; i <= len(word1); i++ {
+			for j := 1; j <= len(word2); j++ {
+				if word1[i-1] == word2[j-1] {
+					// only no substitude
+					dist[i][j] = dist[i-1][j-1]
+				} else {
+					// only delete from word1 or word2
+					dist[i][j] = 1 + min(dist[i-1][j], dist[i][j-1])
+				}
+			}
+		}
+
+		return dist[len(word1)][len(word2)]
+	}
+
+	log.Print("2 ?= ", minDistance("a", "b"))
+	log.Print("2 ?= ", minDistance("sea", "eat"))
 }
