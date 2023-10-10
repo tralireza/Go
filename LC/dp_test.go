@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"container/heap"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -405,4 +406,35 @@ func Test583(t *testing.T) {
 
 	log.Print("2 ?= ", minDistance("a", "b"))
 	log.Print("2 ?= ", minDistance("sea", "eat"))
+}
+
+// 1318m Minimum Flips to Make a OR b Equal to c
+func Test1318(t *testing.T) {
+	minFlips := func(a, b, c int) int {
+		x := 0
+
+		v1, v2, r := fmt.Sprintf("%031b", a), fmt.Sprintf("%031b", b), fmt.Sprintf("%031b", c)
+		log.Printf("%s\n%s\n%s", v1, v2, r)
+		for i := 0; i < 31; i++ {
+			switch r[i] {
+			case '1':
+				if v1[i] == '0' && v2[i] == '0' {
+					x++
+				}
+			case '0':
+				if v1[i] == '1' {
+					x++
+				}
+				if v2[i] == '1' {
+					x++
+				}
+			}
+		}
+
+		return x
+	}
+
+	log.Print("3 ?= ", minFlips(2, 6, 5))
+	log.Print("1 ?= ", minFlips(4, 2, 7))
+	log.Print(" ?= ", minFlips(1000_000_000, 2, 7))
 }
