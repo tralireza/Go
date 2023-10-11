@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"container/heap"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -413,19 +412,16 @@ func Test1318(t *testing.T) {
 	minFlips := func(a, b, c int) int {
 		x := 0
 
-		v1, v2, r := fmt.Sprintf("%031b", a), fmt.Sprintf("%031b", b), fmt.Sprintf("%031b", c)
-		log.Printf("%s\n%s\n%s", v1, v2, r)
-		for i := 0; i < 31; i++ {
-			switch r[i] {
-			case '1':
-				if v1[i] == '0' && v2[i] == '0' {
+		for ; a > 0 || b > 0 || c > 0; a, b, c = a>>1, b>>1, c>>1 {
+			if c&1 == 1 {
+				if a&1 == 0 && b&1 == 0 {
 					x++
 				}
-			case '0':
-				if v1[i] == '1' {
+			} else {
+				if a&1 == 1 {
 					x++
 				}
-				if v2[i] == '1' {
+				if b&1 == 1 {
 					x++
 				}
 			}
@@ -436,5 +432,5 @@ func Test1318(t *testing.T) {
 
 	log.Print("3 ?= ", minFlips(2, 6, 5))
 	log.Print("1 ?= ", minFlips(4, 2, 7))
-	log.Print(" ?= ", minFlips(1000_000_000, 2, 7))
+	log.Print("15 ?= ", minFlips(1000_000_000, 2, 7))
 }
