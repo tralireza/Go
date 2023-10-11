@@ -412,7 +412,7 @@ func Test1318(t *testing.T) {
 	minFlips := func(a, b, c int) int {
 		x := 0
 
-		for ; a > 0 || b > 0 || c > 0; a, b, c = a>>1, b>>1, c>>1 {
+		for a > 0 || b > 0 || c > 0 {
 			if c&1 == 1 {
 				if a&1 == 0 && b&1 == 0 {
 					x++
@@ -425,6 +425,7 @@ func Test1318(t *testing.T) {
 					x++
 				}
 			}
+			a, b, c = a>>1, b>>1, c>>1
 		}
 
 		return x
