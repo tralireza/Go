@@ -46,6 +46,19 @@ func (o *Trie) Insert(word string) {
 	n.IsNode = true
 }
 
+func (o *Trie) Search(word string) bool {
+	n := o
+	for i := 0; i < len(word); i++ {
+		c := word[i]
+		if n.Children[c-'a'] != nil {
+			n = n.Children[c-'a']
+		} else {
+			return false
+		}
+	}
+	return n.IsNode
+}
+
 func TestTrie(t *testing.T) {
 	T := NewTrie()
 	T.Insert("trie")
@@ -56,4 +69,6 @@ func TestTrie(t *testing.T) {
 	log.Print(T)
 	log.Print(T.Children['i'-'a'])
 	log.Print(T.Children['i'-'a'].Children['s'-'a'])
+
+	log.Print(T.Search("the"), T.Search("tree"))
 }
