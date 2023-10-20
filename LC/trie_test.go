@@ -61,13 +61,10 @@ func (o *Trie) find(word string) *Trie {
 
 func (o *Trie) Search(word string) bool {
 	n := o.find(word)
-	if n != nil {
-		return n.IsNode
-	}
-	return false
+	return n != nil && n.IsNode
 }
 
-func (o *Trie) StartsWith(word string) bool { return o.find(word) != nil }
+func (o *Trie) StartsWith(prefix string) bool { return o.find(prefix) != nil }
 
 func TestTrie(t *testing.T) {
 	T := NewTrie()
@@ -81,5 +78,5 @@ func TestTrie(t *testing.T) {
 	log.Print(T.Children['i'-'a'].Children['s'-'a'])
 
 	log.Print(T.Search("the"), T.Search("tree"))
-	log.Print(T.StartsWith("pre"), T.StartsWith("tree"), T.StartsWith("the"))
+	log.Print(T.StartsWith("pre"), T.StartsWith("trie"), T.StartsWith("the"))
 }
