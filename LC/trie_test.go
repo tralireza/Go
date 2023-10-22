@@ -27,7 +27,7 @@ func (o Trie) String() string {
 	}
 	c := ':'
 	if o.IsNode {
-		c = '+'
+		c = '*'
 	}
 	return fmt.Sprintf("[%s %c]", sb.String(), c)
 }
@@ -70,6 +70,7 @@ func TestTrie(t *testing.T) {
 	T := NewTrie()
 	T.Insert("trie")
 	T.Insert("is")
+	T.Insert("a")
 	T.Insert("prefix")
 	T.Insert("tree")
 
@@ -77,6 +78,6 @@ func TestTrie(t *testing.T) {
 	log.Print(T.Children['i'-'a'])
 	log.Print(T.Children['i'-'a'].Children['s'-'a'])
 
-	log.Print(T.Search("the"), T.Search("tree"))
-	log.Print(T.StartsWith("pre"), T.StartsWith("trie"), T.StartsWith("the"))
+	log.Print("the? tree? -> ", T.Search("the"), T.Search("tree"))
+	log.Print("pre? trie? the? -> ", T.StartsWith("pre"), T.StartsWith("trie"), T.StartsWith("the"))
 }
