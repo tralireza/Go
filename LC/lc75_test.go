@@ -11,7 +11,7 @@ func init() {
 	log.Print("> LC75")
 }
 
-// 1268
+// 1268 Search Suggestions System
 func Test1268(t *testing.T) {
 	// BinSearch
 	suggestedProducts := func(products []string, searchWord string) [][]string {
@@ -35,7 +35,6 @@ func Test1268(t *testing.T) {
 				}
 			}
 
-			log.Printf("%d %s", l, prefix)
 			if l < len(products) {
 				P := []string{}
 				for i := l; i < len(products) && i < l+3; i++ {
@@ -52,8 +51,8 @@ func Test1268(t *testing.T) {
 		return rs
 	}
 
-	log.Print(" ?= ", suggestedProducts([]string{"mobile", "mouse", "moneypot", "monitor", "mousepad"}, "mouse"))
-	log.Print(" ?= ", suggestedProducts([]string{"around", "mobile", "mouse", "moneypot", "monitor", "mousepad"}, "are"))
+	log.Print("[3 3 2 2 2] ?= ", suggestedProducts([]string{"mobile", "mouse", "moneypot", "monitor", "mousepad"}, "mouse"))
+	log.Print("[1 1 0] ?= ", suggestedProducts([]string{"around", "mobile", "mouse", "moneypot", "monitor", "mousepad"}, "arz"))
 }
 
 func TestDecodeString(t *testing.T) {
