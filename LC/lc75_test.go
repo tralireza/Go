@@ -2,11 +2,58 @@ package lc
 
 import (
 	"log"
+	"slices"
+	"strings"
 	"testing"
 )
 
 func init() {
-	log.Print("> 75")
+	log.Print("> LC75")
+}
+
+// 1268
+func Test1268(t *testing.T) {
+	// BinSearch
+	suggestedProducts := func(products []string, searchWord string) [][]string {
+		rs := [][]string{}
+
+		slices.Sort(products)
+		sbr := strings.Builder{}
+
+		l := 0
+		for i := 0; i < len(searchWord); i++ {
+			sbr.WriteByte(searchWord[i])
+			prefix := sbr.String()
+
+			r := len(products)
+			for l < r {
+				m := l + (r-l)>>1
+				if strings.Compare(products[m], prefix) >= 0 {
+					r = m
+				} else {
+					l = m + 1
+				}
+			}
+
+			log.Printf("%d %s", l, prefix)
+			if l < len(products) {
+				P := []string{}
+				for i := l; i < len(products) && i < l+3; i++ {
+					if strings.HasPrefix(products[i], prefix) {
+						P = append(P, products[i])
+					}
+				}
+				rs = append(rs, P)
+			} else {
+				rs = append(rs, []string{})
+			}
+		}
+
+		return rs
+	}
+
+	log.Print(" ?= ", suggestedProducts([]string{"mobile", "mouse", "moneypot", "monitor", "mousepad"}, "mouse"))
+	log.Print(" ?= ", suggestedProducts([]string{"around", "mobile", "mouse", "moneypot", "monitor", "mousepad"}, "are"))
 }
 
 func TestDecodeString(t *testing.T) {
