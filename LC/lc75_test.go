@@ -12,7 +12,18 @@ func init() {
 }
 
 // 1268 Search Suggestions System
-func Test1268(t *testing.T) {
+func TestTrie1268(t *testing.T) {
+	// Trie
+	suggestedProducts := func(products []string, searchWord string) [][]string {
+		rs := [][]string{}
+
+		return rs
+	}
+
+	log.Print("[3 3 2 2 2] ?= ", suggestedProducts([]string{"mobile", "mouse", "moneypot", "monitor", "mousepad"}, "mouse"))
+}
+
+func TestBinSearch1268(t *testing.T) {
 	// BinSearch
 	suggestedProducts := func(products []string, searchWord string) [][]string {
 		rs := [][]string{}
