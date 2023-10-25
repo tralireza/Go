@@ -75,12 +75,8 @@ func TestTrie1268(t *testing.T) {
 		}
 
 		rs := [][]string{}
-
-		sbr := strings.Builder{}
 		for i := 0; i < len(searchWord); i++ {
-			sbr.WriteByte(searchWord[i])
-			prefix := sbr.String()
-
+			prefix := searchWord[:i+1]
 			n := find(T, prefix)
 			if n != nil {
 				P := list(n, 3)
@@ -92,7 +88,6 @@ func TestTrie1268(t *testing.T) {
 				rs = append(rs, []string{})
 			}
 		}
-
 		return rs
 	}
 
