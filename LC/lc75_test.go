@@ -15,7 +15,86 @@ func init() {
 func TestTrie1268(t *testing.T) {
 	// Trie
 	suggestedProducts := func(products []string, searchWord string) [][]string {
+		type Trie struct {
+			Children [26]*Trie
+			IsNode   bool
+		}
+
+		find := func(T *Trie, prefix string) *Trie {
+			n := T
+			for i := 0; i < len(prefix); i++ {
+				child := n.Children[prefix[i]-'a']
+				if child == nil {
+					return nil
+				}
+				n = child
+			}
+			return n
+		}
+
+		insert := func(T *Trie, word string) {
+			n := T
+			for i := 0; i < len(word); i++ {
+				child := n.Children[word[i]-'a']
+				if child == nil {
+					child = &Trie{}
+					n.Children[word[i]-'a'] = child
+				}
+				n = child
+			}
+			n.IsNode = true
+		}
+
+		list := func(T *Trie, count int) []string {
+			rs := []string{}
+			if T.IsNode {
+				rs = append(rs, "")
+			}
+
+			var dfs func(*Trie, []byte)
+			dfs = func(n *Trie, vs []byte) {
+				if len(rs) >= count {
+					return
+				}
+
+				for i, c := range n.Children {
+					if c != nil {
+						dfs(c, append(vs, byte(i)+'a'))
+						if c.IsNode {
+							rs = append(rs, string(append(vs, byte(i)+'a')))
+						}
+					}
+				}
+			}
+
+			dfs(T, []byte{})
+
+			return rs
+		}
+
+		T := &Trie{}
+		for _, prd := range products {
+			insert(T, prd)
+		}
+
 		rs := [][]string{}
+
+		sbr := strings.Builder{}
+		for i := 0; i < len(searchWord); i++ {
+			sbr.WriteByte(searchWord[i])
+			prefix := sbr.String()
+
+			n := find(T, prefix)
+			if n != nil {
+				P := list(n, 3)
+				for i, postfix := range P {
+					P[i] = prefix + postfix
+				}
+				rs = append(rs, P)
+			} else {
+				rs = append(rs, []string{})
+			}
+		}
 
 		return rs
 	}
