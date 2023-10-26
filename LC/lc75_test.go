@@ -47,22 +47,19 @@ func TestTrie1268(t *testing.T) {
 
 		list := func(T *Trie, count int) []string {
 			rs := []string{}
-			if T.IsNode {
-				rs = append(rs, "")
-			}
 
 			var dfs func(*Trie, []byte)
 			dfs = func(n *Trie, vs []byte) {
 				if len(rs) >= count {
 					return
 				}
+				if n.IsNode {
+					rs = append(rs, string(vs))
+				}
 
 				for i, c := range n.Children {
 					if c != nil {
 						dfs(c, append(vs, byte(i)+'a'))
-						if c.IsNode {
-							rs = append(rs, string(append(vs, byte(i)+'a')))
-						}
 					}
 				}
 			}
