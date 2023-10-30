@@ -1,10 +1,13 @@
 package lc
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -80,4 +83,97 @@ func TestTrie(t *testing.T) {
 
 	log.Print("the? tree? -> ", T.Search("the"), T.Search("tree"))
 	log.Print("pre? trie? the? -> ", T.StartsWith("pre"), T.StartsWith("trie"), T.StartsWith("the"))
+}
+
+type eTrie struct {
+	Child  [26 + 26 + 1]*eTrie // a..zA..Z'
+	IsNode bool
+}
+
+func (o eTrie) String() string {
+	child := make([]byte, len(o.Child))
+	isNode := ':'
+	if o.IsNode {
+		isNode = '*'
+	}
+	for i, c := range o.Child {
+		if c != nil {
+			switch {
+			case 0 <= i && i < 26:
+				child[i] = 'A' + byte(i)
+			case 26 <= i && i < 52:
+				child[i] = 'a' + byte(i-26)
+			default:
+				child[i] = '\''
+			}
+		} else {
+			child[i] = '-'
+		}
+	}
+	return fmt.Sprintf("[%s %c]", child, isNode)
+}
+
+// Trie
+func TestTrieSearch(t *testing.T) {
+	bToI := func(b byte) int {
+		switch {
+		case 'A' <= b && b < 'Z':
+			return int(b) - 'A'
+		case 'a' <= b && b < 'z':
+			return 26 + int(b) - 'a'
+		}
+		return 26 + 26
+	}
+
+	trieSearch := func(n *eTrie, prefix string) *eTrie {
+		for i := 0; i < len(prefix); i++ {
+			child := n.Child[bToI(prefix[i])]
+			if child == nil {
+				return nil
+			}
+			n = child
+		}
+		return n
+	}
+
+	//rdr := strings.NewReader("testing\nprefix\ntree\nTrie\nsearch")
+	f, err := os.Open("passwords.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+	rdr := bufio.NewReader(f)
+
+	T := &eTrie{}
+
+	wc, ts := 0, time.Now()
+	scr := bufio.NewScanner(rdr)
+	for scr.Scan() {
+		wrd := scr.Text()
+
+		n := T
+		for i := 0; i < len(wrd); i++ {
+			child := n.Child[bToI(wrd[i])]
+			if child == nil {
+				child = &eTrie{}
+			}
+			n.Child[bToI(wrd[i])] = child
+			n = child
+		}
+		n.IsNode = true
+
+		wc++
+	}
+	if err := scr.Err(); err != nil {
+		t.Fatal(err)
+	}
+	log.Printf("Trie Load: #%d %v", wc, time.Since(ts))
+	log.Print(T)
+
+	log.Print("Trie Search...")
+	for _, wrd := range []string{"computer", "Trie", "pre"} {
+		ts := time.Now()
+		n := trieSearch(T, wrd)
+		log.Printf("? %-11s %5t,%5t %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
+	}
 }
