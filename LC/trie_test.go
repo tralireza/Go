@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"testing"
 	"time"
@@ -140,13 +139,15 @@ func TestTrieSearch(t *testing.T) {
 		return n
 	}
 
-	//rdr := strings.NewReader("testing\nprefix\ntree\nTrie\nsearch")
-	f, err := os.Open("passwords.txt")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
-	rdr := bufio.NewReader(f)
+	rdr := strings.NewReader("testing\nprefix\ntree\nTrie\nsearch\n1234\n-sign\n+sign")
+	/*
+		  f, err := os.Open("passwords.txt")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer f.Close()
+			rdr := bufio.NewReader(f)
+	*/
 
 	T := &eTrie{}
 
@@ -175,7 +176,7 @@ func TestTrieSearch(t *testing.T) {
 	log.Print(T)
 
 	log.Print("Trie Search...")
-	for _, wrd := range []string{"computer", "Trie", "pre", "test&"} {
+	for _, wrd := range []string{"computer", "Trie", "pre", "*sign"} {
 		ts := time.Now()
 		n := trieSearch(T, wrd)
 		log.Printf("? %-11s %5t,%5t %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
