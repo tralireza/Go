@@ -104,7 +104,7 @@ func (o eTrie) String() string {
 			case 26 <= i && i < 52:
 				child[i] = 'a' + byte(i-26)
 			default:
-				child[i] = '\''
+				child[i] = '*'
 			}
 		} else {
 			child[i] = '-'
@@ -171,7 +171,7 @@ func TestTrieSearch(t *testing.T) {
 	log.Print(T)
 
 	log.Print("Trie Search...")
-	for _, wrd := range []string{"computer", "Trie", "pre"} {
+	for _, wrd := range []string{"computer", "Trie", "pre", "test&"} {
 		ts := time.Now()
 		n := trieSearch(T, wrd)
 		log.Printf("? %-11s %5t,%5t %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
