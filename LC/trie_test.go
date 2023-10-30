@@ -86,7 +86,7 @@ func TestTrie(t *testing.T) {
 }
 
 type eTrie struct {
-	Child  [26 + 26 + 1]*eTrie // a..zA..Z'
+	Child  [26 + 26 + 10 + 1]*eTrie // A..Za..z0..9*'
 	IsNode bool
 }
 
@@ -103,6 +103,8 @@ func (o eTrie) String() string {
 				child[i] = 'A' + byte(i)
 			case 26 <= i && i < 52:
 				child[i] = 'a' + byte(i-26)
+			case 52 <= i && i < 62:
+				child[i] = '0' + byte(i-52)
 			default:
 				child[i] = '*'
 			}
@@ -121,8 +123,10 @@ func TestTrieSearch(t *testing.T) {
 			return int(b) - 'A'
 		case 'a' <= b && b < 'z':
 			return 26 + int(b) - 'a'
+		case '0' <= b && b < '9':
+			return 52 + int(b) - '0'
 		}
-		return 26 + 26
+		return 62
 	}
 
 	trieSearch := func(n *eTrie, prefix string) *eTrie {
