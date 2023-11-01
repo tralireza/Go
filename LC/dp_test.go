@@ -435,3 +435,13 @@ func Test1318(t *testing.T) {
 	log.Print("1 ?= ", minFlips(4, 2, 7))
 	log.Print("15 ?= ", minFlips(1000_000_000, 2, 7))
 }
+
+// 435m Non-overlappinng Intervals
+func Test435(t *testing.T) {
+	eraseOverlapIntervals := func(intervals [][]int) int {
+
+		return 0
+	}
+
+	log.Print("1 ?= ", eraseOverlapIntervals([][]int{{1, 2}, {2, 3}, {3, 4}, {1, 3}}))
+}
