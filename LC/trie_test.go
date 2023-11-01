@@ -91,7 +91,7 @@ type eTrie struct {
 
 func (o eTrie) String() string {
 	child := make([]byte, len(o.Child))
-	isNode := ':'
+	isNode := '-'
 	if o.IsNode {
 		isNode = '*'
 	}
@@ -179,6 +179,6 @@ func TestTrieSearch(t *testing.T) {
 	for _, wrd := range []string{"computer", "Trie", "pre", "*sign"} {
 		ts := time.Now()
 		n := trieSearch(T, wrd)
-		log.Printf("? %-11s %5t,%5t %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
+		log.Printf("? %-11s [%5t %5t]  %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
 	}
 }
