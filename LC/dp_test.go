@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -439,9 +440,19 @@ func Test1318(t *testing.T) {
 // 435m Non-overlappinng Intervals
 func Test435(t *testing.T) {
 	eraseOverlapIntervals := func(intervals [][]int) int {
+		slices.SortFunc(intervals,
+			func(a, b []int) int {
+				if a[0] == b[0] {
+					return a[1] - b[1]
+				}
+				return a[0] - b[0]
+			})
+		log.Print(intervals)
 
-		return 0
+		x := 0
+		return x
 	}
 
 	log.Print("1 ?= ", eraseOverlapIntervals([][]int{{1, 2}, {2, 3}, {3, 4}, {1, 3}}))
+	log.Print("7 ?= ", eraseOverlapIntervals([][]int{{-52, 31}, {-73, -26}, {82, 97}, {-65, -11}, {-62, -49}, {95, 99}, {58, 95}, {-31, 49}, {66, 98}, {-63, 2}, {30, 47}, {-40, -26}}))
 }
