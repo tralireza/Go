@@ -440,19 +440,24 @@ func Test1318(t *testing.T) {
 // 435m Non-overlappinng Intervals
 func Test435(t *testing.T) {
 	eraseOverlapIntervals := func(intervals [][]int) int {
-		slices.SortFunc(intervals,
-			func(a, b []int) int {
-				if a[0] == b[0] {
-					return a[1] - b[1]
-				}
-				return a[0] - b[0]
-			})
+		slices.SortFunc(intervals, func(a, b []int) int { return a[1] - b[1] })
 		log.Print(intervals)
 
 		x := 0
+		h := 50_000 + 1 // -5*10^4 <= v(i) <= 5*10^4
+		for i := len(intervals) - 1; i >= 0; i-- {
+			cur := intervals[i]
+			if h < cur[1] {
+				x++
+				h = max(cur[0], h)
+			} else {
+				h = cur[0]
+			}
+		}
 		return x
 	}
 
 	log.Print("1 ?= ", eraseOverlapIntervals([][]int{{1, 2}, {2, 3}, {3, 4}, {1, 3}}))
+	log.Print("2 ?= ", eraseOverlapIntervals([][]int{{1, 100}, {11, 22}, {1, 11}, {2, 12}}))
 	log.Print("7 ?= ", eraseOverlapIntervals([][]int{{-52, 31}, {-73, -26}, {82, 97}, {-65, -11}, {-62, -49}, {95, 99}, {58, 95}, {-31, 49}, {66, 98}, {-63, 2}, {30, 47}, {-40, -26}}))
 }
