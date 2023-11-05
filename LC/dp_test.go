@@ -458,7 +458,7 @@ func Test435(t *testing.T) {
 		return x
 	}
 
-	e2 := func(intervals [][]int) int {
+	f2 := func(intervals [][]int) int {
 		slices.SortFunc(intervals, func(a, b []int) int { return a[1] - b[1] })
 
 		x := 0
@@ -475,7 +475,21 @@ func Test435(t *testing.T) {
 		return x
 	}
 
-	for _, f := range []func([][]int) int{eraseOverlapIntervals, e2} {
+	intervalScheduling := func(intervals [][]int) int {
+		slices.SortFunc(intervals, func(a, b []int) int { return a[1] - b[1] })
+		mx := 0 // Maximum number of non-overlapping intervals
+		h := -50_001
+		for i := 0; i < len(intervals); i++ {
+			cur := intervals[i]
+			if h <= cur[0] {
+				mx++
+				h = cur[1]
+			}
+		}
+		return len(intervals) - mx
+	}
+
+	for _, f := range []func([][]int) int{eraseOverlapIntervals, f2, intervalScheduling} {
 		log.Print("+ ", runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name())
 		log.Print("1 ?= ", f([][]int{{1, 2}, {2, 3}, {3, 4}, {1, 3}}))
 		log.Print("2 ?= ", f([][]int{{1, 100}, {11, 22}, {1, 11}, {2, 12}}))
