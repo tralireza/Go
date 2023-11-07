@@ -520,5 +520,6 @@ func Test496(t *testing.T) {
 		return nums1
 	}
 
-	log.Print(" ?= ", nextGreaterElement([]int{1, 3, 5, 2}, []int{6, 5, 4, 3, 9, 2, 1, 7}))
+	log.Print("[7 9 9 7] ?= ", nextGreaterElement([]int{1, 3, 5, 2}, []int{6, 5, 4, 3, 9, 2, 1, 7}))
+	log.Print("[7 7 7 -1] ?= ", nextGreaterElement([]int{1, 3, 5, 7}, []int{6, 5, 4, 3, 1, 7}))
 }
