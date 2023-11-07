@@ -496,3 +496,29 @@ func Test435(t *testing.T) {
 		log.Print("7 ?= ", f([][]int{{-52, 31}, {-73, -26}, {82, 97}, {-65, -11}, {-62, -49}, {95, 99}, {58, 95}, {-31, 49}, {66, 98}, {-63, 2}, {30, 47}, {-40, -26}}))
 	}
 }
+
+// 496 Next Greater Element 1 Stack/Monotonic Stack
+func Test496(t *testing.T) {
+	nextGreaterElement := func(nums1, nums2 []int) []int {
+		m := map[int]int{}
+
+		S := []int{}
+		for _, n := range nums2 {
+			for len(S) > 0 && n > S[len(S)-1] {
+				m[S[len(S)-1]] = n
+				S = S[:len(S)-1]
+			}
+			S = append(S, n)
+		}
+
+		for i, n := range nums1 {
+			nums1[i] = -1
+			if v, ok := m[n]; ok {
+				nums1[i] = v
+			}
+		}
+		return nums1
+	}
+
+	log.Print(" ?= ", nextGreaterElement([]int{1, 3, 5, 2}, []int{6, 5, 4, 3, 9, 2, 1, 7}))
+}
