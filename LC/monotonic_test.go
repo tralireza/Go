@@ -29,12 +29,12 @@ func (o *StockSpanner) Next(price int) int {
 	return span
 }
 
-// [100 80 60 70 60 75 85] -> [1 1 1 2 1 4 6]
+// [100 80 60 70 60 75 85 60 60] -> [1 1 1 2 1 4 6 1 2]
 func Test901(t *testing.T) {
 	o := NewStockSpanner()
 	span := []int{}
 	price := []int{}
-	for _, p := range []int{100, 80, 60, 70, 60, 75, 85} {
+	for _, p := range []int{100, 80, 60, 70, 60, 75, 85, 60, 60} {
 		price = append(price, p)
 		span = append(span, o.Next(p))
 	}
