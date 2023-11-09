@@ -38,5 +38,6 @@ func Test901(t *testing.T) {
 		price = append(price, p)
 		span = append(span, o.Next(p))
 	}
+	log.Print(o.p, o.s)
 	log.Print(price, " -> ", span)
 }
