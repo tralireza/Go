@@ -11,16 +11,21 @@ func init() {
 
 // 901m Online Stock Span
 type StockSpanner struct {
-	S []int
+	p, s []int
 }
 
-func NewStockSpanner() StockSpanner { return StockSpanner{S: []int{}} }
+func NewStockSpanner() StockSpanner { return StockSpanner{[]int{}, []int{}} }
 func (o *StockSpanner) Next(price int) int {
-	o.S = append(o.S, price)
-	span := 0
-	for i := len(o.S) - 1; i >= 0 && price >= o.S[i]; i-- {
-		span++
+	span := 1
+	for len(o.p) > 0 && price >= o.p[len(o.p)-1] {
+		span += o.s[len(o.s)-1]
+		o.s = o.s[:len(o.s)-1] // Pop
+		o.p = o.p[:len(o.p)-1] // Pop
 	}
+
+	o.s = append(o.s, span)
+	o.p = append(o.p, price)
+
 	return span
 }
 
