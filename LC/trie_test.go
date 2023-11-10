@@ -186,7 +186,45 @@ func TestTrieSearch(t *testing.T) {
 // 79m Word Search
 func Test79(t *testing.T) {
 	exist := func(board [][]byte, word string) bool {
+		type P struct{ i, j int }
 
+		m, n := len(board), len(board[0])
+		pValid := func(p P) bool { return p.i >= 0 && p.j >= 0 && m > p.i && n > p.j }
+
+		var dfs func(P, string, [][]bool) bool
+		dfs = func(p P, suffix string, V [][]bool) bool {
+			if suffix == "" {
+				return true
+			}
+
+			V[p.i][p.j] = true
+			for _, dir := range []P{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
+				q := P{p.i + dir.i, p.j + dir.j}
+				if pValid(q) && !V[q.i][q.j] && suffix[0] == board[q.i][q.j] {
+					if dfs(q, suffix[1:], V) {
+						return true
+					}
+				}
+			}
+
+			return false
+		}
+
+		for i := 0; i < m; i++ {
+			for j := 0; j < n; j++ {
+				if board[i][j] != word[0] {
+					continue
+				}
+
+				V := make([][]bool, m)
+				for i := range V {
+					V[i] = make([]bool, n)
+				}
+				if dfs(P{i, j}, word[1:], V) {
+					return true
+				}
+			}
+		}
 		return false
 	}
 
