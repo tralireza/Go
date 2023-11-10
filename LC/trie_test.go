@@ -182,3 +182,15 @@ func TestTrieSearch(t *testing.T) {
 		log.Printf("? %-11s [%5t %5t]  %v", wrd, n != nil && n.IsNode, n != nil, time.Since(ts))
 	}
 }
+
+// 79m Word Search
+func Test79(t *testing.T) {
+	exist := func(board [][]byte, word string) bool {
+
+		return false
+	}
+
+	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCCED"))
+	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "SEE"))
+	log.Print("false ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCB"))
+}
