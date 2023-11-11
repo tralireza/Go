@@ -228,7 +228,16 @@ func Test79(t *testing.T) {
 		return false
 	}
 
-	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCCED"))
-	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "SEE"))
-	log.Print("false ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCB"))
+	board := [][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}
+	for i := range board {
+		for j := range board[i] {
+			fmt.Printf("| %c ", board[i][j])
+		}
+		fmt.Println("|")
+	}
+
+	log.Print("true ?= ", exist(board, "ABCCED"))
+	log.Print("true ?= ", exist(board, "SEE"))
+	log.Print("false ?= ", exist(board, "ABCB"))
+	log.Print("true ?= ", exist(board, "FBCCS"))
 }
