@@ -198,8 +198,9 @@ func Test79(t *testing.T) {
 			}
 
 			Vis[p.i][p.j] = true
-			for _, dir := range []P{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
-				q := P{p.i + dir.i, p.j + dir.j}
+			dir := []int{0, 1, 0, -1, 0}
+			for i := range dir[0:4] {
+				q := P{p.i + dir[i], p.j + dir[i+1]}
 				if pValid(q) && !Vis[q.i][q.j] && suffix[0] == board[q.i][q.j] {
 					if dfs(q, suffix[1:], Vis) {
 						return true
