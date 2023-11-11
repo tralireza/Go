@@ -193,13 +193,13 @@ func Test79(t *testing.T) {
 
 		var dfs func(P, string, [][]bool) bool
 		dfs = func(p P, suffix string, Vis [][]bool) bool {
-			if suffix == "" {
+			if len(suffix) == 0 {
 				return true
 			}
 
 			Vis[p.i][p.j] = true
 			dir := []int{0, 1, 0, -1, 0}
-			for i := range dir[0:4] {
+			for i := range dir[:4] {
 				q := P{p.i + dir[i], p.j + dir[i+1]}
 				if pValid(q) && !Vis[q.i][q.j] && suffix[0] == board[q.i][q.j] {
 					if dfs(q, suffix[1:], Vis) {
@@ -207,6 +207,7 @@ func Test79(t *testing.T) {
 					}
 				}
 			}
+			Vis[p.i][p.j] = false
 
 			return false
 		}
@@ -240,5 +241,6 @@ func Test79(t *testing.T) {
 	log.Print("true ?= ", exist(board, "ABCCED"))
 	log.Print("true ?= ", exist(board, "SEE"))
 	log.Print("false ?= ", exist(board, "ABCB"))
-	log.Print("true ?= ", exist(board, "FBCCS"))
+	log.Print("true ?= ", exist(board, "ABCCFSADEESE"))
+	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'E', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCEFSADEESE"))
 }
