@@ -192,16 +192,16 @@ func Test79(t *testing.T) {
 		pValid := func(p P) bool { return p.i >= 0 && p.j >= 0 && m > p.i && n > p.j }
 
 		var dfs func(P, string, [][]bool) bool
-		dfs = func(p P, suffix string, V [][]bool) bool {
+		dfs = func(p P, suffix string, Vis [][]bool) bool {
 			if suffix == "" {
 				return true
 			}
 
-			V[p.i][p.j] = true
+			Vis[p.i][p.j] = true
 			for _, dir := range []P{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
 				q := P{p.i + dir.i, p.j + dir.j}
-				if pValid(q) && !V[q.i][q.j] && suffix[0] == board[q.i][q.j] {
-					if dfs(q, suffix[1:], V) {
+				if pValid(q) && !Vis[q.i][q.j] && suffix[0] == board[q.i][q.j] {
+					if dfs(q, suffix[1:], Vis) {
 						return true
 					}
 				}
@@ -216,11 +216,11 @@ func Test79(t *testing.T) {
 					continue
 				}
 
-				V := make([][]bool, m)
-				for i := range V {
-					V[i] = make([]bool, n)
+				Vis := make([][]bool, m)
+				for i := range Vis {
+					Vis[i] = make([]bool, n)
 				}
-				if dfs(P{i, j}, word[1:], V) {
+				if dfs(P{i, j}, word[1:], Vis) {
 					return true
 				}
 			}
