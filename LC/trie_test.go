@@ -194,11 +194,14 @@ func Test79(t *testing.T) {
 		var dfs func(P, string) bool
 		dfs = func(p P, suffix string) bool {
 			if len(suffix) == 0 {
+				log.Printf("+ %q", board)
 				return true
 			}
 
 			b := board[p.i][p.j]
 			board[p.i][p.j] = '*'
+
+			log.Printf("> %s %q", suffix, board)
 
 			dir := []int{0, 1, 0, -1, 0}
 			for i := range dir[:4] {
@@ -212,12 +215,13 @@ func Test79(t *testing.T) {
 
 			board[p.i][p.j] = b
 
+			log.Printf("- %q", board)
 			return false
 		}
 
 		for i := 0; i < m; i++ {
 			for j := 0; j < n; j++ {
-				if board[i][j] == word[0] {
+				if board[i][j] != word[0] {
 					continue
 				}
 				if dfs(P{i, j}, word[1:]) {
