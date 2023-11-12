@@ -191,38 +191,36 @@ func Test79(t *testing.T) {
 		m, n := len(board), len(board[0])
 		pValid := func(p P) bool { return p.i >= 0 && p.j >= 0 && m > p.i && n > p.j }
 
-		var dfs func(P, string, [][]bool) bool
-		dfs = func(p P, suffix string, Vis [][]bool) bool {
+		var dfs func(P, string) bool
+		dfs = func(p P, suffix string) bool {
 			if len(suffix) == 0 {
 				return true
 			}
 
-			Vis[p.i][p.j] = true
+			b := board[p.i][p.j]
+			board[p.i][p.j] = '*'
+
 			dir := []int{0, 1, 0, -1, 0}
 			for i := range dir[:4] {
 				q := P{p.i + dir[i], p.j + dir[i+1]}
-				if pValid(q) && !Vis[q.i][q.j] && suffix[0] == board[q.i][q.j] {
-					if dfs(q, suffix[1:], Vis) {
+				if pValid(q) && suffix[0] == board[q.i][q.j] {
+					if dfs(q, suffix[1:]) {
 						return true
 					}
 				}
 			}
-			Vis[p.i][p.j] = false
+
+			board[p.i][p.j] = b
 
 			return false
 		}
 
 		for i := 0; i < m; i++ {
 			for j := 0; j < n; j++ {
-				if board[i][j] != word[0] {
+				if board[i][j] == word[0] {
 					continue
 				}
-
-				Vis := make([][]bool, m)
-				for i := range Vis {
-					Vis[i] = make([]bool, n)
-				}
-				if dfs(P{i, j}, word[1:], Vis) {
+				if dfs(P{i, j}, word[1:]) {
 					return true
 				}
 			}
@@ -230,7 +228,9 @@ func Test79(t *testing.T) {
 		return false
 	}
 
-	board := [][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}
+	boardSet := func() [][]byte { return [][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}} }
+
+	board := boardSet()
 	for i := range board {
 		for j := range board[i] {
 			fmt.Printf("| %c ", board[i][j])
@@ -238,9 +238,9 @@ func Test79(t *testing.T) {
 		fmt.Println("|")
 	}
 
-	log.Print("true ?= ", exist(board, "ABCCED"))
-	log.Print("true ?= ", exist(board, "SEE"))
-	log.Print("false ?= ", exist(board, "ABCB"))
-	log.Print("true ?= ", exist(board, "ABCCFSADEESE"))
+	log.Print("true ?= ", exist(boardSet(), "ABCCED"))
+	log.Print("true ?= ", exist(boardSet(), "SEE"))
+	log.Print("false ?= ", exist(boardSet(), "ABCB"))
+	log.Print("true ?= ", exist(boardSet(), "ABCCFSADEESE"))
 	log.Print("true ?= ", exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'E', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCEFSADEESE"))
 }
