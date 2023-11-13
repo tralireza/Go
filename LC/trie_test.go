@@ -27,7 +27,7 @@ func (o Trie) String() string {
 		}
 		sb.WriteByte(c)
 	}
-	c := ':'
+	c := '-'
 	if o.IsNode {
 		c = '*'
 	}
@@ -59,6 +59,47 @@ func (o *Trie) find(word string) *Trie {
 		}
 	}
 	return n
+}
+
+// Find a word in Trie with wildcards: word or w.rd/w*rd
+func (o *Trie) findWildcard(word string, wildcard byte) *Trie {
+	var dfs func(*Trie, int) *Trie
+	dfs = func(n *Trie, idx int) *Trie {
+		if idx == len(word) {
+			return n
+		}
+
+		if word[idx] == wildcard {
+			for _, child := range n.Children {
+				if child != nil {
+					if n := dfs(child, idx+1); n != nil {
+						return n
+					}
+				}
+			}
+		} else {
+			child := n.Children[word[idx]-'a']
+			if child == nil {
+				return nil
+			}
+			return dfs(child, idx+1)
+		}
+
+		return nil
+	}
+
+	return dfs(o, 0)
+}
+
+func TestWildcard(t *testing.T) {
+	T := &Trie{}
+	T.Insert("app")
+	T.Insert("apple")
+	T.Insert("approve")
+	T.Insert("application")
+
+	log.Print(T.findWildcard("app", '.'))
+	log.Print(T.findWildcard("a.p.e", '.'))
 }
 
 func (o *Trie) Search(word string) bool {
