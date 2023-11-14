@@ -48,6 +48,25 @@ func (o *Trie) Insert(word string) {
 	n.IsNode = true
 }
 
+func TestInsert(t *testing.T) {
+	T := NewTrie()
+	for _, w := range []string{"a", "b", "c", "ab", "ac", "bc"} {
+		T.Insert(w)
+	}
+
+	var walk func(*Trie, string)
+	walk = func(n *Trie, w string) {
+		log.Print(n, " ", w)
+
+		for i, child := range n.Children {
+			if child != nil {
+				walk(child, w+string(byte(i)+'a'))
+			}
+		}
+	}
+	walk(T, "")
+}
+
 func (o *Trie) find(word string) *Trie {
 	n := o
 	for i := 0; i < len(word); i++ {
