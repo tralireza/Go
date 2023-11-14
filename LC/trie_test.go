@@ -48,23 +48,28 @@ func (o *Trie) Insert(word string) {
 	n.IsNode = true
 }
 
-func TestInsert(t *testing.T) {
-	T := NewTrie()
-	for _, w := range []string{"a", "b", "c", "ab", "ac", "bc"} {
-		T.Insert(w)
-	}
-
+// DFS Walk
+func (o *Trie) Walk() {
 	var walk func(*Trie, string)
 	walk = func(n *Trie, w string) {
 		log.Print(n, " ", w)
-
 		for i, child := range n.Children {
 			if child != nil {
 				walk(child, w+string(byte(i)+'a'))
 			}
 		}
 	}
-	walk(T, "")
+
+	walk(o, "")
+}
+
+func TestInsert(t *testing.T) {
+	T := NewTrie()
+	for _, w := range []string{"a", "b", "c", "ab", "ac", "bcz", "abc", "abcdefghi", "z"} {
+		T.Insert(w)
+	}
+
+	T.Walk()
 }
 
 func (o *Trie) find(word string) *Trie {
