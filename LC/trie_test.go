@@ -53,6 +53,7 @@ func (o *Trie) Walk() {
 	var walk func(*Trie, string)
 	walk = func(n *Trie, w string) {
 		log.Print(n, " ", w)
+
 		for i, child := range n.Children {
 			if child != nil {
 				walk(child, w+string(byte(i)+'a'))
@@ -85,6 +86,23 @@ func (o *Trie) find(word string) *Trie {
 	return n
 }
 
+func TestWildcard(t *testing.T) {
+	T := &Trie{}
+	T.Insert("a")
+	T.Insert("app")
+	T.Insert("apple")
+	T.Insert("approve")
+	T.Insert("application")
+
+	T.Walk()
+
+	log.Print(T.findWildcard(".", '.'), " ? .")
+	log.Print(T.findWildcard("..", '.'), " ? ..")
+	log.Print(T.findWildcard("app", '.'), " ? app")
+	log.Print(T.findWildcard("a.p.e", '.'), " ? a.p.e")
+	log.Print(T.findWildcard("*******", '*'), " ? *******")
+}
+
 // Find a word in Trie with wildcards: word or w.rd/w*rd
 func (o *Trie) findWildcard(word string, wildcard byte) *Trie {
 	var dfs func(*Trie, int) *Trie
@@ -96,7 +114,7 @@ func (o *Trie) findWildcard(word string, wildcard byte) *Trie {
 		if word[idx] == wildcard {
 			for _, child := range n.Children {
 				if child != nil {
-					if n := dfs(child, idx+1); n != nil {
+					if n := dfs(child, idx+1); n != nil && n.IsNode {
 						return n
 					}
 				}
@@ -113,17 +131,6 @@ func (o *Trie) findWildcard(word string, wildcard byte) *Trie {
 	}
 
 	return dfs(o, 0)
-}
-
-func TestWildcard(t *testing.T) {
-	T := &Trie{}
-	T.Insert("app")
-	T.Insert("apple")
-	T.Insert("approve")
-	T.Insert("application")
-
-	log.Print(T.findWildcard("app", '.'))
-	log.Print(T.findWildcard("a.p.e", '.'))
 }
 
 func (o *Trie) Search(word string) bool {
