@@ -371,3 +371,23 @@ func Test143(t *testing.T) {
 	fmt.Print("[0 5 1 4 8 6 2 3 7] -> ")
 	draw(r)
 }
+
+// 287m Find Duplicate Number
+func Test287(t *testing.T) {
+	findDuplicate := func(nums []int) int {
+		i, d := 0, 1
+		for nums[i] != nums[d] {
+			d += 2
+			i += 1
+			if d >= len(nums) {
+				d %= len(nums)
+			}
+			if i == len(nums) {
+				i = 0
+			}
+		}
+		return nums[i]
+	}
+
+	log.Print("2 ?= ", findDuplicate([]int{1, 3, 4, 2, 2}))
+}
