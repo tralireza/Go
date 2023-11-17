@@ -376,20 +376,19 @@ func Test143(t *testing.T) {
 func Test287(t *testing.T) {
 	// BinSearch
 	findDuplicate := func(nums []int) int {
-		countLess := func(v int) bool {
+		l, r := 1, len(nums)-1
+
+		for l < r {
+			m := l + (r-l)>>1
+
 			f := 0
 			for _, n := range nums {
-				if n <= v {
+				if n <= m {
 					f++
 				}
 			}
-			return f > v
-		}
 
-		l, r := 1, len(nums)-1
-		for l < r {
-			m := l + (r-l)>>1
-			if countLess(m) {
+			if f > m {
 				r = m
 			} else {
 				l = m + 1
