@@ -399,29 +399,8 @@ func Test287(t *testing.T) {
 		return l
 	}
 
-	// Two Pointers
-	f1 := func(nums []int) int {
-		i, d := 0, 1
-		for nums[i] != nums[d] {
-			d += 2
-			i += 1
-
-			if i == d {
-				d += 1
-			}
-
-			if d >= len(nums) {
-				d %= len(nums)
-			}
-			if i == len(nums) {
-				i = 0
-			}
-		}
-		return nums[i]
-	}
-
 	log.Print("2 ?= ", findDuplicate([]int{1, 3, 4, 2, 2}))
 	log.Print("1 ?= ", findDuplicate([]int{1, 3, 4, 2, 1}))
 	log.Print("4 ?= ", findDuplicate([]int{4, 3, 1, 4, 2}))
-	log.Print("1 ?= ", f1([]int{1, 1}))
+	log.Print("1 ?= ", findDuplicate([]int{1, 1}))
 }
