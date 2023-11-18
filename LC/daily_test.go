@@ -404,3 +404,40 @@ func Test287(t *testing.T) {
 	log.Print("4 ?= ", findDuplicate([]int{4, 3, 1, 4, 2}))
 	log.Print("1 ?= ", findDuplicate([]int{1, 1}))
 }
+
+// 637 Average of Levels in Binary Tree
+func Test637(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	averageOfLevels := func(root *TreeNode) []float64 {
+		rst := []float64{}
+
+		queue := []*TreeNode{root}
+		for len(queue) > 0 {
+			l := len(queue)
+			var v float64
+			for range l {
+				n := queue[0]
+				queue = queue[1:]
+				v += float64(n.Val)
+
+				if n.Left != nil {
+					queue = append(queue, n.Left)
+				}
+				if n.Right != nil {
+					queue = append(queue, n.Right)
+				}
+			}
+
+			rst = append(rst, v/float64(l))
+		}
+
+		return rst
+	}
+
+	type T = TreeNode
+	log.Print(averageOfLevels(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+}
