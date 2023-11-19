@@ -405,6 +405,30 @@ func Test287(t *testing.T) {
 	log.Print("1 ?= ", findDuplicate([]int{1, 1}))
 }
 
+// 442m Find all Duplicates in an Array
+func Test442(t *testing.T) {
+	// all elements between 1..n with duplicates
+	// O(n) time & O(1) space
+	findDuplicates := func(nums []int) []int {
+		dups := []int{}
+
+		for _, n := range nums {
+			if n < 0 {
+				n = -n
+			}
+			if nums[n-1] < 0 {
+				dups = append(dups, n)
+			}
+
+			nums[n-1] = -nums[n-1]
+		}
+
+		return dups
+	}
+
+	log.Print("[2 3] ?= ", findDuplicates([]int{4, 3, 2, 7, 8, 2, 3, 1}))
+}
+
 // 637 Average of Levels in Binary Tree
 func Test637(t *testing.T) {
 	type TreeNode struct {
