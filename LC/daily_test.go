@@ -405,13 +405,29 @@ func Test287(t *testing.T) {
 	log.Print("1 ?= ", findDuplicate([]int{1, 1}))
 }
 
+// 172m Factorial Leading Zeros
+func Test172(t *testing.T) {
+	trailingZeros := func(n int) int {
+		z := 0
+		for n > 0 {
+			n /= 5
+			z += n
+		}
+		return z
+	}
+
+	log.Print("0 ?= ", trailingZeros(3))
+	log.Print("1 ?= ", trailingZeros(7))
+	log.Print("2 ?= ", trailingZeros(12)) // 12! = 479001600
+	log.Print(" ?= ", trailingZeros(120))
+}
+
 // 442m Find all Duplicates in an Array
 func Test442(t *testing.T) {
 	// all elements between 1..n with duplicates
 	// O(n) time & O(1) space
 	findDuplicates := func(nums []int) []int {
 		dups := []int{}
-
 		for _, n := range nums {
 			if n < 0 {
 				n = -n
@@ -422,7 +438,6 @@ func Test442(t *testing.T) {
 
 			nums[n-1] = -nums[n-1]
 		}
-
 		return dups
 	}
 
