@@ -405,6 +405,27 @@ func Test287(t *testing.T) {
 	log.Print("1 ?= ", findDuplicate([]int{1, 1}))
 }
 
+// 80m Remove Duplicates from Sorted Array II
+func Test80(t *testing.T) {
+	// at most 2 instances of any duplicates
+	removeDuplicates := func(nums []int) int {
+		l := 2
+		for _, n := range nums[2:] {
+			if n > nums[l-1] {
+				nums[l] = n
+				l++
+			} else if n > nums[l-2] {
+				nums[l] = n
+				l++
+			}
+		}
+		return l
+	}
+
+	sarr := []int{1, 1, 1, 2, 2, 3, 4, 4, 4, 4, 5, 6}
+	log.Print("[1 1 2 2 3 4 4 5 6] ?= ", sarr[:removeDuplicates(sarr)])
+}
+
 // 172m Factorial Leading Zeroes
 func Test172(t *testing.T) {
 	trailingZeroes := func(n int) int {
