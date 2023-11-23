@@ -44,15 +44,18 @@ func Test1091(t *testing.T) {
 		return -1
 	}
 
-	gridSet := func() [][]int { return [][]int{{0, 0, 0}, {1, 1, 0}, {1, 1, 0}} }
-
+	gridSet := func() [][]int { return [][]int{{0, 0, 0, 0, 0}, {1, 1, 0, 1, 1}, {1, 1, 0, 0, 1}, {0, 0, 1, 1, 0}} }
 	grid := gridSet()
-	for i := range grid {
-		for _, v := range grid[i] {
-			fmt.Printf("| %d ", v)
-		}
-		fmt.Println("|")
-	}
 
-	log.Print("4 ?= ", shortestPathBinaryMatrix(gridSet()))
+	draw := func() {
+		for i := range grid {
+			for _, v := range grid[i] {
+				fmt.Printf("| %d ", v)
+			}
+			fmt.Println("|")
+		}
+	}
+	draw()
+	log.Print("5 ?= ", shortestPathBinaryMatrix(grid))
+	draw()
 }
