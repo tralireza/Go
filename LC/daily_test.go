@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"reflect"
 	"runtime"
@@ -501,6 +502,39 @@ func Test637(t *testing.T) {
 
 	type T = TreeNode
 	log.Print(averageOfLevels(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+}
+
+// 41h First Missing Positive
+func Test41(t *testing.T) {
+	firstMissingPositive := func(nums []int) int {
+		posCount := 0
+		for i, n := range nums {
+			if n <= 0 {
+				nums[i] = math.MaxInt
+			} else {
+				posCount++
+			}
+		}
+
+		for _, n := range nums {
+			if n < 0 {
+				n = -n
+			}
+			if n <= len(nums) && nums[n-1] > 0 {
+				nums[n-1] = -nums[n-1]
+			}
+		}
+
+		for i, n := range nums {
+			if n > 0 {
+				return i + 1
+			}
+		}
+		return posCount + 1
+	}
+
+	log.Print("2 ?= ", firstMissingPositive([]int{-1, -3, -7, -8, -9, 1}))
+	log.Print("1 ?= ", firstMissingPositive([]int{-6, 4, -6, 4, 3, 3, -6, 4, 0, 9, 7}))
 }
 
 // Moving all Non-Positive Numbers to Right
