@@ -504,6 +504,28 @@ func Test637(t *testing.T) {
 	log.Print(averageOfLevels(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
 }
 
+// 74m Search in a 2D Matrix
+func Test74(t *testing.T) {
+	searchMatrix := func(matrix [][]int, target int) bool {
+		p, q := len(matrix), len(matrix[0])
+		l, r := 0, p*q
+		for l < r {
+			m := l + (r-l)>>1
+			if matrix[m/q][m%q] >= target {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return l < p*q && matrix[l/q][l%q] == target
+	}
+
+	log.Print("true ?= ", searchMatrix([][]int{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 11))
+	log.Print("false ?= ", searchMatrix([][]int{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 0))
+	log.Print("false ?= ", searchMatrix([][]int{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 13))
+	log.Print("false ?= ", searchMatrix([][]int{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 61))
+}
+
 // 41h First Missing Positive
 func Test41(t *testing.T) {
 	firstMissingPositive := func(nums []int) int {
