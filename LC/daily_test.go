@@ -566,8 +566,8 @@ func TestCycleSort(t *testing.T) {
 		i := 0
 		for i < len(nums) {
 			n := nums[i]
-			if 0 < n && n <= len(nums) && nums[n-1] != nums[i] {
-				nums[n-1], nums[i] = nums[i], nums[n-1]
+			if 0 < n && n <= len(nums) && nums[n-1] != n {
+				nums[n-1], nums[i] = n, nums[n-1]
 			} else {
 				i++
 			}
