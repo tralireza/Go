@@ -559,6 +559,27 @@ func Test41(t *testing.T) {
 	log.Print("1 ?= ", firstMissingPositive([]int{-6, 4, -6, 4, 3, 3, -6, 4, 0, 9, 7}))
 }
 
+// Cycle Sort
+func TestCycleSort(t *testing.T) {
+	// Sort [1..n] in-place ignoring zeroes, negatives && duplicates
+	cycleSort := func(nums []int) {
+		i := 0
+		for i < len(nums) {
+			n := nums[i]
+			if 0 < n && n <= len(nums) && nums[n-1] != nums[i] {
+				nums[n-1], nums[i] = nums[i], nums[n-1]
+			} else {
+				i++
+			}
+		}
+	}
+
+	nums := []int{1, 3, 4, 9, 0, 9, -1, 4, 7, -3, 17, 2, 0, 10}
+	log.Print(nums)
+	cycleSort(nums)
+	log.Print(nums)
+}
+
 // Moving all Non-Positive Numbers to Right
 func TestAdjust(t *testing.T) {
 	adjust := func(nums []int) int {
