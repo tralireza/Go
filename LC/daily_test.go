@@ -626,3 +626,14 @@ func TestAdjust(t *testing.T) {
 		log.Print("---")
 	}
 }
+
+// 713m Subarray Product Less Than K
+func Test713(t *testing.T) {
+	numSubarrayProductLessThanK := func(nums []int, k int) int {
+		count := 0
+
+		return count
+	}
+
+	log.Print("8 ?= ", numSubarrayProductLessThanK([]int{10, 5, 2, 6}, 100))
+}
