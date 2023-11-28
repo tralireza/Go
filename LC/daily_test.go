@@ -632,6 +632,19 @@ func Test713(t *testing.T) {
 	numSubarrayProductLessThanK := func(nums []int, k int) int {
 		count := 0
 
+		l := 0
+		p := 1
+		for r, n := range nums {
+			p *= n
+
+			for p >= k {
+				p /= nums[l]
+				l++
+			}
+
+			count += r - l + 1
+		}
+
 		return count
 	}
 
