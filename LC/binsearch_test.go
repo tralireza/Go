@@ -34,9 +34,36 @@ func TestBSLeftMost(t *testing.T) {
 // 33m Search in Rotated Sorted Array
 func Test33(t *testing.T) {
 	search := func(nums []int, target int) int {
+		l, r := 0, len(nums)-1
+		for l < r {
+			m := l + (r-l)>>1
 
-		return 0
+			log.Printf("%d   %d>%d | %d>%d | %d>%d ", target, l, nums[l], m, nums[m], r, nums[r])
+
+			if nums[l] <= nums[m] {
+				if nums[l] <= target && target <= nums[m] {
+					r = m
+				} else {
+					l = m + 1
+				}
+
+			} else {
+				if nums[m] <= target && target <= nums[r] {
+					l = m
+				} else {
+					r = m - 1
+				}
+			}
+
+		}
+
+		if l < len(nums) && nums[l] == target {
+			return l
+		}
+		return -1
 	}
 
 	log.Print("4 ?= ", search([]int{4, 5, 6, 7, 0, 1, 2}, 0))
+	log.Print("-1 ?= ", search([]int{4, 5, 6, 7, 0, 1, 2}, 3))
+	log.Print("-1 ?= ", search([]int{5, 5, 6, 7, 1, 1, 2}, 0))
 }
