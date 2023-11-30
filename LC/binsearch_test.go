@@ -71,8 +71,26 @@ func Test33(t *testing.T) {
 // 153m Find Minimum in Rotated Sorted Array
 func Test153(t *testing.T) {
 	findMin := func(nums []int) int {
-		return 0
+		l, r := 0, len(nums)-1
+
+		for l < r {
+			m := l + (r-l)>>1
+			log.Printf("%d>%d | %d>%d | %d>%d", l, nums[l], m, nums[m], r, nums[r])
+
+			if nums[m] < nums[r] {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+
+		return nums[l]
 	}
 
+	log.Print("1 ?= ", findMin([]int{5, 1, 2, 3, 4}))
+	log.Print("1 ?= ", findMin([]int{3, 4, 5, 1, 2}))
 	log.Print("0 ?= ", findMin([]int{4, 5, 6, 7, 0, 1, 2}))
+	log.Print("0 ?= ", findMin([]int{5, 6, 7, 0, 1, 2, 3, 4}))
+	log.Print("0 ?= ", findMin([]int{0, 1, 2, 3, 4, 5, 6, 7}))
+	log.Print("0 ?= ", findMin([]int{1, 2, 3, 4, 5, 6, 7, 0}))
 }
