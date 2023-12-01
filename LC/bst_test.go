@@ -35,7 +35,20 @@ func TestInOrder(t *testing.T) {
 		walk(root, visit)
 	}
 
-	iInOrder := func(root *Tree, visit func(*Tree)) {}
+	iInOrder := func(root *Tree, visit func(*Tree)) {
+		n, S := root, []*Tree{}
+
+		for len(S) > 0 || n != nil {
+			if n != nil {
+				S = append(S, n)
+				n = n.Left
+			} else {
+				n, S = S[len(S)-1], S[:len(S)-1]
+				visit(n)
+				n = n.Right
+			}
+		}
+	}
 
 	visit := func(n *Tree) {
 		l, r := '-', '-'
@@ -49,7 +62,7 @@ func TestInOrder(t *testing.T) {
 	}
 
 	type T = Tree
-	r := &T{'a', &T{'b', &T{Val: 'c'}, nil}, &T{'d', nil, &T{Val: 'e'}}}
+	r := &T{'1', &T{'2', &T{Val: '4'}, &T{Val: '5'}}, &T{'3', &T{Val: '6'}, nil}}
 	rInOrder(r, visit)
 	fmt.Println()
 	iInOrder(r, visit)
