@@ -94,3 +94,13 @@ func Test153(t *testing.T) {
 	log.Print("0 ?= ", findMin([]int{0, 1, 2, 3, 4, 5, 6, 7}))
 	log.Print("0 ?= ", findMin([]int{1, 2, 3, 4, 5, 6, 7, 0}))
 }
+
+// 4h Median of Two Sorted Arrays
+func Test4(t *testing.T) {
+	findMedianSortedArrays := func(nums1, nums2 []int) float64 {
+
+		return float64(0)
+	}
+
+	log.Print("2 ?= ", findMedianSortedArrays([]int{1, 3}, []int{2}))
+}
