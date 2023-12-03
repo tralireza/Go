@@ -98,9 +98,46 @@ func Test153(t *testing.T) {
 // 4h Median of Two Sorted Arrays
 func Test4(t *testing.T) {
 	findMedianSortedArrays := func(nums1, nums2 []int) float64 {
+		var kValue func(int, int, int, int, int) int
+		kValue = func(k, l1, r1, l2, r2 int) int {
+			log.Print(l1, r1, l2, r2)
 
-		return float64(0)
+			if r1 < l1 {
+				return nums2[k-l1]
+			}
+			if r2 < l2 {
+				return nums1[k-l2]
+			}
+
+			m1 := l1 + (r1-l1)>>1
+			m2 := l2 + (r2-l2)>>1
+			v1, v2 := nums1[m1], nums2[m2]
+			if m1+m2 < k {
+				if v1 > v2 {
+					return kValue(k, l1, r1, m2+1, r2)
+				} else {
+					return kValue(k, m1+1, r2, l2, r2)
+				}
+			} else {
+				if v1 > v2 {
+					return kValue(k, l1, m1-1, l2, r2)
+				} else {
+					return kValue(k, l1, r1, l2, m2-1)
+				}
+			}
+		}
+
+		ln1, ln2 := len(nums1), len(nums2)
+		ln := ln1 + ln2
+		v := kValue(ln>>1, 0, ln1-1, 0, ln2-1)
+		if ln&1 == 1 {
+			return float64(v)
+		}
+
+		v += kValue(ln>>1-1, 0, ln1-1, 0, ln2-1)
+		return float64(v) / float64(2)
 	}
 
 	log.Print("2 ?= ", findMedianSortedArrays([]int{1, 3}, []int{2}))
+	log.Print("3.5 ?= ", findMedianSortedArrays([]int{1, 2, 3, 4}, []int{2, 4, 5, 5}))
 }
