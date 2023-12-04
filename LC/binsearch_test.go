@@ -147,10 +147,14 @@ func Test4(t *testing.T) {
 func Test441(t *testing.T) {
 	arrangeCoins := func(n int) int {
 		coins := func(v int) bool {
-			return true
+			cs := 0
+			for r := 1; r <= v && cs <= n; r++ {
+				cs += r
+			}
+			return cs > n
 		}
 
-		l, r := 1, n
+		l, r := 1, n+1
 		for l < r {
 			m := l + (r-l)>>1
 			if coins(m) {
@@ -160,11 +164,12 @@ func Test441(t *testing.T) {
 			}
 		}
 
-		return l
+		return l - 1
 	}
 
+	log.Print("1 ?= ", arrangeCoins(1))
 	log.Print("2 ?= ", arrangeCoins(5))
 	log.Print("3 ?= ", arrangeCoins(8))
-	log.Print("4 ?= ", arrangeCoins(10))
-	log.Print("5 ?= ", arrangeCoins(11))
+	log.Print("6 ?= ", arrangeCoins(21))
+	log.Print("6 ?= ", arrangeCoins(22))
 }
