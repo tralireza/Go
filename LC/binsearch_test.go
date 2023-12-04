@@ -142,3 +142,29 @@ func Test4(t *testing.T) {
 	log.Print("2 ?= ", findMedianSortedArrays([]int{1, 3}, []int{2}))
 	log.Print("3.5 ?= ", findMedianSortedArrays([]int{1, 2, 3, 4}, []int{2, 4, 5, 5}))
 }
+
+// 441 Arranging Coins
+func Test441(t *testing.T) {
+	arrangeCoins := func(n int) int {
+		coins := func(v int) bool {
+			return true
+		}
+
+		l, r := 1, n
+		for l < r {
+			m := l + (r-l)>>1
+			if coins(m) {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+
+		return l
+	}
+
+	log.Print("2 ?= ", arrangeCoins(5))
+	log.Print("3 ?= ", arrangeCoins(8))
+	log.Print("4 ?= ", arrangeCoins(10))
+	log.Print("5 ?= ", arrangeCoins(11))
+}
