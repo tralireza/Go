@@ -146,18 +146,28 @@ func Test4(t *testing.T) {
 // 441 Arranging Coins
 func Test441(t *testing.T) {
 	arrangeCoins := func(n int) int {
-		coins := func(v int) bool {
+		triangular := func(v int) int {
+			if v&1 == 1 {
+				return v * (v + 1) / 2
+			}
+			return v / 2 * (v + 1)
+		}
+
+		coins := func(v int) int {
 			cs := 0
-			for r := 1; r <= v && cs <= n; r++ {
+			for r := 1; r <= v; r++ {
 				cs += r
 			}
-			return cs > n
+			return cs
 		}
 
 		l, r := 1, n+1
 		for l < r {
 			m := l + (r-l)>>1
-			if coins(m) {
+			cs, tri := coins(m), triangular(m)
+			log.Printf("%d   %d>%d:%d   %d", l, m, cs, tri, r)
+
+			if coins(m) > n {
 				r = m
 			} else {
 				l = m + 1
