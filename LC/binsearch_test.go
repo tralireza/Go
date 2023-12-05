@@ -153,21 +153,10 @@ func Test441(t *testing.T) {
 			return v / 2 * (v + 1)
 		}
 
-		coins := func(v int) int {
-			cs := 0
-			for r := 1; r <= v; r++ {
-				cs += r
-			}
-			return cs
-		}
-
 		l, r := 1, n+1
 		for l < r {
 			m := l + (r-l)>>1
-			cs, tri := coins(m), triangular(m)
-			log.Printf("%d   %d>%d:%d   %d", l, m, cs, tri, r)
-
-			if coins(m) > n {
+			if triangular(m) > n {
 				r = m
 			} else {
 				l = m + 1
@@ -182,4 +171,5 @@ func Test441(t *testing.T) {
 	log.Print("3 ?= ", arrangeCoins(8))
 	log.Print("6 ?= ", arrangeCoins(21))
 	log.Print("6 ?= ", arrangeCoins(22))
+	log.Print(" ?= ", arrangeCoins(1000_000_000))
 }
