@@ -24,9 +24,9 @@ func TestBSLeftMost(t *testing.T) {
 	}
 
 	log.Print("2 ?= ", bSearch([]int{1, 2, 3, 4, 5}, 3))
-	log.Print("0 ?= ", bSearch([]int{1, 2, 3}, 1))
+	log.Print("0 ?= ", bSearch([]int{1, 1, 3}, 1))
 	log.Print("0 ?= ", bSearch([]int{1, 2, 3, 4}, 0))
-	log.Print("2 ?= ", bSearch([]int{1, 2, 5, 7}, 3))
+	log.Print("3 ?= ", bSearch([]int{1, 2, 2, 7}, 3))
 	log.Print("3 ?= ", bSearch([]int{1, 2, 5, 7}, 7))
 	log.Print("4 ?= ", bSearch([]int{1, 2, 3, 4}, 5))
 }
