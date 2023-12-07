@@ -154,11 +154,13 @@ func Test2962(t *testing.T) {
 					frq++
 				}
 			}
-			if frq == k {
+			for frq == k {
 				count += int64(len(nums) - r + 1)
-			}
-			if nums[l] == mxVal {
-				frq--
+				if nums[l] == mxVal {
+					frq--
+				} else {
+					l++
+				}
 			}
 		}
 
