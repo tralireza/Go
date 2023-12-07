@@ -4,6 +4,7 @@ import (
 	"log"
 	"slices"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -145,6 +146,29 @@ func Test2962(t *testing.T) {
 		mxVal := slices.Max(nums)
 		count := int64(0)
 
+		l, r := 0, 0
+		frq := 0
+		for ; l < len(nums); l++ {
+			for ; r < len(nums) && frq < k; r++ {
+				if nums[r] == mxVal {
+					frq++
+				}
+			}
+			if frq == k {
+				count += int64(len(nums) - r + 1)
+			}
+			if nums[l] == mxVal {
+				frq--
+			}
+		}
+
+		return count
+	}
+
+	fOn2 := func(nums []int, k int) int64 {
+		mxVal := slices.Max(nums)
+		count := int64(0)
+
 		frq := 0
 		for r, n := range nums {
 			if n == mxVal {
@@ -161,5 +185,8 @@ func Test2962(t *testing.T) {
 		return count
 	}
 
-	log.Print("6 ?= ", countSubarrays([]int{1, 3, 2, 3, 3}, 2))
+	for _, f := range []func([]int, int) int64{countSubarrays, fOn2} {
+		ts := time.Now()
+		log.Print("6 ?= ", f([]int{1, 3, 2, 3, 3}, 2), " ", time.Since(ts))
+	}
 }
