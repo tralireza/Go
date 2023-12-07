@@ -148,18 +148,14 @@ func Test2962(t *testing.T) {
 
 		l, r := 0, 0
 		frq := 0
-		for ; l < len(nums); l++ {
-			for ; r < len(nums) && frq < k; r++ {
-				if nums[r] == mxVal {
-					frq++
-				}
+		for ; r < len(nums); r++ {
+			if nums[r] == mxVal {
+				frq++
 			}
-			for frq == k {
-				count += int64(len(nums) - r + 1)
+			for ; frq >= k; l++ {
+				count += int64(len(nums) - r)
 				if nums[l] == mxVal {
 					frq--
-				} else {
-					l++
 				}
 			}
 		}
