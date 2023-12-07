@@ -137,3 +137,12 @@ func Test216(t *testing.T) {
 	log.Printf("%v", combinationSum3(3, 9))
 	log.Printf("%v", combinationSum3(4, 24))
 }
+
+// 2962m Count Subarrays Where Max Element Appears at Least K Times
+func Test2962(t *testing.T) {
+	countSubarrays := func(nums []int, k int) int64 {
+		return 0
+	}
+
+	log.Print("6 ?= ", countSubarrays([]int{1, 3, 2, 3, 3}, 2))
+}
