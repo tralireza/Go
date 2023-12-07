@@ -2,6 +2,7 @@ package lc
 
 import (
 	"log"
+	"slices"
 	"testing"
 )
 
@@ -141,7 +142,23 @@ func Test216(t *testing.T) {
 // 2962m Count Subarrays Where Max Element Appears at Least K Times
 func Test2962(t *testing.T) {
 	countSubarrays := func(nums []int, k int) int64 {
-		return 0
+		mxVal := slices.Max(nums)
+		count := int64(0)
+
+		frq := 0
+		for r, n := range nums {
+			if n == mxVal {
+				frq++
+			}
+			for l, frq := 0, frq; l <= r && frq >= k; l++ {
+				count++
+				if nums[l] == mxVal {
+					frq--
+				}
+			}
+		}
+
+		return count
 	}
 
 	log.Print("6 ?= ", countSubarrays([]int{1, 3, 2, 3, 3}, 2))
