@@ -59,3 +59,37 @@ func Test1091(t *testing.T) {
 	log.Print("5 ?= ", shortestPathBinaryMatrix(grid))
 	draw()
 }
+
+// 200m Number of Islands
+func Test200(t *testing.T) {
+	numIslands := func(grid [][]byte) int {
+		m, n := len(grid), len(grid[0])
+		islands := 0
+
+		dirs := []int{0, 1, 0, -1, 0}
+
+		var dfs func(i, j int)
+		dfs = func(i, j int) {
+			grid[i][j] = 'X'
+			for k := range dirs[:4] {
+				p, q := i+dirs[k], j+dirs[k+1]
+				if p >= 0 && m > p && q >= 0 && n > q && grid[p][q] == '1' {
+					dfs(p, q)
+				}
+			}
+		}
+
+		for i := 0; i < m; i++ {
+			for j := 0; j < n; j++ {
+				if grid[i][j] == '1' {
+					islands++
+					dfs(i, j)
+				}
+			}
+		}
+
+		return islands
+	}
+
+	log.Print("1 ?= ", numIslands([][]byte{{'1', '1', '1', '1', '0'}, {'1', '1', '0', '1', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '0', '0', '0'}}))
+}
