@@ -91,5 +91,15 @@ func Test200(t *testing.T) {
 		return islands
 	}
 
-	log.Print("1 ?= ", numIslands([][]byte{{'1', '1', '1', '1', '0'}, {'1', '1', '0', '1', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '0', '0', '0'}}))
+	grid := [][]byte{{'1', '1', '1', '1', '0'}, {'1', '1', '0', '1', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '0', '0', '0'}}
+	draw := func() {
+		for i := 0; i < len(grid); i++ {
+			for j := 0; j < len(grid[i]); j++ {
+				fmt.Printf("| %c ", grid[i][j])
+			}
+			fmt.Println("|")
+		}
+	}
+	draw()
+	log.Print("1 ?= ", numIslands(grid))
 }
