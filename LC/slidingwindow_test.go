@@ -163,6 +163,23 @@ func Test2962(t *testing.T) {
 		return count
 	}
 
+	fOn := func(nums []int, k int) int64 {
+		mxVal := slices.Max(nums)
+		count := int64(0)
+
+		mxIdx := []int{}
+		for i, n := range nums {
+			if n == mxVal {
+				mxIdx = append(mxIdx, i)
+			}
+			if len(mxIdx) >= k {
+				count += int64(mxIdx[len(mxIdx)-k] + 1)
+			}
+		}
+
+		return count
+	}
+
 	fOn2 := func(nums []int, k int) int64 {
 		mxVal := slices.Max(nums)
 		count := int64(0)
@@ -183,7 +200,7 @@ func Test2962(t *testing.T) {
 		return count
 	}
 
-	for _, f := range []func([]int, int) int64{countSubarrays, fOn2} {
+	for _, f := range []func([]int, int) int64{countSubarrays, fOn, fOn2} {
 		ts := time.Now()
 		log.Print("6 ?= ", f([]int{1, 3, 2, 3, 3}, 2), " ", time.Since(ts))
 	}
