@@ -205,3 +205,42 @@ func Test2962(t *testing.T) {
 		log.Print("6 ?= ", f([]int{1, 3, 2, 3, 3}, 2), " ", time.Since(ts))
 	}
 }
+
+// 992h Subarrays with K Different Integers
+func Test992(t *testing.T) {
+	subarraysWithKDistinct := func(nums []int, k int) int {
+		atMost := func(k int) int {
+			if k == 0 {
+				return 0
+			}
+
+			frq := map[int]int{}
+			curK, count := 0, 0
+
+			l := 0
+			for r, n := range nums {
+				if frq[n] == 0 {
+					curK++
+				}
+				frq[n]++
+
+				for curK > k {
+					if frq[nums[l]] == 1 {
+						curK--
+					}
+					frq[nums[l]]--
+					l++
+				}
+
+				count += r - l + 1
+			}
+
+			return count
+		}
+
+		return atMost(k) - atMost(k-1)
+	}
+
+	log.Print("7 ?= ", subarraysWithKDistinct([]int{1, 2, 1, 2, 3}, 2))
+	log.Print("3 ?= ", subarraysWithKDistinct([]int{1, 2, 1, 4, 3}, 3))
+}
