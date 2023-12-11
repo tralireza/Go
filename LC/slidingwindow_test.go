@@ -210,10 +210,6 @@ func Test2962(t *testing.T) {
 func Test992(t *testing.T) {
 	subarraysWithKDistinct := func(nums []int, k int) int {
 		atMost := func(k int) int {
-			if k == 0 {
-				return 0
-			}
-
 			frq := map[int]int{}
 			curK, count := 0, 0
 
