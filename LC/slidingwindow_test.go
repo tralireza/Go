@@ -277,3 +277,23 @@ func Test992(t *testing.T) {
 	log.Print("7 ?= ", subarraysWithKDistinct([]int{1, 2, 1, 2, 3}, 2))
 	log.Print("3 ?= ", subarraysWithKDistinct([]int{1, 2, 1, 4, 3}, 3))
 }
+
+// 56m Merge Intervals
+func Test56(t *testing.T) {
+	merge := func(intervals [][]int) [][]int {
+		slices.SortFunc(intervals, func(a, b []int) int { return a[0] - b[0] })
+
+		ms := [][]int{intervals[0]}
+		for _, i := range intervals {
+			if ms[len(ms)-1][1] >= i[0] {
+				ms[len(ms)-1][1] = max(ms[len(ms)-1][1], i[1])
+			} else {
+				ms = append(ms, i)
+			}
+		}
+		return ms
+	}
+
+	log.Print(merge([][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}}))
+	log.Print(merge([][]int{{1, 4}, {4, 5}}))
+}
