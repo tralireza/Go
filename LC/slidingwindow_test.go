@@ -284,7 +284,7 @@ func Test56(t *testing.T) {
 		slices.SortFunc(intervals, func(a, b []int) int { return a[0] - b[0] })
 
 		ms := [][]int{intervals[0]}
-		for _, i := range intervals {
+		for _, i := range intervals[1:] {
 			if ms[len(ms)-1][1] >= i[0] {
 				ms[len(ms)-1][1] = max(ms[len(ms)-1][1], i[1])
 			} else {
