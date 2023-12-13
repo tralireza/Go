@@ -297,3 +297,29 @@ func Test56(t *testing.T) {
 	log.Print(merge([][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}}))
 	log.Print(merge([][]int{{1, 4}, {4, 5}}))
 }
+
+func TestPerms(t *testing.T) {
+	counter := 0
+	var Perms func([]int, int)
+	Perms = func(arr []int, k int) {
+		if k == len(arr)-1 {
+			counter++
+			log.Printf("%3d -> %v", counter, arr)
+			return
+		}
+
+		for i := k; i < len(arr); i++ {
+			arr[i], arr[k] = arr[k], arr[i]
+			Perms(arr, k+1)
+			arr[i], arr[k] = arr[k], arr[i]
+		}
+	}
+
+	Perms([]int{0, 1, 2, 3, 4, 5}, 0)
+	log.Print(counter)
+
+	X := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	for i, x := range X {
+		log.Print(i, X[:i], x, X[i+1:])
+	}
+}
