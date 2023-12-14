@@ -24,6 +24,7 @@ func TestBSSearch(t *testing.T) {
 		return l
 	}
 
+	// Rightmost Index
 	bSearchRight := func(nums []int, k int) int {
 		l, r := 0, len(nums)
 		for l < r {
