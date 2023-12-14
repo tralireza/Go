@@ -9,8 +9,9 @@ func init() {
 	log.Print("> BinSearch")
 }
 
-func TestBSLeftMost(t *testing.T) {
-	bSearch := func(nums []int, k int) int {
+func TestBSSearch(t *testing.T) {
+	// Leftmost Index
+	bSearchLeft := func(nums []int, k int) int {
 		l, r := 0, len(nums)
 		for l < r {
 			m := l + (r-l)>>1
@@ -23,12 +24,31 @@ func TestBSLeftMost(t *testing.T) {
 		return l
 	}
 
-	log.Print("2 ?= ", bSearch([]int{1, 2, 3, 4, 5}, 3))
-	log.Print("0 ?= ", bSearch([]int{1, 1, 3}, 1))
-	log.Print("0 ?= ", bSearch([]int{1, 2, 3, 4}, 0))
-	log.Print("3 ?= ", bSearch([]int{1, 2, 2, 7}, 3))
-	log.Print("3 ?= ", bSearch([]int{1, 2, 5, 7}, 7))
-	log.Print("4 ?= ", bSearch([]int{1, 2, 3, 4}, 5))
+	bSearchRight := func(nums []int, k int) int {
+		l, r := 0, len(nums)
+		for l < r {
+			m := l + (r-l)>>1
+			if nums[m] > k {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+		return r
+	}
+
+	log.Print("+ Rightmost Index")
+	log.Print("4 ?= ", bSearchRight([]int{1, 2, 3, 4}, 5))
+	log.Print("3 ?= ", bSearchRight([]int{1, 2, 3, 4, 5}, 3))
+	log.Print("2 ?= ", bSearchRight([]int{1, 1, 3}, 1))
+	log.Print("0 ?= ", bSearchRight([]int{1, 2, 3, 4}, 0))
+	log.Print("+ Leftmost Index")
+	log.Print("2 ?= ", bSearchLeft([]int{1, 2, 3, 4, 5}, 3))
+	log.Print("0 ?= ", bSearchLeft([]int{1, 1, 3}, 1))
+	log.Print("0 ?= ", bSearchLeft([]int{1, 2, 3, 4}, 0))
+	log.Print("3 ?= ", bSearchLeft([]int{1, 2, 2, 7}, 3))
+	log.Print("3 ?= ", bSearchLeft([]int{1, 2, 5, 7}, 7))
+	log.Print("4 ?= ", bSearchLeft([]int{1, 2, 3, 4}, 5))
 }
 
 // 33m Search in Rotated Sorted Array
