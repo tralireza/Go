@@ -1,7 +1,9 @@
 package lc
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"testing"
 )
 
@@ -26,7 +28,7 @@ func TestDJS(t *testing.T) {
 			}
 			return e.parent, true
 		} else {
-			return 0, false
+			return n, false
 		}
 	}
 
@@ -54,22 +56,44 @@ func TestDJS(t *testing.T) {
 		}
 	}
 
+	countSets := func(djs DJS) int {
+		count := 0
+		for x, X := range djs {
+			if x == X.parent {
+				count++
+			}
+		}
+		return count
+	}
+
 	djs := DJS{}
 
-	makeSet(djs, 1)
-	makeSet(djs, 2)
-	makeSet(djs, 3)
-	makeSet(djs, 1024)
-	log.Printf("%v", djs)
+	m := map[int]struct{}{}
+	for range 25 {
+		v := rand.Intn(100)
+		m[v] = struct{}{}
+		makeSet(djs, v)
+	}
+	log.Printf("%d:%d -> %v", countSets(djs), len(m), djs)
 
 	log.Print(findSet(djs, 2))
 	log.Print(findSet(djs, 7))
 
-	union(djs, 3, 1024)
-	log.Print(findSet(djs, 1024))
-	makeSet(djs, 7)
-	makeSet(djs, 9)
-	union(djs, 3, 7)
-	union(djs, 7, 9)
-	log.Print(djs)
+	var vs []int
+	for v := range m {
+		vs = append(vs, v)
+	}
+	for range 25 {
+		union(djs, vs[rand.Intn(len(vs))], vs[rand.Intn(len(vs))])
+	}
+
+	log.Printf("%d -> %v", countSets(djs), djs)
+
+	fmt.Print("+ Leaders: ")
+	for x, X := range djs {
+		if x == X.parent {
+			fmt.Printf("%d:%v ", x, X)
+		}
+	}
+	fmt.Println()
 }
