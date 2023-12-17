@@ -328,9 +328,34 @@ func TestPerms(t *testing.T) {
 func Test2444(t *testing.T) {
 	countSubarrays := func(nums []int, minK int, maxK int) int64 {
 		count := int64(0)
+		mn, mx := -1, -1
+
+		l, r := 0, 0
+		for r < len(nums) {
+			n := nums[r]
+
+			if n == minK {
+				mn = r
+			}
+			if n == maxK {
+				mx = r
+			}
+			if n < minK || maxK < n {
+				mx = -1
+				mn = -1
+				l = r + 1
+			}
+
+			if mx >= 0 && mn >= 0 {
+				count += int64(min(mx, mn) - l + 1)
+			}
+
+			r++
+		}
 
 		return count
 	}
 
 	log.Print("2 ?= ", countSubarrays([]int{1, 3, 5, 2, 7, 5}, 1, 5))
+	log.Print("10 ?= ", countSubarrays([]int{1, 1, 1, 1}, 1, 1))
 }
