@@ -11,6 +11,38 @@ func init() {
 
 // 75m Sort Colors
 func Test75(t *testing.T) {
+	const (
+		RED int = iota
+		GREEN
+		BLUE
+	)
+
+	sortColors_1Pass := func(flags []int) {
+		l, r := 0, len(flags)-1
+		i := 0
+		for i != r {
+			if flags[i] == RED {
+				if l == i {
+					i++
+				} else {
+					flags[i], flags[l] = flags[l], RED
+				}
+				l++
+			}
+
+			if flags[i] == BLUE {
+				flags[i], flags[r] = flags[r], BLUE
+				r--
+			}
+
+			if flags[i] == GREEN {
+				i++
+			}
+		}
+
+		log.Print(flags)
+	}
+
 	sortColors := func(flags []int) {
 		frq := [3]int{}
 		for _, f := range flags {
@@ -29,4 +61,5 @@ func Test75(t *testing.T) {
 	}
 
 	sortColors([]int{0, 1, 2, 0, 2, 1, 2, 1, 0, 1, 0})
+	sortColors_1Pass([]int{RED, GREEN, BLUE, RED, BLUE, GREEN, BLUE, GREEN, RED, GREEN, RED})
 }
