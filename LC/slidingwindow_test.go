@@ -323,3 +323,14 @@ func TestPerms(t *testing.T) {
 		log.Print(i, X[:i], x, X[i+1:])
 	}
 }
+
+// 2444h Count Subarrays with Fixed Bounds
+func Test2444(t *testing.T) {
+	countSubarrays := func(nums []int, minK int, maxK int) int64 {
+		count := int64(0)
+
+		return count
+	}
+
+	log.Print("2 ?= ", countSubarrays([]int{1, 3, 5, 2, 7, 5}, 1, 5))
+}
