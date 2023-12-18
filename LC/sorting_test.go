@@ -13,7 +13,7 @@ func init() {
 func Test75(t *testing.T) {
 	const (
 		RED int = iota
-		GREEN
+		WHITE
 		BLUE
 	)
 
@@ -35,7 +35,7 @@ func Test75(t *testing.T) {
 				r--
 			}
 
-			if flags[i] == GREEN {
+			if flags[i] == WHITE {
 				i++
 			}
 		}
@@ -61,5 +61,5 @@ func Test75(t *testing.T) {
 	}
 
 	sortColors([]int{0, 1, 2, 0, 2, 1, 2, 1, 0, 1, 0})
-	sortColors_1Pass([]int{RED, GREEN, BLUE, RED, BLUE, GREEN, BLUE, GREEN, RED, GREEN, RED})
+	sortColors_1Pass([]int{RED, WHITE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED})
 }
