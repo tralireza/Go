@@ -17,6 +17,7 @@ func Test75(t *testing.T) {
 		BLUE
 	)
 
+	// Red, White, Green: Dutch national flag partitioning sort
 	sortColors_1Pass := func(flags []int) {
 		l, r := 0, len(flags)-1
 		i := 0
