@@ -2,6 +2,7 @@ package lc
 
 import (
 	"log"
+	"math/rand"
 	"testing"
 )
 
@@ -17,11 +18,11 @@ func Test75(t *testing.T) {
 		BLUE
 	)
 
-	// Red, White, Green: Dutch national flag partitioning sort
-	sortColors_1Pass := func(flags []int) {
+	// Red, White, Green: Dutch national flag Partitioning Sort
+	sortColors := func(flags []int) {
 		l, r := 0, len(flags)-1
 		i := 0
-		for i != r {
+		for i <= r {
 			if flags[i] == RED {
 				if l == i {
 					i++
@@ -40,27 +41,20 @@ func Test75(t *testing.T) {
 				i++
 			}
 		}
-
-		log.Print(flags)
 	}
 
-	sortColors := func(flags []int) {
-		frq := [3]int{}
-		for _, f := range flags {
-			frq[f]++
-		}
+	vs := []int{RED, WHITE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED}
+	sortColors(vs)
+	log.Print(vs)
 
-		i := 0
-		for f, count := range frq {
-			for range count {
-				flags[i] = f
-				i++
-			}
-		}
-
-		log.Print(flags)
+	flags := []int{}
+	for range 8196 {
+		flags = append(flags, rand.Intn(3))
 	}
-
-	sortColors([]int{0, 1, 2, 0, 2, 1, 2, 1, 0, 1, 0})
-	sortColors_1Pass([]int{RED, WHITE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED})
+	sortColors(flags)
+	for i := range flags[:len(flags)-1] {
+		if flags[i] > flags[i+1] {
+			t.Fatalf("Bad Dutch flag! %d: %d %d", i, flags[i], flags[i+1])
+		}
+	}
 }
