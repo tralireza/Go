@@ -1,6 +1,7 @@
 package lc
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"testing"
@@ -43,9 +44,24 @@ func Test75(t *testing.T) {
 		}
 	}
 
+	draw := func(flags []int) {
+		fmt.Print("[ ")
+		for _, f := range flags {
+			switch f {
+			case RED:
+				fmt.Print("R")
+			case WHITE:
+				fmt.Print("W")
+			case BLUE:
+				fmt.Print("B")
+			}
+		}
+		fmt.Println(" ]")
+	}
+
 	vs := []int{RED, WHITE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED}
 	sortColors(vs)
-	log.Print(vs)
+	draw(vs)
 
 	flags := []int{}
 	for range 8196 {
