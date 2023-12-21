@@ -63,14 +63,16 @@ func Test75(t *testing.T) {
 	sortColors(vs)
 	draw(vs)
 
-	flags := []int{}
-	for range 8196 {
-		flags = append(flags, rand.Intn(3))
-	}
-	sortColors(flags)
-	for i := range flags[:len(flags)-1] {
-		if flags[i] > flags[i+1] {
-			t.Fatalf("Bad Dutch flag! %d: %d %d", i, flags[i], flags[i+1])
+	for range 4096 {
+		flags := []int{RED, WHITE, BLUE}
+		for range rand.Intn(8192) {
+			flags = append(flags, rand.Intn(3))
+		}
+		sortColors(flags)
+		for i := range flags[:len(flags)-1] {
+			if flags[i] > flags[i+1] {
+				t.Fatalf("Bad Dutch(%d) Flag! %d: %d %d", len(flags), i, flags[i], flags[i+1])
+			}
 		}
 	}
 }
