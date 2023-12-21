@@ -20,25 +20,19 @@ func Test75(t *testing.T) {
 	)
 
 	// Red, White, Green: Dutch national flag Partitioning Sort
+	// 3Way Partitioning
 	sortColors := func(flags []int) {
 		l, r := 0, len(flags)-1
 		i := 0
 		for i <= r {
-			if flags[i] == RED {
-				if l == i {
-					i++
-				} else {
-					flags[i], flags[l] = flags[l], RED
-				}
+			if flags[i] < WHITE {
+				flags[i], flags[l] = flags[l], RED
 				l++
-			}
-
-			if flags[i] == BLUE {
+				i++
+			} else if flags[i] > WHITE {
 				flags[i], flags[r] = flags[r], BLUE
 				r--
-			}
-
-			if flags[i] == WHITE {
+			} else {
 				i++
 			}
 		}
