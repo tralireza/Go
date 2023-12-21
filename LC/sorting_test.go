@@ -59,13 +59,13 @@ func Test75(t *testing.T) {
 		fmt.Println(" ]")
 	}
 
-	vs := []int{RED, WHITE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED}
+	vs := []int{RED, WHITE, BLUE, BLUE, RED, BLUE, WHITE, BLUE, WHITE, RED, WHITE, RED}
 	sortColors(vs)
 	draw(vs)
 
 	for range 4096 {
 		flags := []int{RED, WHITE, BLUE}
-		for range rand.Intn(8192) {
+		for range rand.Intn(4096) {
 			flags = append(flags, rand.Intn(3))
 		}
 		sortColors(flags)
