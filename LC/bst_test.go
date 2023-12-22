@@ -68,3 +68,38 @@ func TestInOrder(t *testing.T) {
 	iInOrder(r, visit)
 	fmt.Println()
 }
+
+// 530 Minimum Absolute Difference in BST
+func Test530(t *testing.T) {
+	type TreeNode struct {
+		Val         int
+		Left, Right *TreeNode
+	}
+
+	minimumDifference := func(root *TreeNode) int {
+		mnVal, prvVal := 100_001, -1
+
+		S, n := []*TreeNode{}, root
+		for len(S) > 0 || n != nil {
+			if n != nil {
+				S = append(S, n)
+				n = n.Left
+			} else {
+				n, S = S[len(S)-1], S[:len(S)-1]
+
+				if prvVal != -1 {
+					mnVal = min(mnVal, n.Val-prvVal)
+				}
+				prvVal = n.Val
+
+				n = n.Right
+			}
+		}
+
+		return mnVal
+	}
+
+	type T = TreeNode
+	log.Print("1 =? ", minimumDifference(&T{2, &T{Val: 1}, &T{Val: 3}}))
+	log.Print("1 =? ", minimumDifference(&T{4, &T{2, nil, &T{Val: 3}}, &T{Val: 6}}))
+}
