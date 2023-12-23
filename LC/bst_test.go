@@ -37,14 +37,15 @@ func TestInOrder(t *testing.T) {
 
 	iInOrder := func(root *Tree, visit func(*Tree)) {
 		n, S := root, []*Tree{}
-
 		for len(S) > 0 || n != nil {
 			if n != nil {
 				S = append(S, n)
 				n = n.Left
 			} else {
 				n, S = S[len(S)-1], S[:len(S)-1]
+
 				visit(n)
+
 				n = n.Right
 			}
 		}
