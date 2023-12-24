@@ -20,9 +20,10 @@ func Test3102(t *testing.T) {
 
 		f := func(i int) func(a, b []int) int {
 			return func(a, b []int) int {
-				return a[1] - b[1]
+				return a[i] - b[i]
 			}
 		}
+		fx, fy := f(0), f(1)
 
 		mdist := 2*(100_000_000-1) + 1
 		for i := range points {
@@ -30,8 +31,8 @@ func Test3102(t *testing.T) {
 			ps = append(ps, points[:i]...)
 			ps = append(ps, points[i+1:]...)
 
-			xX, mX := slices.MaxFunc(ps, f(0)), slices.MinFunc(ps, f(0))
-			xY, mY := slices.MaxFunc(ps, f(1)), slices.MinFunc(ps, f(1))
+			xX, mX := slices.MaxFunc(ps, fx), slices.MinFunc(ps, fx)
+			xY, mY := slices.MaxFunc(ps, fy), slices.MinFunc(ps, fy)
 
 			dist := max(xX[0]-mX[0], xY[1]-mY[1])
 			mdist = min(mdist, dist)
