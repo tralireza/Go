@@ -2,7 +2,7 @@ package lc
 
 import (
 	"log"
-	"slices"
+	"math"
 	"testing"
 )
 
@@ -13,35 +13,45 @@ func init() {
 // 3102h Minimize Manhattan Distances
 func Test3102(t *testing.T) {
 	minimumDistance := func(points [][]int) int {
-		for i, p := range points {
-			points[i] = []int{p[0] - p[1], p[0] + p[1]}
-		}
-		log.Print(points)
+		xdst := func(iSkip int) (d, i, j int) {
+			x, n, xi, ni := math.MinInt, math.MaxInt, 0, 0
+			xd, nd, xdi, ndi := math.MinInt, math.MaxInt, 0, 0
 
-		f := func(i int) func(a, b []int) int {
-			return func(a, b []int) int {
-				return a[i] - b[i]
+			for i, p := range points {
+				if i == iSkip {
+					continue
+				}
+
+				if x < p[0]+p[1] {
+					x, xi = p[0]+p[1], i
+				}
+				if n > p[0]+p[1] {
+					n, xi = p[0]+p[1], i
+				}
+
+				if xd < p[0]-p[1] {
+					xd, xdi = p[0]-p[1], i
+				}
+				if nd > p[0]-p[1] {
+					nd, xdi = p[0]-p[1], i
+				}
 			}
+
+			if x-n > xd-nd {
+				return x - n, xi, ni
+			}
+			return xd - nd, xdi, ndi
 		}
-		fx, fy := f(0), f(1)
 
-		mdist := 2*(100_000_000-1) + 1
-		for i := range points {
-			ps := make([][]int, 0, len(points)-1)
-			ps = append(ps, points[:i]...)
-			ps = append(ps, points[i+1:]...)
+		x, i, j := xdst(-1)
+		log.Print(x, points[i], points[j])
 
-			xX, mX := slices.MaxFunc(ps, fx), slices.MinFunc(ps, fx)
-			xY, mY := slices.MaxFunc(ps, fy), slices.MinFunc(ps, fy)
-
-			dist := max(xX[0]-mX[0], xY[1]-mY[1])
-			mdist = min(mdist, dist)
-
-			log.Print(i, dist, ps)
-		}
-		return mdist
+		d1, _, _ := xdst(i)
+		d2, _, _ := xdst(j)
+		return min(d1, d2)
 	}
 
+	log.Print("0 ?= ", minimumDistance([][]int{{1, 1}, {1, 1}, {1, 1}}))
 	log.Print("12 ?= ", minimumDistance([][]int{{3, 10}, {5, 15}, {10, 2}, {4, 4}}))
 	log.Print("10 ?= ", minimumDistance([][]int{{3, 2}, {3, 9}, {7, 10}, {4, 4}, {8, 10}, {2, 7}}))
 }
