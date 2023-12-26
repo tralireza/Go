@@ -37,9 +37,11 @@ func Test3102(t *testing.T) {
 				}
 			}
 
-			if x-n > xd-nd {
+			if x-n >= xd-nd {
+				log.Print("y=x Diagonal")
 				return x - n, xi, ni
 			}
+			log.Print("y=-x Diagonal")
 			return xd - nd, xdi, ndi
 		}
 
