@@ -22,6 +22,7 @@ func Test3102(t *testing.T) {
 					continue
 				}
 
+				// y=x diagonal
 				if x < p[0]+p[1] {
 					x, xi = p[0]+p[1], i
 				}
@@ -29,6 +30,7 @@ func Test3102(t *testing.T) {
 					n, xi = p[0]+p[1], i
 				}
 
+				// y=-x diagonal
 				if xd < p[0]-p[1] {
 					xd, xdi = p[0]-p[1], i
 				}
