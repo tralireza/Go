@@ -59,3 +59,33 @@ func Test3102(t *testing.T) {
 	log.Print("12 ?= ", minimumDistance([][]int{{3, 10}, {5, 15}, {10, 2}, {4, 4}}))
 	log.Print("10 ?= ", minimumDistance([][]int{{3, 2}, {3, 9}, {7, 10}, {4, 4}, {8, 10}, {2, 7}}))
 }
+
+// 205 Isomorphic Strings
+func Test205(t *testing.T) {
+	isIsomorphic := func(s, t string) bool {
+		ms, mt := map[byte]byte{}, map[byte]byte{}
+		for i := 0; i < len(s); i++ {
+			log.Printf("%q %q", s[i], t[i])
+
+			if b, ok := ms[s[i]]; ok {
+				if b != t[i] {
+					return false
+				}
+				if _, ok := mt[b]; !ok {
+					return false
+				}
+			} else {
+				if _, ok := mt[t[i]]; ok {
+					return false
+				}
+				ms[s[i]], mt[t[i]] = t[i], s[i]
+			}
+		}
+		log.Printf("%q %q", ms, mt)
+		return true
+	}
+
+	log.Print("true ?= ", isIsomorphic("egg", "add"))
+	log.Print("false ?= ", isIsomorphic("foo", "bar"))
+	log.Print("false ?= ", isIsomorphic("aba", "xxy"))
+}
