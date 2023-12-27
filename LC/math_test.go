@@ -78,7 +78,6 @@ func Test205(t *testing.T) {
 			if ms[s[i]] != t[i] || mt[t[i]] != s[i] {
 				return false
 			}
-
 		}
 
 		log.Printf("%q %q", ms, mt)
