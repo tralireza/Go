@@ -80,11 +80,12 @@ func Test205(t *testing.T) {
 			}
 		}
 
-		log.Printf("%q %q", ms, mt)
+		log.Printf("%q\n%q", ms, mt)
 		return true
 	}
 
 	log.Print("true ?= ", isIsomorphic("egg", "add"))
 	log.Print("false ?= ", isIsomorphic("foo", "bar"))
 	log.Print("false ?= ", isIsomorphic("aba", "xxy"))
+	log.Print("true ?= ", isIsomorphic("abcdefghij", "0123456789"))
 }
