@@ -213,3 +213,29 @@ func Test1351(t *testing.T) {
 
 	log.Print("8 ?= ", countNegatives([][]int{{4, 3, 2, -1}, {3, 2, 1, -1}, {1, 1, -1, -2}, {-1, -1, -2, -3}}))
 }
+
+// 1539 Kth Missing Positive Number
+func Test1539(t *testing.T) {
+	findKthPositive := func(arr []int, k int) int {
+		kV := 1
+		for k > 0 {
+			l, r := 0, len(arr)
+			for l < r {
+				m := l + (r-l)>>1
+				if arr[m] >= kV {
+					r = m
+				} else {
+					l = m + 1
+				}
+			}
+			if l == len(arr) || arr[l] != kV {
+				k--
+			}
+			kV++
+		}
+		return kV - 1
+	}
+
+	log.Print("9 ?= ", findKthPositive([]int{2, 3, 4, 7, 11}, 5))
+	log.Print("6 ?= ", findKthPositive([]int{1, 2, 3, 4}, 2))
+}
