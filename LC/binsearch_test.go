@@ -194,3 +194,22 @@ func Test441(t *testing.T) {
 	log.Print("6 ?= ", arrangeCoins(22))
 	log.Print(" ?= ", arrangeCoins(1000_000_000))
 }
+
+// 1351 Count Negative Numbers in Sorted Matrix
+func Test1351(t *testing.T) {
+	countNegatives := func(grid [][]int) int {
+		count := 0
+		i, j := 0, len(grid[0])-1
+		for i < len(grid) && 0 <= j {
+			if grid[i][j] < 0 {
+				count += len(grid) - i
+				j--
+			} else {
+				i++
+			}
+		}
+		return count
+	}
+
+	log.Print("8 ?= ", countNegatives([][]int{{4, 3, 2, -1}, {3, 2, 1, -1}, {1, 1, -1, -2}, {-1, -1, -2, -3}}))
+}
