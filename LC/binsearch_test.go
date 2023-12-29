@@ -217,6 +217,21 @@ func Test1351(t *testing.T) {
 // 1539 Kth Missing Positive Number
 func Test1539(t *testing.T) {
 	findKthPositive := func(arr []int, k int) int {
+		l, r := 0, len(arr)
+		for l < r {
+			m := l + (r-l)>>1
+
+			if arr[m]-m > k {
+				r = m
+			} else {
+				l = m + 1
+			}
+		}
+
+		return l + k
+	}
+
+	f := func(arr []int, k int) int {
 		kV := 1
 		for k > 0 {
 			l, r := 0, len(arr)
@@ -236,6 +251,8 @@ func Test1539(t *testing.T) {
 		return kV - 1
 	}
 
-	log.Print("9 ?= ", findKthPositive([]int{2, 3, 4, 7, 11}, 5))
-	log.Print("6 ?= ", findKthPositive([]int{1, 2, 3, 4}, 2))
+	for _, f := range []func([]int, int) int{f, findKthPositive} {
+		log.Print("9 ?= ", f([]int{2, 3, 4, 7, 11}, 5))
+		log.Print("6 ?= ", f([]int{1, 2, 3, 4}, 2))
+	}
 }
