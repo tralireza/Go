@@ -255,5 +255,6 @@ func Test1539(t *testing.T) {
 	for _, f := range []func([]int, int) int{f, findKthPositive} {
 		log.Print("9 ?= ", f([]int{2, 3, 4, 7, 11}, 5))
 		log.Print("6 ?= ", f([]int{1, 2, 3, 4}, 2))
+		log.Print("3 ?= ", f([]int{7, 8, 9}, 3))
 	}
 }
