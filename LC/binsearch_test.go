@@ -220,6 +220,7 @@ func Test1539(t *testing.T) {
 		l, r := 0, len(arr)
 		for l < r {
 			m := l + (r-l)>>1
+			log.Print(l, m, r, " | ", arr[m], arr[m]-m)
 
 			if arr[m]-m > k {
 				r = m
