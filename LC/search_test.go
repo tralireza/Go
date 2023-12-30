@@ -103,3 +103,56 @@ func Test200(t *testing.T) {
 	draw()
 	log.Print("1 ?= ", numIslands(grid))
 }
+
+// 130m Surrounded Regions
+func Test130(t *testing.T) {
+	solve := func(board [][]byte) {
+		m, n := len(board), len(board[0])
+		dirs := []int{0, 1, 0, -1, 0}
+
+		var dfs func(i, j int)
+		dfs = func(i, j int) {
+			board[i][j] = '*'
+
+			for k := range dirs[:4] {
+				p, q := i+dirs[k], j+dirs[k+1]
+				if p >= 0 && m > p && q >= 0 && n > q && board[p][q] == 'O' {
+					dfs(p, q)
+				}
+			}
+		}
+
+		for i := 0; i < m; i++ {
+			for j := 0; j < n; j++ {
+				if (i == 0 || i == m-1 || j == 0 || j == n-1) && board[i][j] == 'O' {
+					dfs(i, j)
+				}
+			}
+		}
+
+		for i := 0; i < m; i++ {
+			for j := 0; j < n; j++ {
+				if board[i][j] == 'O' {
+					board[i][j] = 'X'
+				}
+				if board[i][j] == '*' {
+					board[i][j] = 'O'
+				}
+			}
+		}
+	}
+
+	board := [][]byte{{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}}
+	draw := func() {
+		for i := 0; i < len(board); i++ {
+			for j := 0; j < len(board[i]); j++ {
+				fmt.Printf("| %c ", board[i][j])
+			}
+			fmt.Printf("|\n")
+		}
+	}
+	draw()
+	solve(board)
+	log.Print("===")
+	draw()
+}
