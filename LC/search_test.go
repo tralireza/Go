@@ -156,3 +156,40 @@ func Test130(t *testing.T) {
 	log.Print("===")
 	draw()
 }
+
+// 133m Clone Graph
+func Test133(t *testing.T) {
+	type Node struct {
+		Val       int
+		Neighbors []*Node
+	}
+
+	cloneGraph := func(node *Node) *Node {
+		grClone := map[*Node]*Node{}
+
+		var rclone func(*Node) *Node
+		rclone = func(n *Node) *Node {
+			if c, ok := grClone[n]; ok {
+				return c
+			}
+
+			c := &Node{Val: n.Val}
+			grClone[n] = c
+			for _, v := range n.Neighbors {
+				c.Neighbors = append(c.Neighbors, rclone(v))
+			}
+			return c
+		}
+
+		return rclone(node)
+	}
+
+	type N = Node
+	g := &N{1, []*N{{2, []*N{{Val: 4}}}}}
+	n := &N{3, []*N{g}}
+	g.Neighbors = append(g.Neighbors, n)
+
+	c := cloneGraph(g)
+	log.Print(g, g.Neighbors[0], g.Neighbors[1])
+	log.Print(c, c.Neighbors[0], c.Neighbors[1])
+}
