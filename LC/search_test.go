@@ -165,16 +165,16 @@ func Test133(t *testing.T) {
 	}
 
 	cloneGraph := func(node *Node) *Node {
-		grClone := map[*Node]*Node{}
+		m := map[*Node]*Node{}
 
 		var rclone func(*Node) *Node
 		rclone = func(n *Node) *Node {
-			if c, ok := grClone[n]; ok {
+			if c, ok := m[n]; ok {
 				return c
 			}
 
 			c := &Node{Val: n.Val}
-			grClone[n] = c
+			m[n] = c
 			for _, v := range n.Neighbors {
 				c.Neighbors = append(c.Neighbors, rclone(v))
 			}
