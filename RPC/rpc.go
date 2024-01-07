@@ -20,7 +20,7 @@ func (o *Server) Reply(rq int, rp *time.Time) error {
 	return nil
 }
 
-func Client() {
+func Client(q int) {
 	cnn, err := rpc.Dial("tcp", ":19999")
 	if err != nil {
 		log.Print(err)
@@ -28,12 +28,12 @@ func Client() {
 	}
 
 	var tsServer time.Time
-	if err := cnn.Call("Server.Reply", 1, &tsServer); err != nil {
+	if err := cnn.Call("Server.Reply", q, &tsServer); err != nil {
 		log.Print(err)
 		return
 	}
 
-	log.Printf("TimeStamp on Server (via RPC) -> %v", tsServer)
+	log.Printf("%2d. TimeStamp on Server (via RPC) -> %v", q, tsServer)
 }
 
 func RunServer() {
