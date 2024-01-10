@@ -1,6 +1,7 @@
 package lrcp
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -9,6 +10,26 @@ import (
 	"testing"
 	"time"
 )
+
+func TestIOBuf(t *testing.T) {
+	f, err := os.Open("rpc.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	rdr := bufio.NewReader(f)
+	for {
+		if l, err := rdr.ReadString('\n'); err == nil {
+			log.Printf("| %v", l)
+		} else {
+			if err != io.EOF {
+				log.Fatal(err)
+			}
+			break
+		}
+	}
+}
 
 func TestIO(t *testing.T) {
 	f, err := os.Open("go.mod")
