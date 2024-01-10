@@ -2,10 +2,32 @@ package lrcp
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"testing"
 	"time"
 )
+
+func TestIO(t *testing.T) {
+	f, err := os.Open("go.mod")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	bs := make([]byte, 128)
+	for {
+		if n, err := f.Read(bs); err == nil {
+			log.Printf("| %q", bs[:n])
+		} else {
+			if err != io.EOF {
+				log.Fatal(err)
+			}
+			break
+		}
+	}
+}
 
 func TestCall(t *testing.T) {
 	go RunServer()
@@ -56,7 +78,7 @@ func Knapsack(ksCapacity int) int {
 }
 
 func TestKnapsack(t *testing.T) {
-	for _, v := range []int{8, 13} {
+	for _, v := range []int{8, 9, 18} {
 		log.Printf("+ %d: %d", v, Knapsack(v))
 	}
 }
