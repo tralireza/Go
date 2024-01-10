@@ -1,6 +1,7 @@
 package lrcp
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -16,10 +17,14 @@ func TestIO(t *testing.T) {
 	}
 	defer f.Close()
 
-	bs := make([]byte, 128)
+	bs := make([]byte, 16)
+	bfs := bytes.Buffer{}
 	for {
 		if n, err := f.Read(bs); err == nil {
-			log.Printf("| %q", bs[:n])
+			log.Printf("> %d\n| %q\n| %[2]v\n| %[2]x", n, bs[:n])
+			bfs.Write(bs[:n])
+			log.Printf("+ %d %d", bfs.Len(), bfs.Cap())
+			bfs.Reset()
 		} else {
 			if err != io.EOF {
 				log.Fatal(err)
