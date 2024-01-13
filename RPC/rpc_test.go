@@ -147,7 +147,10 @@ func TestGenBookToFile(t *testing.T) {
 	}
 	defer f.Close()
 
-	GenBooks(1000, f)
+	wtr := bufio.NewWriter(f)
+	GenBooks(1000, wtr)
+	wtr.Flush()
+	log.Printf("+ %d", wtr.Size())
 }
 
 func TestGenBooks(t *testing.T) {
