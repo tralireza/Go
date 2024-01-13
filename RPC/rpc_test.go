@@ -3,9 +3,11 @@ package lrcp
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"testing"
 	"time"
@@ -134,4 +136,68 @@ func BenchmarkIO(b *testing.B) {
 		bs := make([]byte, 1024)
 		wtr.Write(bs)
 	}
+}
+
+func TestGenBooks(t *testing.T) {
+	var wtr bytes.Buffer
+	GenBooks(3, &wtr)
+	log.Printf("%v", wtr.String())
+}
+
+func GenBooks(n int, wtr io.Writer) {
+	type Book struct {
+		Author     string `json:"author"`
+		Title      string `json:"title"`
+		Year       int    `json:"year,omitempty"`
+		Rating     int    `json:"rating,omitempty"`
+		OnlineCopy bool   `json:"online_copy,string"`
+	}
+
+	authors := []string{"Author 1", "Author 2", "Author 3"}
+	tWords := []string{"a", "of", "the", "Games", "Pride", "Story", "Adventure", "to", "Kill", "Runaway", "Plain", "House", "Lake"}
+
+	var bfr bytes.Buffer
+	jenc := json.NewEncoder(&bfr)
+	jenc.SetIndent("", "  ")
+
+	wtr.Write([]byte{'['})
+	for n > 0 {
+		book := Book{Author: authors[rand.Intn(len(authors))]}
+
+		k := 3 + rand.Intn(len(tWords)-3)
+		for _, i := range rand.Perm(len(tWords)) {
+			book.Title += tWords[i]
+			if k > 0 {
+				book.Title += " "
+			}
+			if k == 0 {
+				break
+			}
+			k--
+		}
+
+		switch rand.Intn(2) {
+		case 0:
+			book.Year = 1900 + rand.Intn(124)
+		}
+		switch rand.Intn(2) {
+		case 0:
+			book.OnlineCopy = true
+		}
+		switch r := rand.Intn(6); r {
+		case 0:
+		default:
+			book.Rating = r
+		}
+
+		jenc.Encode(book)
+		if n > 1 {
+			bfr.WriteByte(',')
+		}
+		bfr.WriteTo(wtr)
+
+		n--
+	}
+	wtr.Write([]byte{']'})
+
 }
