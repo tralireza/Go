@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"math/rand"
 	"os"
@@ -136,6 +137,17 @@ func BenchmarkIO(b *testing.B) {
 		bs := make([]byte, 1024)
 		wtr.Write(bs)
 	}
+}
+
+func TestGenBookToFile(t *testing.T) {
+	f, err := os.OpenFile("books.json", os.O_CREATE|os.O_WRONLY, fs.FileMode(0644))
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	defer f.Close()
+
+	GenBooks(1000, f)
 }
 
 func TestGenBooks(t *testing.T) {
