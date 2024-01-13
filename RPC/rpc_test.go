@@ -21,7 +21,7 @@ func TestIOBuf(t *testing.T) {
 	rdr := bufio.NewReader(f)
 	for {
 		if l, err := rdr.ReadString('\n'); err == nil {
-			log.Printf("| %v", l)
+			log.Printf("| %d", len(l))
 		} else {
 			if err != io.EOF {
 				log.Fatal(err)
@@ -106,5 +106,32 @@ func Knapsack(ksCapacity int) int {
 func TestKnapsack(t *testing.T) {
 	for _, v := range []int{8, 9, 18} {
 		log.Printf("+ %d: %d", v, Knapsack(v))
+	}
+}
+
+type NullWriter struct{}
+
+func (NullWriter) Write(p []byte) (int, error) {
+	return len(p), nil
+}
+
+func BenchmarkBufIO(b *testing.B) {
+	b.StopTimer()
+	bfr := bytes.NewBuffer(make([]byte, 128))
+	bs := make([]byte, 1024)
+
+	b.StartTimer()
+	var wtr NullWriter
+	for i := 0; i < b.N; i++ {
+		bfr.Read(bs)
+		bfr.WriteTo(wtr)
+	}
+}
+
+func BenchmarkIO(b *testing.B) {
+	var wtr NullWriter
+	for i := 0; i < b.N; i++ {
+		bs := make([]byte, 1024)
+		wtr.Write(bs)
 	}
 }
