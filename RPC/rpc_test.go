@@ -218,11 +218,22 @@ func GenBooks(n int, wtr io.Writer) {
 
 }
 
+// O(n)
+func PeekFinderLinear(A []int) int {
+	for i := 0; i < len(A)-1; i++ {
+		if A[i] > A[i+1] {
+			return i
+		}
+	}
+	return len(A) - 1
+}
+
 // O(lg n)
 func PeekFinder(A []int) int {
 	l, r := 0, len(A)-1
-	for l < r {
+	for l <= r {
 		m := l + (r-l)/2
+		log.Printf("(%d %d %d) -> %d %d %d", l, m, r, A[l], A[m], A[r])
 		if A[m] > A[m+1] {
 			r = m - 1
 		} else {
@@ -233,7 +244,9 @@ func PeekFinder(A []int) int {
 }
 
 func TestPeekFinder(t *testing.T) {
-	A := []int{1, 2, 3, 8, 4, 3, 9, 3, 1}
+	A := []int{1, 2, 3, 4, 7, 8, 9, 3, 1}
+	log.Print(A)
+
 	i := PeekFinder(A)
-	log.Printf("+ %d: %d", i, A[i])
+	log.Printf("+ %d: %d | O(n): %d", i, A[i], PeekFinderLinear(A))
 }
