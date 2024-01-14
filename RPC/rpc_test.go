@@ -217,3 +217,23 @@ func GenBooks(n int, wtr io.Writer) {
 	wtr.Write([]byte{']'})
 
 }
+
+// O(lg n)
+func PeekFinder(A []int) int {
+	l, r := 0, len(A)-1
+	for l < r {
+		m := l + (r-l)/2
+		if A[m] > A[m+1] {
+			r = m - 1
+		} else {
+			l = m + 1
+		}
+	}
+	return l
+}
+
+func TestPeekFinder(t *testing.T) {
+	A := []int{1, 2, 3, 8, 4, 3, 9, 3, 1}
+	i := PeekFinder(A)
+	log.Printf("+ %d: %d", i, A[i])
+}
