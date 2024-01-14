@@ -140,7 +140,7 @@ func BenchmarkIO(b *testing.B) {
 }
 
 func TestGenBookToFile(t *testing.T) {
-	f, err := os.OpenFile("books.json", os.O_CREATE|os.O_WRONLY, fs.FileMode(0644))
+	f, err := os.OpenFile("books.json", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, fs.FileMode(0644))
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -162,11 +162,12 @@ func TestGenBooks(t *testing.T) {
 
 func GenBooks(n int, wtr io.Writer) {
 	type Book struct {
-		Author     string `json:"author"`
-		Title      string `json:"title"`
-		Year       int    `json:"year,omitempty"`
-		Rating     int    `json:"rating,omitempty"`
-		OnlineCopy bool   `json:"online_copy,string"`
+		Author     string    `json:"author"`
+		Title      string    `json:"title"`
+		Year       int       `json:"year,omitempty"`
+		Rating     int       `json:"rating,omitempty"`
+		OnlineCopy bool      `json:"online_copy,string"`
+		TStamp     time.Time `json:"timestamp"`
 	}
 
 	authors := []string{"Author 1", "Author 2", "Author 3"}
@@ -178,7 +179,7 @@ func GenBooks(n int, wtr io.Writer) {
 
 	wtr.Write([]byte{'['})
 	for n > 0 {
-		book := Book{Author: authors[rand.Intn(len(authors))]}
+		book := Book{Author: authors[rand.Intn(len(authors))], TStamp: time.Now()}
 
 		k := 3 + rand.Intn(len(tWords)-3)
 		for _, i := range rand.Perm(len(tWords)) {
