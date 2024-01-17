@@ -10,6 +10,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -250,4 +251,44 @@ func TestPeekFinder(t *testing.T) {
 
 	i := PeekFinder(A)
 	log.Printf("+ %d: %d | O(n): %d", i, A[i], PeekFinderLinear(A))
+}
+
+func TestQueryWriter(t *testing.T) {
+	hlColor := 31
+	rdr := strings.NewReader(`This is going to test Go/go query writer!
+At least one go should trun RED :-)
+No show line.`)
+
+	io.ReadAll(io.TeeReader(rdr, NewQueryWriter(os.Stdout, "go", hlColor)))
+
+	f, _ := os.Open("rpc_test.go")
+	defer f.Close()
+	io.ReadAll(io.TeeReader(bufio.NewReader(f), NewQueryWriter(os.Stdout, "go", hlColor)))
+}
+
+func NewQueryWriter(w io.Writer, query string, hlightColor int) io.Writer {
+	return &QueryWriter{w, []byte(query), hlightColor}
+}
+
+type QueryWriter struct {
+	io.Writer
+	q      []byte
+	hlCode int
+}
+
+func (q QueryWriter) Write(p []byte) (int, error) {
+	for _, lb := range bytes.Split(p, []byte{'\n'}) {
+		if i := bytes.Index(lb, q.q); i >= 0 {
+			for _, b := range [][]byte{lb[0:i],
+				[]byte(fmt.Sprintf("\x1b[%dm", q.hlCode)), q.q, []byte("\x1b[39m"),
+				lb[i+len(q.q):]} {
+				n, err := q.Writer.Write(b)
+				if err != nil {
+					return n, err
+				}
+			}
+			q.Writer.Write([]byte{'\n'})
+		}
+	}
+	return len(p), nil
 }
