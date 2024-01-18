@@ -113,30 +113,22 @@ func TestKnapsack(t *testing.T) {
 	}
 }
 
-type NullWriter struct{}
-
-func (NullWriter) Write(p []byte) (int, error) {
-	return len(p), nil
-}
-
 func BenchmarkBufIO(b *testing.B) {
 	b.StopTimer()
 	bfr := bytes.NewBuffer(make([]byte, 128))
 	bs := make([]byte, 1024)
 
 	b.StartTimer()
-	var wtr NullWriter
 	for i := 0; i < b.N; i++ {
 		bfr.Read(bs)
-		bfr.WriteTo(wtr)
+		io.Discard.Write(bfr.Bytes())
 	}
 }
 
 func BenchmarkIO(b *testing.B) {
-	var wtr NullWriter
 	for i := 0; i < b.N; i++ {
 		bs := make([]byte, 1024)
-		wtr.Write(bs)
+		io.Discard.Write(bs)
 	}
 }
 
