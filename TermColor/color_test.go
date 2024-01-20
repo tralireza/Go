@@ -4,11 +4,28 @@ import (
 	"bytes"
 	"log"
 	"math/rand"
+	"os"
+	"os/exec"
+	"os/user"
+	"strconv"
 	"testing"
 )
 
 func init() {
 	log.Print("TermColor >")
+}
+
+func TestOS(t *testing.T) {
+	uid := os.Getuid()
+	usr, _ := user.LookupId(strconv.Itoa(uid))
+	log.Printf("~%s %s %s:%s", usr.HomeDir, usr.Username, usr.Uid, usr.Gid)
+
+	cmd := exec.Command("ls", "-ltr")
+	cmd.Stdout = os.Stdout
+	if err := cmd.Start(); err != nil {
+		log.Print(err)
+	}
+	cmd.Wait()
 }
 
 func TestOut(t *testing.T) {
