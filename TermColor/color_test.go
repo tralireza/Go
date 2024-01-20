@@ -3,6 +3,7 @@ package termcolor
 import (
 	"bytes"
 	"log"
+	"math/rand"
 	"testing"
 )
 
@@ -19,7 +20,9 @@ func TestOut(t *testing.T) {
 }
 
 func TestColor(t *testing.T) {
-	Red.Out("*** Red ***\n")
-	Green.Out("*** Green ***\n")
-	Yellow.Out("*** Yellow ***\n")
+	Red.Out("--- Red ---\n")
+	Green.Out("--- Green ---\n")
+	Yellow.Out("--- Yellow ---\n")
+
+	TermColor(31 + rand.Intn(8)).Out("[ Random Color ]\n")
 }
