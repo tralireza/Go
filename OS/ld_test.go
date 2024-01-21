@@ -43,13 +43,13 @@ func TestSignal(t *testing.T) {
 
 // ls -l | grep w | wc -l
 func TestPipeIO(t *testing.T) {
-	ws := []string{"go", "mod"}
+	ws := []string{".go", "mod"}
 	cmds := make([][2]*exec.Cmd, len(ws))
 	wtrs := make([]io.Writer, len(ws))
 	outs := make([]bytes.Buffer, len(ws))
 
-	var err error
 	for i := range ws {
+		var err error
 		cmds[i][0] = exec.Command("grep", ws[i])
 		if wtrs[i], err = cmds[i][0].StdinPipe(); err != nil {
 			log.Fatal(err)
