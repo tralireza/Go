@@ -19,7 +19,6 @@ func main() {
 	log.Printf("[%d] ppid: %d", pid, os.Getppid())
 
 	if len(os.Args) != 1 {
-		log.Print(os.Args)
 		for {
 			log.Printf("[%d] daemon: %v", pid, time.Now())
 			time.Sleep(5 * time.Second)
@@ -31,8 +30,7 @@ func main() {
 	log.Printf("[%d] -> %v", pid, filepath.Join(cwd, os.Args[0]))
 
 	cmd := exec.Command(filepath.Join(cwd, os.Args[0]), "--daemon")
-	cmd.Stdout, cmd.Stdin, cmd.Dir = os.Stdout, os.Stdin, "/"
-	log.Print(cmd.Args)
+	cmd.Stdout, cmd.Stderr, cmd.Dir = os.Stdout, os.Stderr, "/"
 	if err := cmd.Start(); err != nil {
 		log.Printf("[%d] <FORK> %v", pid, err)
 		return
