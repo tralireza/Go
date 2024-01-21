@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"syscall"
 	"testing"
+	"time"
 )
 
 func TestStart(t *testing.T) {
@@ -94,4 +96,28 @@ func TestPipeIO(t *testing.T) {
 		out := bytes.TrimSpace(outs[i].Bytes())
 		log.Printf("%9q -> %s", cmds[i][0].Args, out)
 	}
+}
+
+type logTrip struct{ http.RoundTripper }
+
+func (t logTrip) RoundTrip(r *http.Request) (*http.Response, error) {
+	log.Print("-> ", r.URL)
+	r.Header.Set("X-Log-Time", time.Now().String())
+	return t.RoundTripper.RoundTrip(r)
+}
+
+func TestGLog(t *testing.T) {
+	client := http.Client{Transport: logTrip{http.DefaultTransport}}
+	rq, err := http.NewRequest("GET", "http://127.0.0.1:10080/search?q=Golang", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rsp, err := client.Do(rq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer rsp.Body.Close()
+
+	log.Print(rsp.StatusCode, rsp.Status)
 }
