@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -108,7 +109,8 @@ func (t logTrip) RoundTrip(r *http.Request) (*http.Response, error) {
 
 func TestGLog(t *testing.T) {
 	client := http.Client{Transport: logTrip{http.DefaultTransport}}
-	rq, err := http.NewRequest("GET", "http://127.0.0.1:10080/search?q=Golang", nil)
+	//rq, err := http.NewRequest("GET", "http://127.0.0.1:10080/search?q=Golang", nil)
+	rq, err := http.NewRequest("GET", "https://www.google.com/search?q=Golang", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -118,6 +120,16 @@ func TestGLog(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer rsp.Body.Close()
+	log.Print(rsp.StatusCode, " ", rsp.Status)
+}
 
-	log.Print(rsp.StatusCode, rsp.Status)
+func TestTemplate(t *testing.T) {
+	type TData struct{ Qs, Ans string }
+	tpl, err := template.New("1st").Parse(`<div><p>Q: {{.Qs}}</p><p>A: {{.Ans}}</p></div>`)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tdata := TData{"Question", "Answer"}
+	tpl.Execute(os.Stdout, tdata)
 }
