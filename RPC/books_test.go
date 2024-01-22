@@ -6,7 +6,13 @@ import (
 )
 
 func init() {
-	log.Print(">>> rpc.Library")
+	log.Print("> rpc.Library")
+}
+
+func TestISBN(t *testing.T) {
+	for i := 0; i < 15; i++ {
+		log.Print(GetRandomISBN())
+	}
 }
 
 func TestAdd(t *testing.T) {
