@@ -43,10 +43,13 @@ func TestServerRPC(t *testing.T) {
 	}
 	defer client.Close()
 
-	index := -1
 	b := Book{ISBN: NewISBN(), Title: "Title1", Author: "Author1"}
-	if err := client.Call("LibrarySvc.Add", b, &index); err != nil {
-		log.Fatal(err)
+	for i := 0; i < 2; i++ {
+		index := -1
+		if err := client.Call("LibrarySvc.Add", b, &index); err != nil {
+			log.Printf("%d. error: %v", i, err)
+			continue
+		}
+		log.Printf("%d. Book: %d", i, index)
 	}
-	log.Printf("Book: %d", index)
 }
