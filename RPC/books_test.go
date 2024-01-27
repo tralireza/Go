@@ -52,4 +52,10 @@ func TestServerRPC(t *testing.T) {
 		}
 		log.Printf("%d. Book: %d", i, index)
 	}
+
+	count := -1
+	if err := client.Call("LibrarySvc.Count", 0, &count); err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Books: %d", count)
 }
