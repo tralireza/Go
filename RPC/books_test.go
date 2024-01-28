@@ -1,8 +1,11 @@
 package lrcp
 
 import (
+	"bytes"
+	"encoding/xml"
 	"log"
 	"net/rpc"
+	"strings"
 	"testing"
 	"time"
 )
@@ -58,4 +61,32 @@ func TestServerRPC(t *testing.T) {
 		log.Fatal(err)
 	}
 	log.Printf("Books: %d", count)
+}
+
+type ID string
+type xmlS struct {
+	XMLName   struct{} `xml:"treasure"`
+	ID        ID       `xml:"id,attr"`
+	Name      string   `xml:"name"`
+	Job       string   `xml:"details>job,omitempty"`
+	BirthYear int      `xml:"birth_year,omitempty"`
+}
+
+func (o ID) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+	return xml.Attr{
+		Name:  xml.Name{Local: "idattr"},
+		Value: strings.ToUpper(string(o)),
+	}, nil
+}
+
+func TestXML(t *testing.T) {
+	c := xmlS{Name: "Hakim-e-Tos", Job: "Poet", BirthYear: 550, ID: "1"}
+
+	bfr := bytes.Buffer{}
+	e := xml.NewEncoder(&bfr)
+	e.Indent("", "  ")
+	if err := e.Encode(c); err != nil {
+		t.Fatal(err)
+	}
+	log.Printf("%d:%d -> %v", bfr.Len(), len(bfr.String()), bfr.String())
 }
