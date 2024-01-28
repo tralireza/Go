@@ -2,6 +2,7 @@ package lrcp
 
 import (
 	"bytes"
+	"encoding/gob"
 	"encoding/xml"
 	"log"
 	"net/rpc"
@@ -63,7 +64,7 @@ func TestServerRPC(t *testing.T) {
 	log.Printf("Books: %d", count)
 }
 
-type xmlS struct {
+type lS struct {
 	XMLName   struct{} `xml:"treasure"`
 	ID        iD       `xml:",attr"`
 	Name      string   `xml:"name"`
@@ -80,7 +81,7 @@ func (o iD) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func TestXML(t *testing.T) {
-	c := xmlS{Name: "Hakim-e-Tos", Job: "Poet", BirthYear: 550, ID: "1"}
+	c := lS{Name: "Hakim-e-Tos", Job: "Poet", BirthYear: 550, ID: "1"}
 
 	bfr := bytes.Buffer{}
 	e := xml.NewEncoder(&bfr)
@@ -89,4 +90,15 @@ func TestXML(t *testing.T) {
 		t.Fatal(err)
 	}
 	log.Printf("%d:%d -> %v", bfr.Len(), len(bfr.String()), bfr.String())
+}
+
+func TestGOB(t *testing.T) {
+	luke := lS{Name: "Luke", Job: "Jedi"}
+
+	var s strings.Builder
+	e := gob.NewEncoder(&s)
+	if err := e.Encode(luke); err != nil {
+		t.Fatal(err)
+	}
+	log.Printf("%+v\n|--->>>\n%s\n<<<---|\n", s, s.String())
 }
