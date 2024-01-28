@@ -63,18 +63,18 @@ func TestServerRPC(t *testing.T) {
 	log.Printf("Books: %d", count)
 }
 
-type ID string
 type xmlS struct {
 	XMLName   struct{} `xml:"treasure"`
-	ID        ID       `xml:"id,attr"`
+	ID        iD       `xml:",attr"`
 	Name      string   `xml:"name"`
 	Job       string   `xml:"details>job,omitempty"`
 	BirthYear int      `xml:"birth_year,omitempty"`
 }
+type iD string
 
-func (o ID) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+func (o iD) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return xml.Attr{
-		Name:  xml.Name{Local: "idattr"},
+		Name:  xml.Name{Local: "id"},
 		Value: strings.ToUpper(string(o)),
 	}, nil
 }
