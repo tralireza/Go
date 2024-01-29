@@ -65,11 +65,12 @@ func TestServerRPC(t *testing.T) {
 }
 
 type lS struct {
-	XMLName   struct{} `xml:"treasure"`
-	ID        iD       `xml:",attr"`
-	Name      string   `xml:"name"`
-	Job       string   `xml:"details>job,omitempty"`
-	BirthYear int      `xml:"birth_year,omitempty"`
+	XMLName   struct{} `xml:"treasure" gob:"-"`
+	ID        iD       `xml:",attr" gob:"id"`
+	Name      string   `xml:"name" gob:"name"`
+	Job       string   `xml:"details>job,omitempty" gob:"job"`
+	BirthYear int      `xml:"birth_year,omitempty" gob:"birthyear"`
+	Sq        int      `gob:"-" xml:"-"`
 }
 type iD string
 
@@ -81,7 +82,7 @@ func (o iD) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 }
 
 func TestXML(t *testing.T) {
-	c := lS{Name: "Hakim-e-Tos", Job: "Poet", BirthYear: 550, ID: "1"}
+	c := lS{Name: "Hakim-e-Tos", Job: "Poet", BirthYear: 550, ID: "1", Sq: 42}
 
 	bfr := bytes.Buffer{}
 	e := xml.NewEncoder(&bfr)
@@ -93,12 +94,20 @@ func TestXML(t *testing.T) {
 }
 
 func TestGOB(t *testing.T) {
-	luke := lS{Name: "Luke", Job: "Jedi"}
+	lukeSkywalker := lS{Name: "Luke", Job: "Jedi", ID: "J1"}
 
 	var s strings.Builder
 	e := gob.NewEncoder(&s)
-	if err := e.Encode(luke); err != nil {
+	if err := e.Encode(lukeSkywalker); err != nil {
 		t.Fatal(err)
 	}
-	log.Printf("%+v\n|--->>>\n%s\n<<<---|\n", s, s.String())
+	log.Printf("%+v\n|--->>>\n%q\n<<<---|\n", s, s.String())
+}
+
+func TestClosure(t *testing.T) {
+	for i := 0; i < 3; i++ {
+		go log.Printf("+ %d", i)
+		go func() { log.Printf("- %d", i) }()
+	}
+	time.Sleep(time.Second)
 }
