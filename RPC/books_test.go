@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/xml"
+	"fmt"
 	"log"
 	"net/rpc"
 	"strings"
@@ -110,4 +111,20 @@ func TestClosure(t *testing.T) {
 		go func() { log.Printf("- %d", i) }()
 	}
 	time.Sleep(time.Second)
+}
+
+func TestSync(t *testing.T) {
+	var s int
+	for i := 0; i < 16; i++ {
+		go func(i int) {
+			d := time.Duration(i) * time.Millisecond
+			time.Sleep(d)
+			fmt.Printf(".%d ", s)
+		}(i)
+	}
+	for ; s < 16; s++ {
+		time.Sleep(time.Millisecond)
+		fmt.Printf(",%d ", s)
+	}
+	log.Print()
 }
