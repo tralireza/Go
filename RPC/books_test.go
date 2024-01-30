@@ -133,18 +133,18 @@ func TestSync(t *testing.T) {
 func TestChan(t *testing.T) {
 	c := make(chan int)
 	go func(sc chan<- int) {
+		defer close(sc)
 		for i := 0; i < 5; i++ {
 			sc <- i
 		}
-		close(sc)
 	}(c)
 
 	quitc := make(chan struct{})
 	go func(rc <-chan int, quitc chan<- struct{}) {
+		defer close(quitc)
 		for i := range rc {
 			log.Print(i)
 		}
-		close(quitc)
 	}(c, quitc)
 
 	<-quitc
