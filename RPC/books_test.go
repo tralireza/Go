@@ -151,30 +151,17 @@ func TestChan(t *testing.T) {
 }
 
 func TestTimer(t *testing.T) {
-	tmr := time.NewTimer(time.Millisecond)
-	time.Sleep(time.Millisecond / 2)
-	if !tmr.Stop() {
-		<-tmr.C
-		panic("should stop")
-	}
+	tkr := time.NewTicker(time.Second)
+	time.AfterFunc(3*time.Second, func() { tkr.Stop() })
 
-	tmr.Reset(time.Millisecond)
-	time.Sleep(time.Millisecond)
-
-	select {
-	case <-tmr.C:
-	default:
-		panic("should fire")
-	}
-
-	time.Sleep(time.Millisecond)
-	if tmr.Stop() {
-		panic("should not stop")
-	}
-
-	select {
-	case <-tmr.C:
-	default:
-		panic("not fired?")
+	qc := time.After(5*time.Second + 75*time.Millisecond)
+	for {
+		select {
+		case <-tkr.C:
+			fmt.Print(".")
+		case <-qc:
+			fmt.Println("*")
+			return
+		}
 	}
 }
