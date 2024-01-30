@@ -124,7 +124,23 @@ func TestSync(t *testing.T) {
 	}
 	for ; s < 16; s++ {
 		time.Sleep(time.Millisecond)
-		fmt.Printf(",%d ", s)
+		fmt.Printf("=%d ", s)
 	}
+	time.Sleep(time.Millisecond)
 	log.Print()
+}
+
+func TestChan(t *testing.T) {
+	c := make(chan int)
+	go func(sc chan<- int) {
+		for i := 0; i < 3; i++ {
+			sc <- i
+		}
+		close(sc)
+	}(c)
+	func(rc <-chan int) {
+		for i := range rc {
+			log.Print(i)
+		}
+	}(c)
 }
