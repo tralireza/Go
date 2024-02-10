@@ -40,6 +40,13 @@ func TestBinSearch3(t *testing.T) {
 	}
 }
 
+func BenchmarkBinSearch(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		slices.BinarySearch(S, 41)
+		slices.BinarySearch(S, 2)
+	}
+}
+
 func BenchmarkBinSearch2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		BinSearch2(S, 41)
