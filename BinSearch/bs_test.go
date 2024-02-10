@@ -1,6 +1,7 @@
 package bsearch
 
 import (
+	"fmt"
 	"log"
 	"slices"
 	"testing"
@@ -19,5 +20,28 @@ func Test2300(t *testing.T) {
 			t.Fatalf("Wrong pairs! %v != %v", pairs, v[3])
 		}
 		log.Printf("+ %v %v  -%d->  %v", spells, potions, success, v[3])
+	}
+}
+
+var S = []int{1, 3, 4, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 31, 33, 38, 39, 41, 43, 44, 45, 46, 51, 55, 56, 59}
+
+func TestBinSearch3(t *testing.T) {
+	for i := range S {
+		fmt.Printf("|%2d", i)
+	}
+	fmt.Println("|")
+	for _, v := range S {
+		fmt.Printf("|%2d", v)
+	}
+	fmt.Println("|")
+	for _, v := range []int{1, 59, 33, 31, 2, 58, 0, 60} {
+		log.Printf("%3v -> % 3d", v, BinSearch3(S, v))
+	}
+}
+
+func BenchmarkBinSearch3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		BinSearch3(S, 41)
+		BinSearch3(S, 2)
 	}
 }
