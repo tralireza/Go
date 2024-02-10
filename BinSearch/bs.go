@@ -26,21 +26,18 @@ func SuccessfulPairs(spells []int, potions []int, success int64) []int {
 	}
 
 	slices.Sort(potions)
-	log.Print(potions)
 
 	pairs := make([]int, len(spells))
 	for i, v := range spells {
+		pairs[i] = len(potions)
 		x := (success + int64(v) - 1) / int64(v)
 		if x > 1 {
 			l := leftBSearch(potions, int(x))
-			pairs[i] = len(potions) - l
-			if l == len(potions)-1 && int64(potions[l]) < x {
-				log.Printf("%d: %d %d", l, potions[l], x)
+			pairs[i] -= l
 
+			if l == len(potions)-1 && int64(potions[l]) < x {
 				pairs[i]--
 			}
-		} else {
-			pairs[i] = len(potions)
 		}
 	}
 	return pairs
