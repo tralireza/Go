@@ -10,7 +10,7 @@ func init() {
 	log.Print("> binSearch")
 }
 
-func BinSearch2(S []int, x int) int {
+func BinSearch2R(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
 		m := (l + r) / 2
@@ -26,7 +26,7 @@ func BinSearch2(S []int, x int) int {
 	return -1
 }
 
-func BinSearch2L(S []int, x int) int {
+func BinSearch2(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
 		m := (l + r + 1) / 2
