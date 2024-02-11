@@ -13,6 +13,22 @@ func init() {
 func BinSearch2(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
+		m := (l + r) / 2
+		if S[m] < x {
+			l = m + 1
+		} else {
+			r = m
+		}
+	}
+	if x == S[r] {
+		return r
+	}
+	return -1
+}
+
+func BinSearch2L(S []int, x int) int {
+	l, r := 0, len(S)-1
+	for l != r {
 		m := (l + r + 1) / 2
 		if S[m] > x {
 			r = m - 1
