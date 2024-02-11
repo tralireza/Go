@@ -36,7 +36,7 @@ func TestBinSearch3(t *testing.T) {
 	fmt.Println("|")
 
 	for _, v := range []int{1, 59, 33, 31, 2, 58, 0, 60} {
-		log.Printf("3. %3v -> % 3d   | 2. %3v -> % 3d", v, BinSearch3(S, v), v, BinSearch2(S, v))
+		log.Printf("3. %3v -> % 3d   | 2. % 3d   | 2L. % 3d", v, BinSearch3(S, v), BinSearch2(S, v), BinSearch2L(S, v))
 	}
 }
 
