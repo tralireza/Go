@@ -13,7 +13,7 @@ func init() {
 func BinSearch2R(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
-		m := (l + r) / 2
+		m := l + (r-l)/2
 		if S[m] < x {
 			l = m + 1
 		} else {
@@ -29,7 +29,7 @@ func BinSearch2R(S []int, x int) int {
 func BinSearch2(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
-		m := (l + r + 1) / 2
+		m := l + (r+1-l)/2
 		if S[m] > x {
 			r = m - 1
 		} else {
@@ -45,7 +45,7 @@ func BinSearch2(S []int, x int) int {
 func BinSearch3(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l <= r {
-		m := (l + r) / 2
+		m := l + (r-l)/2
 		if x < S[m] {
 			r = m - 1
 		} else if x > S[m] {
