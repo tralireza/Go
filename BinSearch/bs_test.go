@@ -25,7 +25,7 @@ func Test2300(t *testing.T) {
 
 var S = []int{1, 3, 4, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 31, 33, 38, 39, 41, 43, 44, 45, 46, 51, 55, 56, 59}
 
-func TestBinSearch3(t *testing.T) {
+func TestBinSearch(t *testing.T) {
 	for i := range S {
 		fmt.Printf("|%2d", i)
 	}

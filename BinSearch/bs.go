@@ -62,7 +62,7 @@ func SuccessfulPairs(spells []int, potions []int, success int64) []int {
 	leftBSearch := func(Sdup []int, x int) int {
 		l, r := 0, len(Sdup)-1
 		for l < r {
-			m := (l + r) / 2
+			m := l + (r-l)/2
 			if Sdup[m] < x {
 				l = m + 1
 			} else {
