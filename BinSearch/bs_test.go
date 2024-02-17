@@ -23,24 +23,45 @@ func Test2300(t *testing.T) {
 	}
 }
 
-var S = []int{1, 3, 4, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 31, 33, 38, 39, 41, 43, 44, 45, 46, 51, 55, 56, 59}
+type tArr []int
 
-func TestBinSearch(t *testing.T) {
-	for i := range S {
+func New() tArr {
+	return tArr([]int{1, 3, 4, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 31, 33, 38, 39, 41, 43, 44, 45, 46, 51, 55, 56, 59})
+}
+func (a tArr) Draw() {
+	for i := range a {
 		fmt.Printf("|%2d", i)
 	}
 	fmt.Println("|")
-	for _, v := range S {
+	for _, v := range a {
 		fmt.Printf("|%2d", v)
 	}
 	fmt.Println("|")
+}
+func (a tArr) Dups() {
+	a[1], a[2] = 1, 1
+	a[18], a[19], a[20] = 33, 33, 33
+}
 
+func TestLeftBinSearch(t *testing.T) {
+	S := New()
+	S.Dups()
+	S.Draw()
+	for _, v := range []int{1, 19, 29, 60, 33, 43} {
+		i := LeftBinSearch(S, v)
+		log.Printf("%3d -> Rank: %3d (found? %t)", v, i, i < len(S) && S[i] == v)
+	}
+}
+
+func TestBinSearch(t *testing.T) {
+	S := New()
 	for _, v := range []int{1, 59, 33, 31, 2, 58, 0, 60} {
 		log.Printf("3. %3v -> % 3d   | 2. % 3d   | 2r. % 3d", v, BinSearch3(S, v), BinSearch2(S, v), BinSearch2R(S, v))
 	}
 }
 
 func BenchmarkBinSearch(b *testing.B) {
+	S := New()
 	for i := 0; i < b.N; i++ {
 		slices.BinarySearch(S, 41)
 		slices.BinarySearch(S, 2)
@@ -48,6 +69,7 @@ func BenchmarkBinSearch(b *testing.B) {
 }
 
 func BenchmarkBinSearch2(b *testing.B) {
+	S := New()
 	for i := 0; i < b.N; i++ {
 		BinSearch2(S, 41)
 		BinSearch2(S, 2)
@@ -55,6 +77,7 @@ func BenchmarkBinSearch2(b *testing.B) {
 }
 
 func BenchmarkBinSearch3(b *testing.B) {
+	S := New()
 	for i := 0; i < b.N; i++ {
 		BinSearch3(S, 41)
 		BinSearch3(S, 2)
