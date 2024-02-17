@@ -43,13 +43,15 @@ func (a tArr) Dups() {
 	a[18], a[19], a[20] = 33, 33, 33
 }
 
-func TestLeftBinSearch(t *testing.T) {
+func TestRankBinSearch(t *testing.T) {
 	S := New()
 	S.Dups()
 	S.Draw()
-	for _, v := range []int{1, 19, 29, 60, 33, 43} {
-		i := LeftBinSearch(S, v)
-		log.Printf("%3d -> Rank: %3d (found? %t)", v, i, i < len(S) && S[i] == v)
+	for _, v := range []int{0, 1, 8, 29, 43, 55, 59, 60} {
+		l, r := LeftBinSearch(S, v), RightBinSearch(S, v)
+		log.Printf("%3d -> Rank(L): %2d (found? %-5t)   | Rank(R): %2d (%2d) (found? %-5t)", v,
+			l, l < len(S) && S[l] == v,
+			len(S)-r-1, r, r > 0 && S[r] == v)
 	}
 }
 
