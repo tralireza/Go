@@ -10,6 +10,19 @@ func init() {
 	log.Print("> binSearch")
 }
 
+func LeftBinSearch(Sdup []int, x int) int {
+	l, r := 0, len(Sdup)
+	for l < r {
+		m := l + (r-l)/2
+		if Sdup[m] < x {
+			l = m + 1
+		} else {
+			r = m
+		}
+	}
+	return l
+}
+
 func BinSearch2R(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
