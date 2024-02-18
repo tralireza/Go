@@ -36,22 +36,6 @@ func LeftBinSearch(Sdup []int, x int) int {
 	return l
 }
 
-func BinSearch2R(S []int, x int) int {
-	l, r := 0, len(S)-1
-	for l != r {
-		m := l + (r-l)/2
-		if S[m] < x {
-			l = m + 1
-		} else {
-			r = m
-		}
-	}
-	if x == S[r] {
-		return r
-	}
-	return -1
-}
-
 func BinSearch2(S []int, x int) int {
 	l, r := 0, len(S)-1
 	for l != r {
@@ -85,33 +69,20 @@ func BinSearch3(S []int, x int) int {
 
 // 2300
 func SuccessfulPairs(spells []int, potions []int, success int64) []int {
-	leftBSearch := func(Sdup []int, x int) int {
-		l, r := 0, len(Sdup)-1
-		for l < r {
-			m := l + (r-l)/2
-			if Sdup[m] < x {
-				l = m + 1
-			} else {
-				r = m
-			}
-		}
-		return l
-	}
-
 	slices.Sort(potions)
 
 	pairs := make([]int, len(spells))
-	for i, v := range spells {
-		pairs[i] = len(potions)
-		x := (success + int64(v) - 1) / int64(v)
-		if x > 1 {
-			l := leftBSearch(potions, int(x))
-			pairs[i] -= l
-
-			if l == len(potions)-1 && int64(potions[l]) < x {
-				pairs[i]--
+	for i, spell := range spells {
+		l, r := 0, len(potions)-1
+		for l <= r {
+			m := l + (r-l)>>1
+			if int64(spell*potions[m]) < success {
+				l = m + 1
+			} else {
+				r = m - 1
 			}
 		}
+		pairs[i] = len(potions) - l
 	}
 	return pairs
 }
