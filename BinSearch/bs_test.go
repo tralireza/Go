@@ -26,7 +26,8 @@ func Test2300(t *testing.T) {
 type tArr []int
 
 func New() tArr {
-	return tArr([]int{1, 3, 4, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 31, 33, 38, 39, 41, 43, 44, 45, 46, 51, 55, 56, 59})
+	return tArr([]int{1, 3, 4, 5, 7, 8, 10, 12, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 31, 33, 34, 36, 38, 39,
+		41, 43, 44, 45, 46, 48, 49, 51, 52, 53, 55, 56, 58, 59})
 }
 func (a tArr) Draw() {
 	for i := range a {
@@ -41,6 +42,7 @@ func (a tArr) Draw() {
 func (a tArr) Dups() {
 	a[1], a[2] = 1, 1
 	a[18], a[19], a[20] = 33, 33, 33
+	a[34], a[35] = 51, 51
 }
 
 func TestRankBinSearch(t *testing.T) {
@@ -49,16 +51,19 @@ func TestRankBinSearch(t *testing.T) {
 	S.Draw()
 	for _, v := range []int{0, 1, 8, 29, 43, 55, 59, 60} {
 		l, r := LeftBinSearch(S, v), RightBinSearch(S, v)
-		log.Printf("%3d -> Rank(L): %2d (found? %-5t)   | Rank(R): %2d (%2d) (found? %-5t)", v,
+		i, ok := slices.BinarySearch(S, v)
+		log.Printf("%3d -> Rank(L): %2d (found? %-5t)   | Rank(R): %2d (%2d) (found? %-5t)  | %2d (found? %-5t)", v,
 			l, l < len(S) && S[l] == v,
-			len(S)-r-1, r, r > 0 && S[r] == v)
+			len(S)-r-1, r, r > 0 && S[r] == v,
+			i, ok)
 	}
 }
 
 func TestBinSearch(t *testing.T) {
 	S := New()
+	S.Draw()
 	for _, v := range []int{1, 59, 33, 31, 2, 58, 0, 60} {
-		log.Printf("3. %3v -> % 3d   | 2. % 3d   | 2r. % 3d", v, BinSearch3(S, v), BinSearch2(S, v), BinSearch2R(S, v))
+		log.Printf("3. %3v -> % 3d   | 2. % 3d", v, BinSearch3(S, v), BinSearch2(S, v))
 	}
 }
 
