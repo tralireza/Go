@@ -116,7 +116,7 @@ func toOddEvenList(head *ListNode) *ListNode {
 }
 
 func Test328(t *testing.T) {
-	h := toOddEvenList(&ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{5, &ListNode{6, &ListNode{7, nil}}}}}}})
+	h := toOddEvenList(&ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{5, &ListNode{6, &ListNode{7, &ListNode{8, nil}}}}}}}})
 	for n := h; n != nil; n = n.Next {
 		if n.Next != nil {
 			fmt.Print(n, "-> ")
