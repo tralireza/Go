@@ -1,1 +1,3 @@
 package tgraph
+
+func init() {}
