@@ -8,6 +8,19 @@ import (
 
 func init() {}
 
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func (o ListNode) String() string {
+	b := '+'
+	if o.Next == nil {
+		b = '-'
+	}
+	return fmt.Sprintf("{%d %c}", o.Val, b)
+}
+
 type TreeNode struct {
 	Val         int
 	Left, Right *TreeNode
@@ -24,6 +37,34 @@ func (o TreeNode) String() string {
 	return fmt.Sprintf("{%d %c %c}", o.Val, l, r)
 }
 
+// 437
+func PathSum3(root *TreeNode, targetSum int) int {
+	Q, S := []*TreeNode{}, [][]int{}
+	Q, S = append(Q, root), append(S, []int{})
+
+	v := 0
+	for len(Q) > 0 {
+		n, vs := Q[len(Q)-1], S[len(S)-1]
+		Q, S = Q[:len(Q)-1], S[:len(S)-1]
+
+		vs = append(vs, n.Val)
+		for s, i := 0, len(vs)-1; i >= 0; i-- {
+			s += vs[i]
+			if s == targetSum {
+				v++
+			}
+		}
+
+		if n.Left != nil {
+			Q, S = append(Q, n.Left), append(S, vs)
+		}
+		if n.Right != nil {
+			Q, S = append(Q, n.Right), append(S, vs)
+		}
+	}
+	return v
+}
+
 func DFS1448(root *TreeNode) int {
 	type E struct {
 		Node *TreeNode
@@ -35,7 +76,7 @@ func DFS1448(root *TreeNode) int {
 	Q.PushBack(E{root, root.Val})
 	for Q.Len() > 0 {
 		e := Q.Remove(Q.Back()).(E)
-		log.Print(e)
+		log.Printf("%+v", e)
 		n, x := e.Node, e.xVal
 		if n.Val >= x {
 			v++
@@ -50,4 +91,40 @@ func DFS1448(root *TreeNode) int {
 		}
 	}
 	return v
+}
+
+// 1609
+func IsEvenOddTree(root *TreeNode) bool {
+	Q, L := []*TreeNode{}, []int{}
+	Q, L = append(Q, root), append(L, 0)
+
+	var prv int
+	h := -1
+	for len(Q) > 0 {
+		n, l := Q[0], L[0]
+		Q, L = Q[1:], L[1:]
+
+		if l > h {
+			h = l
+		} else {
+			if l&1 == 0 && prv >= n.Val {
+				return false
+			}
+			if l&1 == 1 && prv <= n.Val {
+				return false
+			}
+		}
+		if l&1 == n.Val&1 {
+			return false
+		}
+		prv = n.Val
+
+		if n.Left != nil {
+			Q, L = append(Q, n.Left), append(L, l+1)
+		}
+		if n.Right != nil {
+			Q, L = append(Q, n.Right), append(L, l+1)
+		}
+	}
+	return true
 }

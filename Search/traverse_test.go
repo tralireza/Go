@@ -89,19 +89,6 @@ func TestDFS(t *testing.T) {
 	}
 }
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
-func (o ListNode) String() string {
-	b := '+'
-	if o.Next == nil {
-		b = '-'
-	}
-	return fmt.Sprintf("{%d %c}", o.Val, b)
-}
-
 func toOddEvenList(head *ListNode) *ListNode {
 	heven := head.Next
 
@@ -126,47 +113,22 @@ func Test328(t *testing.T) {
 	}
 }
 
-func isEvenOddTree(root *TreeNode) bool {
-	Q, L := []*TreeNode{}, []int{}
-	Q, L = append(Q, root), append(L, 0)
-
-	var prv int
-	h := -1
-	for len(Q) > 0 {
-		n, l := Q[0], L[0]
-		Q, L = Q[1:], L[1:]
-
-		if l > h {
-			h = l
-		} else {
-			if l&1 == 0 && prv >= n.Val {
-				return false
-			}
-			if l&1 == 1 && prv <= n.Val {
-				return false
-			}
-		}
-		if l&1 == n.Val&1 {
-			return false
-		}
-		prv = n.Val
-
-		if n.Left != nil {
-			Q, L = append(Q, n.Left), append(L, l+1)
-		}
-		if n.Right != nil {
-			Q, L = append(Q, n.Right), append(L, l+1)
-		}
-	}
-	return true
+/*
+			    1
+			4       2
+		3   5   7
+	 8         2
+*/
+func aTree() *TreeNode {
+	return &TreeNode{1, &TreeNode{4, &TreeNode{3, &TreeNode{Val: 8}, nil}, &TreeNode{Val: 5}}, &TreeNode{2, &TreeNode{7, nil, &TreeNode{Val: 2}}, nil}}
 }
 
-func aTree() *TreeNode {
-	return &TreeNode{1, &TreeNode{4, &TreeNode{Val: 3}, &TreeNode{Val: 5}}, &TreeNode{2, &TreeNode{Val: 7}, nil}}
+func Test437(t *testing.T) {
+	log.Print(PathSum3(aTree(), 9))
 }
 
 func Test1609(t *testing.T) {
-	log.Print(isEvenOddTree(aTree()))
+	log.Print(IsEvenOddTree(aTree()))
 }
 
 func TestDFS1448(t *testing.T) {
