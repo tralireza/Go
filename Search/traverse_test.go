@@ -168,3 +168,7 @@ func aTree() *TreeNode {
 func Test1609(t *testing.T) {
 	log.Print(isEvenOddTree(aTree()))
 }
+
+func TestDFS1448(t *testing.T) {
+	log.Print(DFS1448(aTree()))
+}
