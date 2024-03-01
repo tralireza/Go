@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"fmt"
 	"log"
+	"math"
 )
 
 func init() {}
@@ -57,6 +58,41 @@ func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 		return l
 	}
 	return r
+}
+
+// 1161
+func MaxLevelSum(root *TreeNode) int {
+	Q := []*TreeNode{}
+	Q = append(Q, root)
+
+	l := 0
+	xs, xl := math.MinInt, 0
+	for len(Q) > 0 {
+		l++
+		ls := 0
+
+		log.Print(l, Q)
+
+		for lsize := len(Q); lsize > 0; lsize-- {
+			n := Q[0]
+			Q = Q[1:]
+
+			ls += n.Val
+
+			if n.Left != nil {
+				Q = append(Q, n.Left)
+			}
+			if n.Right != nil {
+				Q = append(Q, n.Right)
+			}
+		}
+
+		if ls > xs {
+			xs, xl = ls, l
+		}
+	}
+
+	return xl
 }
 
 // 1372

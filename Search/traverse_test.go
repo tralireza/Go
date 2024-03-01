@@ -128,6 +128,10 @@ var root *TreeNode = &TreeNode{1,
 	},
 }
 
+func Test1161(t *testing.T) {
+	log.Print(MaxLevelSum(root))
+}
+
 func Test1372(t *testing.T) {
 	log.Print(LongestZigZag(root))
 }
