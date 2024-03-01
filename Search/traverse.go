@@ -39,61 +39,24 @@ func (o TreeNode) String() string {
 
 // 236
 func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-	type E struct {
-		N *TreeNode
-		H []*TreeNode
+	if root == nil {
+		return nil
 	}
 
-	fh := func(r *TreeNode) ([]*TreeNode, []*TreeNode) {
-		Q := list.New()
-		Q.PushBack(E{r, []*TreeNode{r}})
-		for Q.Len() > 0 {
-			e := Q.Remove(Q.Back()).(E)
-			n := e.N
-			if n == p {
-				return e.H, nil
-			}
-			if n == q {
-				return nil, e.H
-			}
-
-			if n.Left != nil {
-				Q.PushBack(E{n.Left, append(e.H, n.Left)})
-			}
-			if n.Right != nil {
-				Q.PushBack(E{n.Right, append(e.H, n.Right)})
-			}
-		}
-		return nil, nil
+	if p == root || q == root {
+		return root
 	}
 
-	hP, hQ := fh(root)
-	if hQ != nil {
-		hP = hQ
-		p, q = q, p
+	l := LowestCommonAncestor(root.Left, p, q)
+	r := LowestCommonAncestor(root.Right, p, q)
+
+	if l != nil && r != nil {
+		return root
 	}
-
-	for i := len(hP) - 1; i >= 0; i-- {
-		r := hP[i]
-		Q := []*TreeNode{r}
-
-		for len(Q) > 0 {
-			n := Q[len(Q)-1]
-			Q = Q[:len(Q)-1]
-			if n == q {
-				return r
-			}
-
-			if n.Left != nil {
-				Q = append(Q, n.Left)
-			}
-			if n.Right != nil {
-				Q = append(Q, n.Right)
-			}
-		}
+	if l != nil {
+		return l
 	}
-
-	return root
+	return r
 }
 
 // 1372
