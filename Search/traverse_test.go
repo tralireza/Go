@@ -126,22 +126,6 @@ func Test328(t *testing.T) {
 	}
 }
 
-type TreeNode struct {
-	Val         int
-	Left, Right *TreeNode
-}
-
-func (o TreeNode) String() string {
-	l, r := '+', '+'
-	if o.Left == nil {
-		l = '-'
-	}
-	if o.Right == nil {
-		r = '-'
-	}
-	return fmt.Sprintf("{%d %c %c}", o.Val, l, r)
-}
-
 func isEvenOddTree(root *TreeNode) bool {
 	Q, L := []*TreeNode{}, []int{}
 	Q, L = append(Q, root), append(L, 0)
@@ -177,7 +161,10 @@ func isEvenOddTree(root *TreeNode) bool {
 	return true
 }
 
+func aTree() *TreeNode {
+	return &TreeNode{1, &TreeNode{4, &TreeNode{Val: 3}, &TreeNode{Val: 5}}, &TreeNode{2, &TreeNode{Val: 7}, nil}}
+}
+
 func Test1609(t *testing.T) {
-	h := &TreeNode{1, &TreeNode{4, &TreeNode{Val: 3}, &TreeNode{Val: 5}}, &TreeNode{2, &TreeNode{Val: 7}, nil}}
-	log.Print(isEvenOddTree(h))
+	log.Print(isEvenOddTree(aTree()))
 }
