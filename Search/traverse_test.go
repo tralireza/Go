@@ -114,17 +114,19 @@ func Test328(t *testing.T) {
 }
 
 /*
-				    1
-				4       2
-			3   5       7
-		 8           2
-	                1
+				     1
+				4         2
+			3   5     7   9
+		 8     6       4
+	    11 13         15
 */
 var root *TreeNode = &TreeNode{1,
-	&TreeNode{4, &TreeNode{3, &TreeNode{Val: 8}, nil}, &TreeNode{Val: 5}},
+	&TreeNode{4,
+		&TreeNode{3, &TreeNode{8, nil, &TreeNode{Val: 11}}, nil},
+		&TreeNode{5, nil, &TreeNode{6, &TreeNode{Val: 13}, nil}}},
 	&TreeNode{2,
-		nil,
-		&TreeNode{7, &TreeNode{2, nil, &TreeNode{Val: 1}}, nil},
+		&TreeNode{Val: 7},
+		&TreeNode{9, &TreeNode{4, nil, &TreeNode{Val: 15}}, nil},
 	},
 }
 
