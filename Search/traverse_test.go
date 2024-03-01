@@ -114,23 +114,32 @@ func Test328(t *testing.T) {
 }
 
 /*
-			    1
-			4       2
-		3   5   7
-	 8         2
+				    1
+				4       2
+			3   5       7
+		 8           2
+	                1
 */
-func aTree() *TreeNode {
-	return &TreeNode{1, &TreeNode{4, &TreeNode{3, &TreeNode{Val: 8}, nil}, &TreeNode{Val: 5}}, &TreeNode{2, &TreeNode{7, nil, &TreeNode{Val: 2}}, nil}}
+var root *TreeNode = &TreeNode{1,
+	&TreeNode{4, &TreeNode{3, &TreeNode{Val: 8}, nil}, &TreeNode{Val: 5}},
+	&TreeNode{2,
+		nil,
+		&TreeNode{7, &TreeNode{2, nil, &TreeNode{Val: 1}}, nil},
+	},
+}
+
+func Test1372(t *testing.T) {
+	log.Print(LongestZigZag(root))
 }
 
 func Test437(t *testing.T) {
-	log.Print(PathSum3(aTree(), 9))
+	log.Print(PathSum3(root, 9))
 }
 
 func Test1609(t *testing.T) {
-	log.Print(IsEvenOddTree(aTree()))
+	log.Print(IsEvenOddTree(root))
 }
 
 func TestDFS1448(t *testing.T) {
-	log.Print(DFS1448(aTree()))
+	log.Print(DFS1448(root))
 }

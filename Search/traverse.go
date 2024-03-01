@@ -37,6 +37,38 @@ func (o TreeNode) String() string {
 	return fmt.Sprintf("{%d %c %c}", o.Val, l, r)
 }
 
+// 1372
+func LongestZigZag(root *TreeNode) int {
+	type E struct {
+		Node   *TreeNode
+		lZ, rZ int
+	}
+	Q := list.New()
+
+	v := 0
+	Q.PushBack(E{root, 0, 0})
+	for Q.Len() > 0 {
+		e := Q.Remove(Q.Back()).(E)
+		n := e.Node
+
+		if n.Left != nil {
+			e.rZ++
+			if e.rZ > v {
+				v = e.rZ
+			}
+			Q.PushBack(E{n.Left, e.rZ, 0})
+		}
+		if n.Right != nil {
+			e.lZ++
+			if e.lZ > v {
+				v = e.lZ
+			}
+			Q.PushBack(E{n.Right, 0, e.lZ})
+		}
+	}
+	return v
+}
+
 // 437
 func PathSum3(root *TreeNode, targetSum int) int {
 	Q, S := []*TreeNode{}, [][]int{}
