@@ -208,3 +208,9 @@ func Test1609(t *testing.T) {
 func TestDFS1448(t *testing.T) {
 	log.Print(DFS1448(root))
 }
+
+func Test399(t *testing.T) {
+	log.Print(CalEquation([][]string{{"a", "b"}, {"b", "c"}, {"e", "f"}, {"g", "f"}, {"c", "d"}},
+		[]float64{2, 3, 4, 8, .25},
+		[][]string{{"a", "c"}, {"f", "e"}, {"e", "g"}, {"x", "x"}, {"a", "f"}, {"b", "g"}, {"a", "b"}}))
+}

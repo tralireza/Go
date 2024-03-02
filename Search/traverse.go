@@ -297,3 +297,53 @@ func IsEvenOddTree(root *TreeNode) bool {
 	}
 	return true
 }
+
+// 399
+func CalEquation(equations [][]string, values []float64, queries [][]string) []float64 {
+	G := map[string]map[string]float64{}
+	for i, e := range equations {
+		a, b, v := e[0], e[1], values[i]
+		if _, ok := G[a]; !ok {
+			G[a] = map[string]float64{b: v}
+		} else {
+			G[a][b] = v
+		}
+		if _, ok := G[b]; !ok {
+			G[b] = map[string]float64{a: 1 / v}
+		} else {
+			G[b][a] = 1 / v
+		}
+	}
+
+	R := []float64{}
+	for _, q := range queries {
+		a, b := q[0], q[1]
+
+		Q, F := []string{a}, []float64{float64(1)}
+		V := map[string]bool{}
+		V[a] = true
+
+		hasValue := false
+		for len(Q) > 0 && !hasValue {
+			x, f := Q[len(Q)-1], F[len(F)-1]
+			Q, F = Q[:len(Q)-1], F[:len(F)-1]
+
+			for y, v := range G[x] {
+				if y == b {
+					R = append(R, f*v)
+					hasValue = true
+					break
+				}
+
+				if !V[y] {
+					V[y] = true
+					Q, F = append(Q, y), append(F, f*v)
+				}
+			}
+		}
+		if !hasValue {
+			R = append(R, -1)
+		}
+	}
+	return R
+}
