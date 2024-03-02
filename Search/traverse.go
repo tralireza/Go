@@ -60,6 +60,35 @@ func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	return r
 }
 
+func InsertBST(root *TreeNode, k int) *TreeNode {
+	var y *TreeNode
+	x := root
+	for x != nil {
+		y = x
+		if k < x.Val {
+			x = x.Left
+		} else {
+			x = x.Right
+		}
+	}
+
+	if y == nil {
+		root = &TreeNode{Val: k}
+	} else if k < y.Val {
+		y.Left = &TreeNode{Val: k}
+	} else {
+		y.Right = &TreeNode{Val: k}
+	}
+
+	return root
+}
+
+// 450
+func DeleteNodeBST(root *TreeNode, k int) *TreeNode {
+
+	return root
+}
+
 // 1161
 func MaxLevelSum(root *TreeNode) int {
 	Q := []*TreeNode{}

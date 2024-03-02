@@ -113,6 +113,31 @@ func Test328(t *testing.T) {
 	}
 }
 
+func TestInsertBST(t *testing.T) {
+	var r *TreeNode
+	for _, v := range []int{5, 3, 8, 1, 4, 6, 9, 0, 7, 2} {
+		r = InsertBST(r, v)
+	}
+
+	Q := []*TreeNode{}
+	Q = append(Q, r)
+	l := 0
+	for len(Q) > 0 {
+		log.Printf("%d -> %v", l, Q)
+		for i := len(Q); i > 0; i-- {
+			n := Q[0]
+			Q = Q[1:]
+			if n.Left != nil {
+				Q = append(Q, n.Left)
+			}
+			if n.Right != nil {
+				Q = append(Q, n.Right)
+			}
+		}
+		l++
+	}
+}
+
 /*
 				     1
 				4         2
