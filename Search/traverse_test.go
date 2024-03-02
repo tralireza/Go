@@ -113,11 +113,45 @@ func Test328(t *testing.T) {
 	}
 }
 
-func TestInsertBST(t *testing.T) {
+func aBST() *TreeNode {
 	var r *TreeNode
 	for _, v := range []int{5, 3, 8, 1, 4, 6, 9, 0, 7, 2} {
 		r = InsertBST(r, v)
 	}
+	return r
+}
+
+func DrawBFS(t *TreeNode) {
+	Q := []*TreeNode{}
+	Q = append(Q, t)
+
+	for l := 0; len(Q) > 0; l++ {
+		log.Printf("%d -> %v", l, Q)
+		for lsize := len(Q); lsize > 0; lsize-- {
+			n := Q[0]
+			Q = Q[1:]
+			if n.Left != nil {
+				Q = append(Q, n.Left)
+			}
+			if n.Right != nil {
+				Q = append(Q, n.Right)
+			}
+		}
+	}
+}
+
+func TestDeleteBST(t *testing.T) {
+	r := aBST()
+	DrawBFS(r)
+	for _, d := range []int{8, 1, 7, 0} {
+		log.Printf("> %d X", d)
+		DeleteBST(r, d)
+		DrawBFS(r)
+	}
+}
+
+func TestInsertBST(t *testing.T) {
+	r := aBST()
 
 	Q := []*TreeNode{}
 	Q = append(Q, r)

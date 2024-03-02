@@ -84,9 +84,59 @@ func InsertBST(root *TreeNode, k int) *TreeNode {
 }
 
 // 450
-func DeleteNodeBST(root *TreeNode, k int) *TreeNode {
+func DeleteBST(root *TreeNode, k int) *TreeNode {
+	Parent := func(root, n *TreeNode) *TreeNode {
+		var y *TreeNode
+		x := root
+		for x != n {
+			y = x
+			if n.Val < x.Val {
+				x = x.Left
+			} else {
+				x = x.Right
+			}
+		}
+		return y
+	}
+	ShiftV2U := func(root, u, v *TreeNode) *TreeNode {
+		p := Parent(root, u)
+		if p == nil {
+			root = v
+		} else if p.Left == u {
+			p.Left = v
+		} else {
+			p.Right = v
+		}
+		return root
+	}
+	_, _ = Parent(nil, nil), ShiftV2U(nil, nil, nil)
 
-	return root
+	n := root
+	if n == nil {
+		return n
+	}
+
+	if k < n.Val {
+		n.Left = DeleteBST(n.Left, k)
+	} else if k > n.Val {
+		n.Right = DeleteBST(n.Right, k)
+	} else {
+		if n.Left == nil {
+			return n.Right
+		}
+		if n.Right == nil {
+			return n.Left
+		}
+
+		t := n.Right
+		for t.Left != nil {
+			t = t.Left
+		}
+		n.Val = t.Val
+		n.Right = DeleteBST(n.Right, t.Val)
+	}
+
+	return n
 }
 
 // 1161
