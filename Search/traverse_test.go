@@ -237,13 +237,14 @@ func Test1926(t *testing.T) {
 
 func Test994(t *testing.T) {
 	grid := [][]int{
-		{2, 1, 1, 0, 1},
-		{1, 1, 0, 1, 0},
-		{1, 2, 0, 1, 1},
-		{0, 1, 1, 0, 2}}
+		{2, 1, 1, 0, 1, 0},
+		{1, 1, 0, 1, 0, 1},
+		{1, 2, 0, 1, 1, 1},
+		{0, 1, 1, 0, 2, 0}}
 
-	v := OrangesRotting(grid)
-	log.Print(v)
+	if v := OrangesRotting(grid); v != -1 {
+		t.Fatalf("Wrong time: -1 != %d", v)
+	}
 
 	for i := range grid {
 		for j := range grid[i] {
