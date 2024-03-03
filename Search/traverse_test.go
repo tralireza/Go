@@ -225,9 +225,9 @@ func Test1926(t *testing.T) {
 
 	log.Print(NearestExit(maze, []int{0, 1}))
 
-	for _, row := range maze {
-		for _, b := range row {
-			fmt.Printf("| %c ", b)
+	for i := range maze {
+		for j := range maze[i] {
+			fmt.Printf("| %c ", maze[i][j])
 		}
 		fmt.Println("|")
 	}
