@@ -223,11 +223,13 @@ func Test1926(t *testing.T) {
 		{'+', '.', '.', '.', '.', '.', '+'},
 		{'+', '+', '+', '+', '.', '+', '.'}}
 
-	log.Print(NearestExit(maze, []int{0, 1}))
+	if v := NearestExit(maze, []int{0, 1}); v != 7 {
+		t.Fatalf("Wrong number of steps: 7 != %d", v)
+	}
 
 	for i := range maze {
 		for j := range maze[i] {
-			fmt.Printf("| %c ", maze[i][j])
+			fmt.Printf("|%c", maze[i][j])
 		}
 		fmt.Println("|")
 	}
