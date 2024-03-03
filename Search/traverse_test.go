@@ -234,3 +234,21 @@ func Test1926(t *testing.T) {
 		fmt.Println("|")
 	}
 }
+
+func Test994(t *testing.T) {
+	grid := [][]int{
+		{2, 1, 1, 0, 1},
+		{1, 1, 0, 1, 0},
+		{1, 2, 0, 1, 1},
+		{0, 1, 1, 0, 2}}
+
+	v := OrangesRotting(grid)
+	log.Print(v)
+
+	for i := range grid {
+		for j := range grid[i] {
+			fmt.Printf("|% d", grid[i][j])
+		}
+		fmt.Println("|")
+	}
+}

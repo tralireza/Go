@@ -359,7 +359,7 @@ func NearestExit(maze [][]byte, entrance []int) int {
 	Q, V := [][]int{entrance}, []int{0}
 
 	i, j := entrance[0], entrance[1]
-	maze[i][j] = 'o'
+	maze[i][j] = 'O'
 
 	for len(Q) > 0 {
 		p, v := Q[0], V[0]
@@ -376,7 +376,7 @@ func NearestExit(maze [][]byte, entrance []int) int {
 
 			if maze[i][j] == '.' {
 				if i*j == 0 || i == m-1 || j == n-1 {
-					maze[i][j] = '*'
+					maze[i][j] = 'X'
 					return v + 1
 				}
 
@@ -386,4 +386,57 @@ func NearestExit(maze [][]byte, entrance []int) int {
 		}
 	}
 	return -1
+}
+
+// 994
+func OrangesRotting(grid [][]int) int {
+	Q := [][]int{}
+	fresh := 0
+
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] == 1 {
+				fresh++
+			}
+			if grid[i][j] == 2 {
+				Q = append(Q, []int{i, j})
+				grid[i][j] = -2
+			}
+		}
+	}
+
+	if fresh == 0 {
+		return 0
+	}
+	m, n := len(grid), len(grid[0])
+
+	t := -1
+	for len(Q) > 0 {
+		log.Print(Q)
+
+		t++
+		tsize := len(Q)
+		for tsize > 0 {
+			p := Q[0]
+			Q = Q[1:]
+
+			i, j := p[0], p[1]
+			for _, p := range [][]int{{i, j + 1}, {i, j - 1}, {i + 1, j}, {i - 1, j}} {
+				i, j := p[0], p[1]
+				if i >= 0 && i < m && j >= 0 && j < n && grid[i][j] > 0 {
+					if grid[i][j] == 1 {
+						fresh--
+					}
+					grid[i][j] *= -1
+					Q = append(Q, []int{i, j})
+				}
+			}
+			tsize--
+		}
+	}
+
+	if fresh > 0 {
+		return -1
+	}
+	return t
 }
