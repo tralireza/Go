@@ -314,6 +314,7 @@ func CalEquation(equations [][]string, values []float64, queries [][]string) []f
 			G[b][a] = 1 / v
 		}
 	}
+	log.Printf("%v", G)
 
 	R := []float64{}
 	for _, q := range queries {
@@ -346,4 +347,43 @@ func CalEquation(equations [][]string, values []float64, queries [][]string) []f
 		}
 	}
 	return R
+}
+
+// 1926
+/*
+ [["+", "+", ".", "+"],
+  [".", ".", ".", "+"],
+  ["+", "+", "+", "."]] */
+func NearestExit(maze [][]byte, entrance []int) int {
+	m, n := len(maze), len(maze[0])
+	Q, V := [][]int{entrance}, []int{0}
+
+	i, j := entrance[0], entrance[1]
+	maze[i][j] = 'o'
+
+	for len(Q) > 0 {
+		p, v := Q[0], V[0]
+		Q, V = Q[1:], V[1:]
+
+		x, y := p[0], p[1]
+		for _, p := range [][]int{{x + 1, y}, {x - 1, y}, {x, y + 1}, {x, y - 1}} {
+			i, j := p[0], p[1]
+			if i < 0 || j < 0 || i == m || j == n {
+				continue
+			}
+
+			log.Printf("(%d,%d) %d %c", i, j, v, maze[i][j])
+
+			if maze[i][j] == '.' {
+				if i*j == 0 || i == m-1 || j == n-1 {
+					maze[i][j] = '*'
+					return v + 1
+				}
+
+				maze[i][j] = ' '
+				Q, V = append(Q, []int{i, j}), append(V, v+1)
+			}
+		}
+	}
+	return -1
 }
