@@ -30,5 +30,6 @@ func TestBfrPool(t *testing.T) {
 	}
 
 	wg.Wait()
-	log.Printf("PoolSize: %d", bfrPl.Len())
+	size, calls, rpTime := bfrPl.Stat()
+	log.Printf("Stat (size:calls): %d:%d,   Eff: %%%d,   Get Rsp. (avg): %v", size, calls, 100*(calls-size)/calls, rpTime)
 }
