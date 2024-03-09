@@ -11,11 +11,11 @@ var BfrPool = sync.Pool{
 	},
 }
 
-func Get() *bytes.Buffer {
+func GetBfr() *bytes.Buffer {
 	return BfrPool.Get().(*bytes.Buffer)
 }
 
-func Put(bfr *bytes.Buffer) {
+func PutBfr(bfr *bytes.Buffer) {
 	bfr.Reset()
 	BfrPool.Put(bfr)
 }
