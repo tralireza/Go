@@ -9,16 +9,17 @@ import (
 )
 
 func TestBfrPool(t *testing.T) {
-	n, ts := 16, time.Now()
-
+	bfrPl := NewBfrPool()
 	wg := sync.WaitGroup{}
-	wg.Add(n)
 
+	n := 16
+	wg.Add(n)
+	ts := time.Now()
 	for n > 0 {
 		go func(v int) {
-			bfr := GetBfr()
+			bfr := bfrPl.Get()
 			defer func() {
-				PutBfr(bfr)
+				bfrPl.Put(bfr)
 				wg.Done()
 			}()
 
@@ -29,4 +30,5 @@ func TestBfrPool(t *testing.T) {
 	}
 
 	wg.Wait()
+	log.Printf("PoolSize: %d", bfrPl.Len())
 }
