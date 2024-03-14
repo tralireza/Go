@@ -54,9 +54,31 @@ func Test930(t *testing.T) {
 		return x
 	}
 
+	// SlidingWindow -> space: O(1)
+	countSubarraysWithSum3 := func(nums []int, goal int) int {
+		// all subarrays with sum of at least: v
+		atLeast := func(v int) int {
+			x := 0
+			l, csum := 0, 0
+			for r := range nums {
+				csum += nums[r]
+				for l <= r && csum > v {
+					csum -= nums[l]
+					l++
+				}
+				x += r - l + 1
+			}
+			return x
+		}
+		return atLeast(goal) - atLeast(goal-1)
+	}
+
 	log.Print("4 ?= ", countSubarraysWithSum([]int{1, 0, 1, 0, 1}, 2))
 	log.Print("8 ?= ", countSubarraysWithSum([]int{1, 0, 1, 0, 1}, 1))
 	log.Print("15 ?= ", countSubarraysWithSum([]int{0, 0, 0, 0, 0}, 0))
 
 	log.Print("4 ?= ", countSubarraysWithSum2([]int{1, 0, 1, 0, 1}, 2))
+
+	log.Print("8 ?= ", countSubarraysWithSum3([]int{1, 0, 1, 0, 1}, 1))
+	log.Print("2 ?= ", countSubarraysWithSum3([]int{1, 0, 1, 0, 1}, 0))
 }
