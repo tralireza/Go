@@ -24,7 +24,7 @@ func TestDecodeString(t *testing.T) {
 
 // 62m Unique Paths
 func Test62(t *testing.T) {
-	uniquePaths := func(m, n int) int {
+	uniquePathsOmn := func(m, n int) int {
 		P := make([][]int, m)
 		for r := range P {
 			P[r] = make([]int, n)
@@ -40,11 +40,10 @@ func Test62(t *testing.T) {
 				P[r][c] = P[r-1][c] + P[r][c-1]
 			}
 		}
-
 		return P[m-1][n-1]
 	}
 
-	uniquePaths2 := func(m, n int) int {
+	uniquePathsOn := func(m, n int) int {
 		row := make([]int, n)
 		for c := range row {
 			row[c] = 1
@@ -59,6 +58,6 @@ func Test62(t *testing.T) {
 		return row[n-1]
 	}
 
-	log.Print("28 ?= ", uniquePaths(3, 7))
-	log.Print("28 ?= ", uniquePaths2(3, 7))
+	log.Print("28 ?= ", uniquePathsOmn(3, 7))
+	log.Print("28 ?= ", uniquePathsOn(3, 7))
 }
