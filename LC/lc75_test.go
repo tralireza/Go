@@ -44,5 +44,21 @@ func Test62(t *testing.T) {
 		return P[m-1][n-1]
 	}
 
+	uniquePaths2 := func(m, n int) int {
+		row := make([]int, n)
+		for c := range row {
+			row[c] = 1
+		}
+
+		for r := 1; r < m; r++ {
+			row[0] = 1
+			for c := 1; c < n; c++ {
+				row[c] = row[c-1] + row[c]
+			}
+		}
+		return row[n-1]
+	}
+
 	log.Print("28 ?= ", uniquePaths(3, 7))
+	log.Print("28 ?= ", uniquePaths2(3, 7))
 }
