@@ -82,3 +82,31 @@ func Test930(t *testing.T) {
 	log.Print("8 ?= ", countSubarraysWithSum3([]int{1, 0, 1, 0, 1}, 1))
 	log.Print("2 ?= ", countSubarraysWithSum3([]int{1, 0, 1, 0, 1}, 0))
 }
+
+// 525m Contiguous Array
+func Test525(t *testing.T) {
+	findMaxLength := func(nums []int) int {
+		idx := map[int]int{}
+		idx[0] = -1
+
+		x, v := 0, 0
+		for i, n := range nums {
+			if n == 0 {
+				v--
+			} else {
+				v++
+			}
+
+			if start, ok := idx[v]; ok {
+				x = max(x, i-start)
+			} else {
+				idx[v] = i
+			}
+		}
+
+		return x
+	}
+
+	log.Print("2 ?= ", findMaxLength([]int{0, 1}))
+	log.Print("2 ?= ", findMaxLength([]int{0, 1, 1, 0, 1, 0, 0}))
+}
