@@ -110,3 +110,14 @@ func Test525(t *testing.T) {
 	log.Print("2 ?= ", findMaxLength([]int{0, 1}))
 	log.Print("2 ?= ", findMaxLength([]int{0, 1, 1, 0, 1, 0, 0}))
 }
+
+// 452m Min Arrows to Burst Ballons
+func Test452(t *testing.T) {
+	findMinArrowShots := func(points [][]int) int {
+		x := 0
+
+		return x
+	}
+
+	log.Print("2 ?= ", findMinArrowShots([][]int{{10, 16}, {2, 8}, {1, 6}, {7, 12}}))
+}
