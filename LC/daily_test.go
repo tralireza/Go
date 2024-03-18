@@ -2,6 +2,7 @@ package lc
 
 import (
 	"log"
+	"slices"
 	"testing"
 )
 
@@ -114,10 +115,29 @@ func Test525(t *testing.T) {
 // 452m Min Arrows to Burst Ballons
 func Test452(t *testing.T) {
 	findMinArrowShots := func(points [][]int) int {
-		x := 0
+		slices.SortFunc(points, func(a, b []int) int {
+			if a[0] == b[0] {
+				return a[1] - b[1]
+			}
+			return a[0] - b[0]
+		})
+		log.Print(points)
 
+		x, arrow := 1, points[0][1]
+		for i := 1; i < len(points); i++ {
+			lower, top := points[i][0], points[i][1]
+			if arrow >= lower {
+				if arrow > top {
+					arrow = top
+				}
+			} else {
+				arrow = top
+				x++
+			}
+		}
 		return x
 	}
 
 	log.Print("2 ?= ", findMinArrowShots([][]int{{10, 16}, {2, 8}, {1, 6}, {7, 12}}))
+	log.Print("2 ?= ", findMinArrowShots([][]int{{9, 12}, {1, 10}, {4, 11}, {8, 12}, {3, 9}, {6, 9}, {6, 7}}))
 }
