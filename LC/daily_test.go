@@ -1,7 +1,6 @@
 package lc
 
 import (
-	"bytes"
 	"container/heap"
 	"log"
 	"reflect"
@@ -214,7 +213,7 @@ func Test621(t *testing.T) {
 		}
 
 		log.Printf("%s", schedule)
-		return len(bytes.Trim(schedule, "-"))
+		return len(schedule)
 	}
 
 	for _, f := range []func([]byte, int) int{leastInterval, leastInterval2} {
