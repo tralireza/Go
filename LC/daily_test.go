@@ -150,6 +150,24 @@ func (o *iHeap) Pop() any {
 	return v
 }
 
+type tHeapItem struct {
+	tsym byte
+	frq  int
+}
+type tHeap []*tHeapItem
+
+func (t tHeap) Len() int { return len(t) }
+func (t tHeap) Less(i, j int) bool {
+	return t[i].frq > t[j].frq || t[i].frq == t[j].frq && t[i].tsym < t[j].tsym
+}
+func (t tHeap) Swap(i, j int) { t[i], t[j] = t[j], t[i] }
+func (t *tHeap) Push(v any)   { *t = append(*t, v.(*tHeapItem)) }
+func (t *tHeap) Pop() any {
+	v := (*t)[len(*t)-1]
+	*t = (*t)[:len(*t)-1]
+	return v
+}
+
 // 621m Task Scheduler
 func Test621(t *testing.T) {
 	leastInterval := func(tasks []byte, n int) int {
@@ -178,10 +196,10 @@ func Test621(t *testing.T) {
 			frq[b-'A']++
 		}
 
-		q := &iHeap{}
-		for _, f := range frq {
+		q := &tHeap{}
+		for i, f := range frq {
 			if f > 0 {
-				heap.Push(q, f)
+				heap.Push(q, &tHeapItem{'A' + byte(i), f})
 			}
 		}
 
@@ -189,17 +207,16 @@ func Test621(t *testing.T) {
 
 		schedule := []byte{}
 		for q.Len() > 0 {
-			log.Print("> ", q)
-			tmps := []int{}
+			tmps := []*tHeapItem{}
 
 			for range n + 1 {
 				if q.Len() > 0 {
-					v := heap.Pop(q).(int)
-					v--
-					if v > 0 {
-						tmps = append(tmps, v)
+					e := heap.Pop(q).(*tHeapItem)
+					e.frq--
+					if e.frq > 0 {
+						tmps = append(tmps, e)
 					}
-					schedule = append(schedule, '*')
+					schedule = append(schedule, e.tsym)
 				} else {
 					if len(tmps) > 0 {
 						schedule = append(schedule, '-')
@@ -207,8 +224,8 @@ func Test621(t *testing.T) {
 				}
 			}
 
-			for _, v := range tmps {
-				heap.Push(q, v)
+			for _, e := range tmps {
+				heap.Push(q, e)
 			}
 		}
 
@@ -216,12 +233,14 @@ func Test621(t *testing.T) {
 		return len(schedule)
 	}
 
+	_ = iHeap{}
 	for _, f := range []func([]byte, int) int{leastInterval, leastInterval2} {
 		log.Print("--- ", runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name())
 		log.Print("2 ?= ", f([]byte{'A', 'B'}, 2))
 		log.Print("8 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
 		log.Print("6 ?= ", f([]byte{'A', 'C', 'A', 'B', 'D', 'B'}, 1))
 		log.Print("10 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 3))
+		log.Print("14 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B', 'C'}, 5))
 		log.Print("10 ?= ", f([]byte{'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'}, 4))
 	}
 }
