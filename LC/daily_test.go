@@ -1,8 +1,13 @@
 package lc
 
 import (
+	"bytes"
+	"container/heap"
 	"log"
+	"reflect"
+	"runtime"
 	"slices"
+	"sort"
 	"testing"
 )
 
@@ -135,6 +140,17 @@ func Test452(t *testing.T) {
 	log.Print("2 ?= ", findMinArrowShots([][]int{{9, 12}, {1, 10}, {4, 11}, {8, 12}, {3, 9}, {6, 9}, {6, 7}}))
 }
 
+type iHeap struct {
+	sort.IntSlice
+}
+
+func (o *iHeap) Push(v any) { o.IntSlice = append(o.IntSlice, v.(int)) }
+func (o *iHeap) Pop() any {
+	v := o.IntSlice[len(o.IntSlice)-1]
+	o.IntSlice = o.IntSlice[:len(o.IntSlice)-1]
+	return v
+}
+
 // 621m Task Scheduler
 func Test621(t *testing.T) {
 	leastInterval := func(tasks []byte, n int) int {
@@ -142,7 +158,6 @@ func Test621(t *testing.T) {
 		for _, b := range tasks {
 			frq[b-'A']++
 		}
-
 		slices.Sort(frq)
 
 		frqX := frq[25] - 1
@@ -157,9 +172,55 @@ func Test621(t *testing.T) {
 		return len(tasks)
 	}
 
-	log.Print("2 ?= ", leastInterval([]byte{'A', 'B'}, 2))
-	log.Print("8 ?= ", leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
-	log.Print("6 ?= ", leastInterval([]byte{'A', 'C', 'A', 'B', 'D', 'B'}, 1))
-	log.Print("10 ?= ", leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 3))
-	log.Print("10 ?= ", leastInterval([]byte{'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'}, 4))
+	// Heap
+	leastInterval2 := func(tasks []byte, n int) int {
+		frq := make([]int, 26)
+		for _, b := range tasks {
+			frq[b-'A']++
+		}
+
+		q := &iHeap{}
+		for _, f := range frq {
+			if f > 0 {
+				heap.Push(q, f)
+			}
+		}
+
+		log.Printf("+ %d %s", n, tasks)
+
+		schedule := []byte{}
+		for q.Len() > 0 {
+			log.Print("> ", q)
+			tmps := []int{}
+
+			for range n + 1 {
+				if q.Len() > 0 {
+					v := heap.Pop(q).(int)
+					v--
+					if v > 0 {
+						tmps = append(tmps, v)
+					}
+					schedule = append(schedule, '*')
+				} else {
+					schedule = append(schedule, '-')
+				}
+			}
+
+			for _, v := range tmps {
+				heap.Push(q, v)
+			}
+		}
+
+		log.Printf("%s", schedule)
+		return len(bytes.Trim(schedule, "-"))
+	}
+
+	for _, f := range []func([]byte, int) int{leastInterval, leastInterval2} {
+		log.Print("--- ", runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name())
+		log.Print("2 ?= ", f([]byte{'A', 'B'}, 2))
+		log.Print("8 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
+		log.Print("6 ?= ", f([]byte{'A', 'C', 'A', 'B', 'D', 'B'}, 1))
+		log.Print("10 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 3))
+		log.Print("10 ?= ", f([]byte{'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'}, 4))
+	}
 }
