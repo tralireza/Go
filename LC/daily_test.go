@@ -6,7 +6,9 @@ import (
 	"testing"
 )
 
-func init() {}
+func init() {
+	log.Print("> Daily")
+}
 
 // 930m
 func Test930(t *testing.T) {
@@ -131,4 +133,33 @@ func Test452(t *testing.T) {
 
 	log.Print("2 ?= ", findMinArrowShots([][]int{{10, 16}, {2, 8}, {1, 6}, {7, 12}}))
 	log.Print("2 ?= ", findMinArrowShots([][]int{{9, 12}, {1, 10}, {4, 11}, {8, 12}, {3, 9}, {6, 9}, {6, 7}}))
+}
+
+// 621m Task Scheduler
+func Test621(t *testing.T) {
+	leastInterval := func(tasks []byte, n int) int {
+		frq := make([]int, 26)
+		for _, b := range tasks {
+			frq[b-'A']++
+		}
+
+		slices.Sort(frq)
+
+		frqX := frq[25] - 1
+		free := frqX * n
+		for i := 24; i >= 0 && frq[i] > 0; i-- {
+			free -= min(frqX, frq[i])
+		}
+
+		if free > 0 {
+			return free + len(tasks)
+		}
+		return len(tasks)
+	}
+
+	log.Print("2 ?= ", leastInterval([]byte{'A', 'B'}, 2))
+	log.Print("8 ?= ", leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
+	log.Print("6 ?= ", leastInterval([]byte{'A', 'C', 'A', 'B', 'D', 'B'}, 1))
+	log.Print("10 ?= ", leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 3))
+	log.Print("10 ?= ", leastInterval([]byte{'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'}, 4))
 }
