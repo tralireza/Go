@@ -202,7 +202,9 @@ func Test621(t *testing.T) {
 					}
 					schedule = append(schedule, '*')
 				} else {
-					schedule = append(schedule, '-')
+					if len(tmps) > 0 {
+						schedule = append(schedule, '-')
+					}
 				}
 			}
 
