@@ -254,29 +254,24 @@ func Test1669(t *testing.T) {
 	}
 
 	mergeInBetween := func(list1 *ListNode, a, b int, list2 *ListNode) *ListNode {
-		dummy := &ListNode{Next: list1}
-
-		b -= a
-		n := dummy
-		for ; n != nil && a > 0; n = n.Next {
-			a--
+		var n, start, end *ListNode
+		n = list1
+		for i := 0; i < b; i++ {
+			if i == a-1 {
+				start = n
+			}
+			n = n.Next
 		}
-		anxt := n.Next
-		n.Next = list2
+		end = n
+		log.Print(start, end)
 
-		n = anxt
-		for ; n != nil && b > 0; n = n.Next {
-			b--
+		start.Next = list2
+		n = list2
+		for ; n.Next != nil; n = n.Next {
 		}
-		bnxt := n.Next
+		n.Next = end.Next
 
-		prv := list2
-		for n := list2; n != nil; n = n.Next {
-			prv = n
-		}
-		prv.Next = bnxt
-
-		return dummy.Next
+		return list1
 	}
 
 	type N = ListNode
