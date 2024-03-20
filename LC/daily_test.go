@@ -254,8 +254,9 @@ func Test1669(t *testing.T) {
 	type N = ListNode
 
 	mergeInBetween := func(list1 *ListNode, a, b int, list2 *ListNode) *ListNode {
+		dummy := &ListNode{Next: list1}
 
-		return nil
+		return dummy.Next
 	}
 
 	ls1 := &N{10, &N{1, &N{13, &N{6, &N{9, &N{5, nil}}}}}}
