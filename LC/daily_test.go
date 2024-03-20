@@ -2,6 +2,7 @@ package lc
 
 import (
 	"container/heap"
+	"fmt"
 	"log"
 	"reflect"
 	"runtime"
@@ -251,17 +252,38 @@ func Test1669(t *testing.T) {
 		Val  int
 		Next *ListNode
 	}
-	type N = ListNode
 
 	mergeInBetween := func(list1 *ListNode, a, b int, list2 *ListNode) *ListNode {
 		dummy := &ListNode{Next: list1}
 
+		b -= a
+		n := dummy
+		for ; n != nil && a > 0; n = n.Next {
+			a--
+		}
+		anxt := n.Next
+		n.Next = list2
+
+		n = anxt
+		for ; n != nil && b > 0; n = n.Next {
+			b--
+		}
+		bnxt := n.Next
+
+		prv := list2
+		for n := list2; n != nil; n = n.Next {
+			prv = n
+		}
+		prv.Next = bnxt
+
 		return dummy.Next
 	}
 
+	type N = ListNode
 	ls1 := &N{10, &N{1, &N{13, &N{6, &N{9, &N{5, nil}}}}}}
 	ls2 := &N{1000000, &N{1000001, &N{1000002, nil}}}
 	for n := mergeInBetween(ls1, 3, 4, ls2); n != nil; n = n.Next {
-		log.Print(n)
+		fmt.Print(*n, " ")
 	}
+	fmt.Println("X")
 }
