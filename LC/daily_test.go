@@ -240,7 +240,27 @@ func Test621(t *testing.T) {
 		log.Print("8 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
 		log.Print("6 ?= ", f([]byte{'A', 'C', 'A', 'B', 'D', 'B'}, 1))
 		log.Print("10 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 3))
-		log.Print("14 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B', 'C'}, 5))
+		log.Print("14 ?= ", f([]byte{'A', 'A', 'A', 'B', 'B', 'B', 'C', 'C', 'D'}, 5))
 		log.Print("10 ?= ", f([]byte{'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'}, 4))
+	}
+}
+
+// 1669m Merge In Between Link Lists
+func Test1669(t *testing.T) {
+	type ListNode struct {
+		Val  int
+		Next *ListNode
+	}
+	type N = ListNode
+
+	mergeInBetween := func(list1 *ListNode, a, b int, list2 *ListNode) *ListNode {
+
+		return nil
+	}
+
+	ls1 := &N{10, &N{1, &N{13, &N{6, &N{9, &N{5, nil}}}}}}
+	ls2 := &N{1000000, &N{1000001, &N{1000002, nil}}}
+	for n := mergeInBetween(ls1, 3, 4, ls2); n != nil; n = n.Next {
+		log.Print(n)
 	}
 }
