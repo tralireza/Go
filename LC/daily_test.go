@@ -311,7 +311,7 @@ func Test206(t *testing.T) {
 		r := reverseList(l)
 		fmt.Print("List: ")
 		for n := r; n != nil; n = n.Next {
-			fmt.Printf("%v ", *n)
+			fmt.Printf("{%v +} ", n.Val)
 		}
 		fmt.Println(" X")
 		l = &N{i, r}
