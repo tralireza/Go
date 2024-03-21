@@ -255,6 +255,7 @@ func Test1669(t *testing.T) {
 
 	mergeInBetween := func(list1 *ListNode, a, b int, list2 *ListNode) *ListNode {
 		var n, start, end *ListNode
+
 		n = list1
 		for i := 0; i < b; i++ {
 			if i == a-1 {
@@ -281,4 +282,32 @@ func Test1669(t *testing.T) {
 		fmt.Print(*n, " ")
 	}
 	fmt.Println("X")
+}
+
+// 206 Reserve Linked List
+func Test206(t *testing.T) {
+	type ListNode struct {
+		Val  int
+		Next *ListNode
+	}
+
+	reverseList := func(head *ListNode) *ListNode {
+		var prv *ListNode
+
+		n := head
+		for n != nil {
+			nxt := n.Next
+			n.Next = prv
+			prv = n
+			n = nxt
+		}
+
+		return prv
+	}
+
+	type N = ListNode
+	for n := reverseList(&N{1, &N{2, &N{3, &N{4, &N{5, nil}}}}}); n != nil; n = n.Next {
+		fmt.Printf("%v ", *n)
+	}
+	fmt.Println(" X")
 }
