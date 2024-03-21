@@ -306,8 +306,14 @@ func Test206(t *testing.T) {
 	}
 
 	type N = ListNode
-	for n := reverseList(&N{1, &N{2, &N{3, &N{4, &N{5, nil}}}}}); n != nil; n = n.Next {
-		fmt.Printf("%v ", *n)
+	var l *N = nil
+	for i := 0; i < 9; i++ {
+		r := reverseList(l)
+		fmt.Print("List: ")
+		for n := r; n != nil; n = n.Next {
+			fmt.Printf("%v ", *n)
+		}
+		fmt.Println(" X")
+		l = &N{i, r}
 	}
-	fmt.Println(" X")
 }
