@@ -317,3 +317,54 @@ func Test206(t *testing.T) {
 		l = &N{i, r}
 	}
 }
+
+// 143m Reorder List
+func Test143(t *testing.T) {
+	type ListNode struct {
+		Val  int
+		Next *ListNode
+	}
+
+	// [1 2 3 4 5 6 7 8] -> [1 8 2 7 3 6 4 5]
+	reorderList := func(head *ListNode) {
+		S := []*ListNode{}
+		l := 1
+		for n := head; n != nil; n = n.Next {
+			S = append(S, n)
+			l++
+		}
+
+		l /= 2
+		for n := head; n != nil; {
+			r := S[len(S)-1]
+			S = S[:len(S)-1]
+
+			if n == r || l == 0 {
+				n.Next = nil
+				n = nil
+			} else {
+				nxt := n.Next
+				n.Next = r
+				r.Next = nxt
+				n = nxt
+			}
+			l--
+		}
+	}
+
+	draw := func(h *ListNode) {
+		for n := h; n != nil; n = n.Next {
+			fmt.Printf("{%d +} ", n.Val)
+		}
+		fmt.Println("X")
+	}
+
+	type N = ListNode
+	l := &N{1, &N{2, &N{3, &N{4, &N{5, &N{6, &N{7, &N{8, nil}}}}}}}}
+	reorderList(l)
+	draw(l)
+
+	r := &N{0, l}
+	reorderList(r)
+	draw(r)
+}
