@@ -328,28 +328,30 @@ func Test143(t *testing.T) {
 	// [1 2 3 4 5 6 7 8] -> [1 8 2 7 3 6 4 5]
 	reorderList := func(head *ListNode) {
 		S := []*ListNode{}
-		l := 1
-		for n := head; n != nil; n = n.Next {
-			S = append(S, n)
-			l++
+
+		m, f := head, head
+		for ; f != nil && f.Next != nil; f = f.Next.Next {
+			m = m.Next
+		}
+		if f != nil && f.Next == nil {
+			m = m.Next
 		}
 
-		l /= 2
-		for n := head; n != nil; {
+		for n := m; n != nil; n = n.Next {
+			S = append(S, n)
+		}
+
+		n := head
+		for len(S) > 0 {
 			r := S[len(S)-1]
 			S = S[:len(S)-1]
 
-			if n == r || l == 0 {
-				n.Next = nil
-				n = nil
-			} else {
-				nxt := n.Next
-				n.Next = r
-				r.Next = nxt
-				n = nxt
-			}
-			l--
+			nxt := n.Next
+			n.Next = r
+			r.Next = nxt
+			n = nxt
 		}
+		n.Next = nil
 	}
 
 	draw := func(h *ListNode) {
