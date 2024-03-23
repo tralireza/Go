@@ -364,9 +364,11 @@ func Test143(t *testing.T) {
 	type N = ListNode
 	l := &N{1, &N{2, &N{3, &N{4, &N{5, &N{6, &N{7, &N{8, nil}}}}}}}}
 	reorderList(l)
+	fmt.Print("[1 8 2 7 3 6 4 5] -> ")
 	draw(l)
 
 	r := &N{0, l}
 	reorderList(r)
+	fmt.Print("[0 5 1 4 8 6 2 3 7] -> ")
 	draw(r)
 }
