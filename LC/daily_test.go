@@ -336,7 +336,6 @@ func Test143(t *testing.T) {
 		if f != nil && f.Next == nil {
 			m = m.Next
 		}
-
 		for n := m; n != nil; n = n.Next {
 			S = append(S, n)
 		}
