@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"fmt"
 	"log"
+	"math/rand"
 	"reflect"
 	"runtime"
 	"slices"
@@ -500,4 +501,48 @@ func Test637(t *testing.T) {
 
 	type T = TreeNode
 	log.Print(averageOfLevels(&T{3, &T{Val: 9}, &T{20, &T{Val: 15}, &T{Val: 7}}}))
+}
+
+// Moving all Non-Positive Numbers to Right
+func TestAdjust(t *testing.T) {
+	adjust := func(nums []int) int {
+		l, r := 0, len(nums)-1
+		for ; l < r; l++ {
+			if nums[l] <= 0 {
+				nums[l], nums[r] = nums[r], nums[l]
+				r--
+				if nums[l] <= 0 {
+					l--
+				}
+			}
+		}
+		if l < len(nums) && nums[l] > 0 {
+			l++
+		}
+		return l
+	}
+
+	for i := 0; i < 100; i++ {
+		nums := make([]int, rand.Intn(25))
+		frq := 0
+		for i := range nums {
+			n := rand.Intn(len(nums))
+			if rand.Intn(2) == 1 {
+				n = -n
+			}
+			if n > 0 {
+				frq++
+			}
+			nums[i] = n
+		}
+
+		log.Print(nums)
+		l := adjust(nums)
+		log.Print(nums)
+		log.Print(frq, " ?= ", len(nums[:l]), nums[:l])
+		if frq != l {
+			t.Fatalf("Wrong length: %d != %d", l, frq)
+		}
+		log.Print("---")
+	}
 }
