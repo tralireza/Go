@@ -525,12 +525,14 @@ func TestAdjust(t *testing.T) {
 	for i := 0; i < 1000; i++ {
 		nums := make([]int, rand.Intn(25))
 		frq := 0
+		positives := []int{}
 		for i := range nums {
 			n := rand.Intn(len(nums))
 			if rand.Intn(2) == 1 {
 				n = -n
 			}
 			if n > 0 {
+				positives = append(positives, n)
 				frq++
 			}
 			nums[i] = n
@@ -543,6 +545,7 @@ func TestAdjust(t *testing.T) {
 		if frq != l {
 			t.Fatalf("Wrong length: %d != %d", l, frq)
 		}
+		log.Print(positives)
 		log.Print("---")
 	}
 }
