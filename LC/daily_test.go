@@ -522,7 +522,7 @@ func TestAdjust(t *testing.T) {
 		return l
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		nums := make([]int, rand.Intn(25))
 		frq := 0
 		for i := range nums {
