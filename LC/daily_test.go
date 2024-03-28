@@ -654,8 +654,27 @@ func Test713(t *testing.T) {
 // 2958m Length Of Longest Subarray With at Most K Frequency
 func Test2958(t *testing.T) {
 	maxSubarrayLength := func(nums []int, k int) int {
-		return 0
+		frq := map[int]int{}
+		x := 0
+
+		l := 0
+		for r, n := range nums {
+			frq[n]++
+			if frq[n] <= k {
+				x = max(x, r-l+1)
+			} else {
+				for l < r && frq[n] > k {
+					if frq[l] > 0 {
+						frq[nums[l]]--
+					}
+					l++
+				}
+			}
+		}
+
+		return x
 	}
 
 	log.Print("6 ?= ", maxSubarrayLength([]int{1, 2, 3, 1, 2, 3, 1, 2}, 2))
+	log.Print("4 ?= ", maxSubarrayLength([]int{5, 5, 5, 5, 5, 5, 5}, 4))
 }
