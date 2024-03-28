@@ -675,6 +675,35 @@ func Test2958(t *testing.T) {
 		return x
 	}
 
-	log.Print("6 ?= ", maxSubarrayLength([]int{1, 2, 3, 1, 2, 3, 1, 2}, 2))
-	log.Print("4 ?= ", maxSubarrayLength([]int{5, 5, 5, 5, 5, 5, 5}, 4))
+	maxSubarrayLength2 := func(nums []int, k int) int {
+		frq := map[int]int{}
+		x := 0
+
+		l := 0
+		countKVals := 0
+		for r, n := range nums {
+			frq[n]++
+			if frq[n] <= k {
+				if countKVals == 0 {
+					x = max(x, r-l+1)
+				}
+			} else {
+				countKVals++
+				if frq[nums[l]] > 0 {
+					frq[nums[l]]--
+					if frq[nums[l]] <= k {
+						countKVals--
+					}
+				}
+				l++
+			}
+		}
+
+		return x
+	}
+
+	for _, f := range []func([]int, int) int{maxSubarrayLength, maxSubarrayLength2} {
+		log.Print("6 ?= ", f([]int{1, 2, 3, 1, 2, 3, 1, 2}, 2))
+		log.Print("4 ?= ", f([]int{5, 5, 5, 5, 5, 5, 5}, 4))
+	}
 }
