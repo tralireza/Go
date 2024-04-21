@@ -707,3 +707,45 @@ func Test2958(t *testing.T) {
 		log.Print("4 ?= ", f([]int{5, 5, 5, 5, 5, 5, 5}, 4))
 	}
 }
+
+// 1971 Find if Path Exists in Graph
+func Test1971(t *testing.T) {
+	validPath := func(n int, edges [][]int, source int, destination int) bool {
+		DJS := make([][2]int, n) // [2]int: 0: Parent, 1: Rank
+		for i := range DJS {
+			DJS[i][0] = i
+		}
+
+		var find func([][2]int, int) int
+		find = func(DJS [][2]int, x int) int {
+			if DJS[x][0] != x {
+				DJS[x][0] = find(DJS, DJS[x][0])
+			}
+			return DJS[x][0]
+		}
+
+		link := func(DJS [][2]int, x, y int) {
+			X, Y := find(DJS, x), find(DJS, y)
+			if X != Y {
+				if DJS[X][1] < DJS[Y][1] {
+					DJS[X][0] = Y
+				} else {
+					DJS[Y][0] = X
+					if DJS[X][1] == DJS[Y][1] {
+						DJS[X][1]++
+					}
+				}
+			}
+		}
+
+		for _, p := range edges {
+			link(DJS, p[0], p[1])
+		}
+		log.Print(DJS)
+
+		return find(DJS, source) == find(DJS, destination)
+	}
+
+	log.Print("true ?= ", validPath(3, [][]int{{0, 1}, {1, 2}, {2, 0}}, 0, 2))
+	log.Print("false ?= ", validPath(6, [][]int{{0, 1}, {0, 2}, {3, 5}, {5, 4}, {4, 3}}, 0, 5))
+}
