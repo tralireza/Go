@@ -751,7 +751,7 @@ func Test1971(t *testing.T) {
 }
 
 // 752m Open Lock
-func Test752(t *testing.T) {
+func Test752m(t *testing.T) {
 	openLock := func(deadends []string, target string) int {
 		Space := make([][][][]byte, 10)
 		for x := range Space {
