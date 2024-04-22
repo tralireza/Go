@@ -749,3 +749,65 @@ func Test1971(t *testing.T) {
 	log.Print("true ?= ", validPath(3, [][]int{{0, 1}, {1, 2}, {2, 0}}, 0, 2))
 	log.Print("false ?= ", validPath(6, [][]int{{0, 1}, {0, 2}, {3, 5}, {5, 4}, {4, 3}}, 0, 5))
 }
+
+// 752m Open Lock
+func Test752(t *testing.T) {
+	openLock := func(deadends []string, target string) int {
+		Space := make([][][][]byte, 10)
+		for x := range Space {
+			Space[x] = make([][][]byte, 10)
+			for y := range Space[x] {
+				Space[x][y] = make([][]byte, 10)
+				for z := range Space[x][y] {
+					Space[x][y][z] = make([]byte, 10)
+				}
+			}
+		}
+
+		b := []byte(target)
+		Space[b[0]-'0'][b[1]-'0'][b[2]-'0'][b[3]-'0'] = '*'
+		if Space[0][0][0][0] == '*' {
+			return 0
+		}
+
+		Q, lvl := [][4]byte{}, 1
+		var x [4]byte
+
+		for _, deadend := range deadends {
+			b := []byte(deadend)
+			Space[b[0]-'0'][b[1]-'0'][b[2]-'0'][b[3]-'0'] = 'X'
+		}
+		if Space[0][0][0][0] != 'X' {
+			Q = append(Q, [4]byte{})
+		}
+
+		for len(Q) > 0 {
+			for range len(Q) {
+				x, Q = Q[0], Q[1:]
+				for i := 0; i < 4; i++ {
+					v := x[i]
+					for _, m := range []byte{1, 9} {
+						x[i] = (x[i] + m) % 10
+						if Space[x[0]][x[1]][x[2]][x[3]] == '*' {
+							return lvl
+						}
+						if Space[x[0]][x[1]][x[2]][x[3]] == 0 {
+							Space[x[0]][x[1]][x[2]][x[3]] = '-'
+							Q = append(Q, x)
+						}
+						x[i] = v
+					}
+				}
+			}
+			lvl++
+		}
+
+		return -1
+	}
+
+	log.Print("6 ?= ", openLock([]string{"0201", "0101", "0102", "1212", "2002"}, "0202"))
+	log.Print("-1 ?= ", openLock([]string{"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"}, "8888"))
+	log.Print("-1 ?= ", openLock([]string{"0000"}, "1234"))
+	log.Print("0 ?= ", openLock([]string{}, "0000"))
+	log.Print("18 ?= ", openLock([]string{}, "6545"))
+}
