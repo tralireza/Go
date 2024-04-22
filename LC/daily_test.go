@@ -781,16 +781,19 @@ func Test752(t *testing.T) {
 			Q = append(Q, [4]byte{})
 		}
 
+		var x [4]byte
 		for len(Q) > 0 {
 			for range len(Q) {
 				x, Q = Q[0], Q[1:]
 				for i := 0; i < 4; i++ {
 					v := x[i]
+
 					for _, m := range []byte{1, 9} {
 						x[i] = (x[i] + m) % 10
 						if Space[x[0]][x[1]][x[2]][x[3]] == '*' {
 							return lvl
 						}
+
 						if Space[x[0]][x[1]][x[2]][x[3]] == 0 {
 							Space[x[0]][x[1]][x[2]][x[3]] = '-'
 							Q = append(Q, x)
