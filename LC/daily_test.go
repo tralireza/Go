@@ -770,17 +770,15 @@ func Test752(t *testing.T) {
 			return 0
 		}
 
-		Q, lvl := [][4]byte{}, 1
-		var x [4]byte
-
 		for _, deadend := range deadends {
 			b := []byte(deadend)
 			Space[b[0]-'0'][b[1]-'0'][b[2]-'0'][b[3]-'0'] = 'X'
 		}
-		if Space[0][0][0][0] != 'X' {
-			Q = append(Q, [4]byte{})
+		if Space[0][0][0][0] == 'X' {
+			return -1
 		}
 
+		Q, lvl := [][4]byte{}, 1
 		var x [4]byte
 		for len(Q) > 0 {
 			for range len(Q) {
