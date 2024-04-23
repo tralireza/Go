@@ -812,3 +812,54 @@ func Test752m(t *testing.T) {
 	log.Print("0 ?= ", openLock([]string{}, "0000"))
 	log.Print("18 ?= ", openLock([]string{}, "6545"))
 }
+
+// 310m Minimum Height Trees
+func Test310(t *testing.T) {
+	findMinHeightTrees := func(n int, edges [][]int) []int {
+		tree := make([][]byte, n)
+		for i := range tree {
+			tree[i] = make([]byte, n)
+		}
+		for _, edge := range edges {
+			v, u := edge[0], edge[1]
+			tree[v][u] = 1
+			tree[u][v] = 1
+		}
+		log.Print(tree)
+
+		heights, mh := make([]int, n), n
+		for v := 0; v < n; v++ {
+			Vis := make([]bool, n)
+			Vis[v] = true
+
+			Q, h := []int{v}, 0
+			for len(Q) > 0 {
+				for range len(Q) {
+					v := Q[0]
+					Q = Q[1:]
+					for u, y := range tree[v] {
+						if y == 1 && !Vis[u] {
+							Vis[u] = true
+							Q = append(Q, u)
+						}
+					}
+				}
+				h++
+			}
+
+			mh = min(mh, h)
+			heights[v] = h
+		}
+
+		roots := []int{}
+		for v, h := range heights {
+			if h == mh {
+				roots = append(roots, v)
+			}
+		}
+		return roots
+	}
+
+	log.Print("[1] ?= ", findMinHeightTrees(4, [][]int{{1, 0}, {1, 2}, {1, 3}}))
+	log.Print("[3 4] ?= ", findMinHeightTrees(6, [][]int{{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}}))
+}
