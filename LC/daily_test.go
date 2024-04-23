@@ -906,8 +906,65 @@ func Test310(t *testing.T) {
 		return roots
 	}
 
-	for _, f := range []func(int, [][]int) []int{findMinHeightTrees, graphAdj} {
+	onlyTwo := func(n int, edges [][]int) []int {
+		if n == 1 {
+			return []int{0}
+		}
+
+		G := map[int][]int{}
+		Degree := make([]int, n)
+		for _, edge := range edges {
+			v, u := edge[0], edge[1]
+			Degree[u]++
+			Degree[v]++
+			G[v] = append(G[v], u)
+			G[u] = append(G[u], v)
+		}
+
+		var Vis []bool
+		var dG []int
+
+		var dfs func(int, []int)
+		dfs = func(v int, D []int) {
+			if len(D) > len(dG) {
+				dG = D
+			}
+			for _, u := range G[v] {
+				if !Vis[u] {
+					Vis[u] = true
+					dfs(u, append(D, u))
+				}
+			}
+		}
+
+		for v := range Degree {
+			if Degree[v] > 1 {
+				continue
+			}
+
+			Vis = make([]bool, n)
+			Vis[v] = true
+
+			dfs(v, []int{v})
+		}
+
+		log.Print(dG)
+
+		if len(dG)&1 == 1 {
+			return []int{dG[len(dG)>>1]}
+		}
+		return []int{dG[len(dG)>>1-1], dG[len(dG)>>1]}
+	}
+
+	for _, f := range []func(int, [][]int) []int{findMinHeightTrees, graphAdj, onlyTwo} {
+		log.Print("[0] ?= ", f(3, [][]int{{1, 0}, {0, 2}}))
 		log.Print("[1] ?= ", f(4, [][]int{{1, 0}, {1, 2}, {1, 3}}))
 		log.Print("[3 4] ?= ", f(6, [][]int{{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}}))
+		log.Print("[0 1] ?= ", f(2, [][]int{{1, 0}}))
+		log.Print("[0] ?= ", f(1, [][]int{}))
+		log.Print("[0] ?= ", f(8, [][]int{{0, 1}, {1, 2}, {2, 3}, {0, 4}, {4, 5}, {4, 6}, {6, 7}}))
+		log.Print("[1 2] ?= ", f(7, [][]int{{0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6}}))
+		log.Print("[3] ?= ", f(10, [][]int{{0, 3}, {1, 3}, {2, 3}, {4, 3}, {5, 3}, {4, 6}, {4, 7}, {5, 8}, {5, 9}}))
+		log.Print("===")
 	}
 }
