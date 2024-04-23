@@ -825,7 +825,6 @@ func Test310(t *testing.T) {
 			tree[v][u] = 1
 			tree[u][v] = 1
 		}
-		log.Print(tree)
 
 		heights, mh := make([]int, n), n
 		for v := 0; v < n; v++ {
@@ -860,6 +859,55 @@ func Test310(t *testing.T) {
 		return roots
 	}
 
-	log.Print("[1] ?= ", findMinHeightTrees(4, [][]int{{1, 0}, {1, 2}, {1, 3}}))
-	log.Print("[3 4] ?= ", findMinHeightTrees(6, [][]int{{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}}))
+	graphAdj := func(n int, edges [][]int) []int {
+		G := map[int]map[int]struct{}{}
+		for _, edge := range edges {
+			v, u := edge[0], edge[1]
+			if _, ok := G[v]; !ok {
+				G[v] = map[int]struct{}{}
+			}
+			G[v][u] = struct{}{}
+			if _, ok := G[u]; !ok {
+				G[u] = map[int]struct{}{}
+			}
+			G[u][v] = struct{}{}
+		}
+
+		heights, mh := make([]int, n), n
+		for v := 0; v < n; v++ {
+			Vis := make([]bool, n)
+			Vis[v] = true
+
+			Q, h := []int{v}, 0
+			for len(Q) > 0 {
+				for range len(Q) {
+					v := Q[0]
+					Q = Q[1:]
+					for u := range G[v] {
+						if !Vis[u] {
+							Vis[u] = true
+							Q = append(Q, u)
+						}
+					}
+				}
+				h++
+			}
+
+			heights[v] = h
+			mh = min(mh, h)
+		}
+
+		roots := []int{}
+		for v, h := range heights {
+			if h == mh {
+				roots = append(roots, v)
+			}
+		}
+		return roots
+	}
+
+	for _, f := range []func(int, [][]int) []int{findMinHeightTrees, graphAdj} {
+		log.Print("[1] ?= ", f(4, [][]int{{1, 0}, {1, 2}, {1, 3}}))
+		log.Print("[3 4] ?= ", f(6, [][]int{{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}}))
+	}
 }
