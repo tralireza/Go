@@ -2,6 +2,7 @@ package lc
 
 import (
 	"container/heap"
+	"container/list"
 	"fmt"
 	"log"
 	"math"
@@ -873,20 +874,20 @@ func Test310(t *testing.T) {
 			G[u][v] = struct{}{}
 		}
 
-		heights, mh := make([]int, n), n
+		heights := make([]int, n)
 		for v := 0; v < n; v++ {
 			Vis := make([]bool, n)
 			Vis[v] = true
 
-			Q, h := []int{v}, 0
-			for len(Q) > 0 {
-				for range len(Q) {
-					v := Q[0]
-					Q = Q[1:]
+			Q, h := list.New(), 0
+			Q.PushBack(v)
+			for Q.Len() > 0 {
+				for range Q.Len() {
+					v := Q.Remove(Q.Front()).(int)
 					for u := range G[v] {
 						if !Vis[u] {
 							Vis[u] = true
-							Q = append(Q, u)
+							Q.PushBack(u)
 						}
 					}
 				}
@@ -894,12 +895,11 @@ func Test310(t *testing.T) {
 			}
 
 			heights[v] = h
-			mh = min(mh, h)
 		}
 
-		roots := []int{}
+		roots, hMin := []int{}, slices.Min(heights)
 		for v, h := range heights {
-			if h == mh {
+			if h == hMin {
 				roots = append(roots, v)
 			}
 		}
