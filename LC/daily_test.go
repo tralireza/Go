@@ -956,7 +956,45 @@ func Test310(t *testing.T) {
 		return []int{dG[len(dG)>>1-1], dG[len(dG)>>1]}
 	}
 
-	for _, f := range []func(int, [][]int) []int{findMinHeightTrees, graphAdj, onlyTwo} {
+	degreeCheck := func(n int, edges [][]int) []int {
+		if n == 1 {
+			return []int{0}
+		}
+
+		G, D := make([][]int, n), make([]int, n)
+		for _, edge := range edges {
+			v, u := edge[0], edge[1]
+			G[v] = append(G[v], u)
+			G[u] = append(G[u], v)
+			D[v]++
+			D[u]++
+		}
+
+		leaves := []int{}
+		for v := range D {
+			if D[v] == 1 {
+				leaves = append(leaves, v)
+			}
+		}
+
+		for n > 2 {
+			n -= len(leaves)
+			nQueue := []int{}
+			for _, leaf := range leaves {
+				for _, u := range G[leaf] {
+					D[u]--
+					if D[u] == 1 {
+						nQueue = append(nQueue, u)
+					}
+				}
+			}
+			leaves = nQueue
+		}
+
+		return leaves
+	}
+
+	for _, f := range []func(int, [][]int) []int{findMinHeightTrees, graphAdj, onlyTwo, degreeCheck} {
 		log.Print("[0] ?= ", f(3, [][]int{{1, 0}, {0, 2}}))
 		log.Print("[1] ?= ", f(4, [][]int{{1, 0}, {1, 2}, {1, 3}}))
 		log.Print("[3 4] ?= ", f(6, [][]int{{3, 0}, {3, 1}, {3, 2}, {3, 4}, {5, 4}}))
