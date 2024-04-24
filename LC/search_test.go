@@ -1,7 +1,6 @@
 package lc
 
 import (
-	"container/list"
 	"fmt"
 	"log"
 	"slices"
@@ -365,62 +364,4 @@ func Test140(t *testing.T) {
 	log.Printf(" ?= %q", wordBreak("pineapplepenapple", []string{"apple", "pen", "applepen", "pine", "pineapple"}))
 	log.Printf(" ?= %q", wordBreak("catsandog", []string{"cat", "cats", "and", "sand", "dog"}))
 	log.Printf(" ?= %q", wordBreak("a", []string{"a"}))
-}
-
-// 752m Open Lock
-func Test752(t *testing.T) {
-	openLock := func(deadends []string, target string) int {
-		Visited := map[string]struct{}{}
-
-		if target == "0000" {
-			return 0
-		}
-
-		for _, n := range deadends {
-			Visited[n] = struct{}{}
-		}
-		if _, ok := Visited[target]; ok {
-			return -1
-		}
-
-		Q := list.New()
-		Q.PushBack("0000")
-
-		Visited["0000"] = struct{}{}
-
-		lvl := 1
-		for Q.Len() > 0 {
-			for range Q.Len() {
-				n := Q.Remove(Q.Front()).(string)
-
-				B := []byte(n)
-				for i := 0; i < 4; i++ {
-					for _, m := range []byte{1, 9} {
-						B[i] = '0' + (B[i]-'0'+m)%10
-						v := string(B)
-
-						if v == target {
-							log.Print(len(Visited))
-							return lvl
-						}
-						if _, ok := Visited[v]; !ok {
-							Visited[v] = struct{}{}
-							Q.PushBack(v)
-						}
-
-						B[i] = n[i]
-					}
-				}
-			}
-
-			lvl++
-		}
-
-		log.Print(len(Visited))
-		return -1
-	}
-
-	log.Print("6 ?= ", openLock([]string{"0201", "0101", "0102", "1212", "2002"}, "0202"))
-	log.Print("-1 ?= ", openLock([]string{"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"}, "8888"))
-	log.Print("20 ?= ", openLock([]string{}, "5555"))
 }

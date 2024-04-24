@@ -752,7 +752,7 @@ func Test1971(t *testing.T) {
 }
 
 // 752m Open Lock
-func Test752m(t *testing.T) {
+func Test752(t *testing.T) {
 	openLock := func(deadends []string, target string) int {
 		Space := make([][][][]byte, 10)
 		for x := range Space {
@@ -807,11 +807,67 @@ func Test752m(t *testing.T) {
 		return -1
 	}
 
-	log.Print("6 ?= ", openLock([]string{"0201", "0101", "0102", "1212", "2002"}, "0202"))
-	log.Print("-1 ?= ", openLock([]string{"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"}, "8888"))
-	log.Print("-1 ?= ", openLock([]string{"0000"}, "1234"))
-	log.Print("0 ?= ", openLock([]string{}, "0000"))
-	log.Print("18 ?= ", openLock([]string{}, "6545"))
+	mapAndList := func(deadends []string, target string) int {
+		Visited := map[string]struct{}{}
+
+		if target == "0000" {
+			return 0
+		}
+
+		for _, n := range deadends {
+			Visited[n] = struct{}{}
+		}
+		if _, ok := Visited["0000"]; ok {
+			return -1
+		}
+		if _, ok := Visited[target]; ok {
+			return -1
+		}
+
+		Q := list.New()
+		Q.PushBack("0000")
+
+		Visited["0000"] = struct{}{}
+
+		lvl := 1
+		for Q.Len() > 0 {
+			for range Q.Len() {
+				n := Q.Remove(Q.Front()).(string)
+
+				B := []byte(n)
+				for i := 0; i < 4; i++ {
+					for _, m := range []byte{1, 9} {
+						B[i] = '0' + (B[i]-'0'+m)%10
+						v := string(B)
+
+						if v == target {
+							log.Print(len(Visited))
+							return lvl
+						}
+						if _, ok := Visited[v]; !ok {
+							Visited[v] = struct{}{}
+							Q.PushBack(v)
+						}
+
+						B[i] = n[i]
+					}
+				}
+			}
+
+			lvl++
+		}
+
+		log.Print(len(Visited))
+		return -1
+	}
+
+	for _, f := range []func([]string, string) int{openLock, mapAndList} {
+		log.Print(" 6 ?= ", f([]string{"0201", "0101", "0102", "1212", "2002"}, "0202"))
+		log.Print("-1 ?= ", f([]string{"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"}, "8888"))
+		log.Print("-1 ?= ", f([]string{"0000"}, "1234"))
+		log.Print(" 0 ?= ", f([]string{}, "0000"))
+		log.Print("20 ?= ", f([]string{}, "5555"))
+	}
 }
 
 // 310m Minimum Height Trees
