@@ -1062,3 +1062,29 @@ func Test310(t *testing.T) {
 		log.Print("===")
 	}
 }
+
+// 2370m Longest Ideal Subsequence
+func Test2370(t *testing.T) {
+	longestIdealString := func(s string, k int) int {
+		D := [26]int{}
+		x := 0
+
+		for i := 0; i < len(s); i++ {
+			cur := int(s[i] - 'a')
+			curX := 0
+			for p := 0; p < 26; p++ {
+				if p-cur <= k && -k <= p-cur {
+					curX = max(curX, D[p])
+				}
+			}
+
+			D[cur] = max(D[cur], curX+1)
+			x = max(x, D[cur])
+		}
+
+		return x
+	}
+
+	log.Print("4 ?= ", longestIdealString("acfgbd", 2))
+	log.Print("4 ?= ", longestIdealString("abcd", 4))
+}
