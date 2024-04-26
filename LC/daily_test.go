@@ -1104,7 +1104,45 @@ func Test2370(t *testing.T) {
 		return slices.Max(D[len(s)-1][:])
 	}
 
-	for _, f := range []func(string, int) int{longestIdealString, bottomUp} {
+	topDown := func(s string, k int) int {
+		D := make([][26]int, len(s))
+		for i := range len(s) {
+			for c := range 26 {
+				D[i][c] = -1
+			}
+		}
+
+		var findMax func(i, c int) int
+		findMax = func(i, c int) int {
+			if D[i][c] != -1 {
+				return D[i][c]
+			}
+
+			D[i][c] = 0
+			if c == int(s[i]-'a') {
+				D[i][c] = 1
+			}
+
+			if i > 0 {
+				D[i][c] = findMax(i-1, c)
+				if c == int(s[i]-'a') {
+					for p := max(0, c-k); p <= min(25, c+k); p++ {
+						D[i][c] = max(D[i][c], findMax(i-1, p)+1)
+					}
+				}
+			}
+
+			return D[i][c]
+		}
+
+		x := 0
+		for c := 0; c < 26; c++ {
+			x = max(x, findMax(len(s)-1, c))
+		}
+		return x
+	}
+
+	for _, f := range []func(string, int) int{longestIdealString, bottomUp, topDown} {
 		log.Print("4 ?= ", f("acfgbd", 2))
 		log.Print("4 ?= ", f("abcd", 4))
 		log.Print("2 ?= ", f("pvjcci", 4))
