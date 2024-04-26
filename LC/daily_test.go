@@ -1067,9 +1067,9 @@ func Test310(t *testing.T) {
 func Test2370(t *testing.T) {
 	longestIdealString := func(s string, k int) int {
 		D := [26]int{}
-		x := 0
+		D[s[0]-'a'] = 1
 
-		for i := 0; i < len(s); i++ {
+		for i := 1; i < len(s); i++ {
 			cur := int(s[i] - 'a')
 			curX := 0
 			for prv := 0; prv < 26; prv++ {
@@ -1077,17 +1077,16 @@ func Test2370(t *testing.T) {
 					curX = max(curX, D[prv])
 				}
 			}
-
-			D[cur] = max(D[cur], curX+1)
-			x = max(x, D[cur])
+			D[cur] = curX + 1
 		}
 
-		return x
+		return slices.Max(D[:])
 	}
 
 	bottomUp := func(s string, k int) int {
 		D := make([][26]int, len(s))
 		D[0][s[0]-'a'] = 1
+		log.Print(D[0])
 
 		for i := 1; i < len(s); i++ {
 			for prv := range 26 {
@@ -1099,7 +1098,7 @@ func Test2370(t *testing.T) {
 				D[i][s[i]-'a'] = max(D[i][s[i]-'a'], D[i-1][prv]+1)
 			}
 
-			log.Print(D[i-1], D[i])
+			log.Print(D[i])
 		}
 
 		return slices.Max(D[len(s)-1][:])
@@ -1108,6 +1107,7 @@ func Test2370(t *testing.T) {
 	for _, f := range []func(string, int) int{longestIdealString, bottomUp} {
 		log.Print("4 ?= ", f("acfgbd", 2))
 		log.Print("4 ?= ", f("abcd", 4))
+		log.Print("2 ?= ", f("pvjcci", 4))
 		log.Print("42 ?= ", f("dyyonfvzsretqxucmavxegvlnnjubqnwrhwikmnnrpzdovjxqdsatwzpdjdsneyqvtvorlwbkb", 7))
 	}
 }
