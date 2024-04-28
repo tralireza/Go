@@ -460,7 +460,72 @@ func Test514(t *testing.T) {
 		return K + D[0]
 	}
 
-	for _, f := range []func(string, string) int{findRotateSteps, bottomUp, spaceOptimized} {
+	shortestPath := func(ring string, key string) int {
+		R, K := len(ring), len(key)
+
+		heap := [][3]int{}
+
+		var Heapify func(int)
+		Heapify = func(i int) {
+			p, l, r := i, 2*i+1, 2*i+2
+			if l < len(heap) && heap[l][0] < heap[p][0] {
+				p = l
+			}
+			if r < len(heap) && heap[r][0] < heap[p][0] {
+				p = r
+			}
+			if p != i {
+				heap[p], heap[i] = heap[i], heap[p]
+				Heapify(p)
+			}
+		}
+
+		Pop := func() (d, r, k int) {
+			v := heap[0]
+			heap[0] = heap[len(heap)-1]
+			heap = heap[1:]
+			Heapify(0)
+			return v[0], v[1], v[2]
+		}
+		Push := func(d, r, k int) {
+			heap = append(heap, [3]int{d, r, k})
+			i := len(heap) - 1
+			for i > 0 && heap[i][0] < heap[(i-1)/2][0] {
+				heap[i], heap[(i-1)/2] = heap[(i-1)/2], heap[i]
+				i = (i - 1) / 2
+			}
+		}
+
+		Vis := map[[2]int]struct{}{}
+		Push(0, 0, 0)
+
+		var r, k, steps int
+		for len(heap) > 0 {
+			steps, r, k = Pop()
+			if k == K {
+				return K + steps
+			}
+
+			if _, ok := Vis[[2]int{r, k}]; ok {
+				continue
+			}
+			Vis[[2]int{r, k}] = struct{}{}
+
+			for x := range R {
+				if ring[x] == key[k] {
+					d := r - x
+					if d < 0 {
+						d *= -1
+					}
+					Push(steps+min(d, R-d), x, k+1)
+				}
+			}
+		}
+
+		return -1
+	}
+
+	for _, f := range []func(string, string) int{findRotateSteps, bottomUp, spaceOptimized, shortestPath} {
 		log.Print("4 ?= ", f("godding", "gd"))
 		log.Print("13 ?= ", f("godding", "godding"))
 		log.Print("14 ?= ", f("godding", "dogdog"))
